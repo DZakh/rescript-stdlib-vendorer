@@ -3,7 +3,12 @@ open NodeJs
 @module("minimist")
 external parseCommandArguments: (array<string>, unit) => S.unknown = "default"
 
-type error = CommandNotFound | IllegalOption({optionName: string})
+type error =
+  | CommandNotFound
+  | IllegalOption({optionName: string})
+  | BsConfigLoadFailure
+  | BsConfigParsingFailure(string)
+  | LintErrorHasGlobalyOpenedStdlib(string)
 type command = Help | Lint | LintHelp
 
 let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
@@ -59,15 +64,31 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
         | _ => Js.Exn.raiseError("Parsed error always must have the InvalidUnion code")
         }
       })
+      ->Belt.Result.flatMap(command => {
+        switch command {
+        | Help => runHelpCommand(.)->Ok
+        | LintHelp => runLintHelpCommand(.)->Ok
+        | Lint =>
+          runLintCommand(.)->Lib.Result.mapError((. lintCommandError) => {
+            switch lintCommandError {
+            | #BS_CONFIG_LOAD_FAILURE => BsConfigLoadFailure
+            | #BS_CONFIG_PARSE_FAILURE(reason) => BsConfigParsingFailure(reason)
+            | #HAS_GLOBALY_OPENED_STDLIB(moduleName) => LintErrorHasGlobalyOpenedStdlib(moduleName)
+            }
+          })
+        }
+      })
 
     switch result {
-    | Ok(Help) => runHelpCommand(.)
-    | Ok(LintHelp) => runLintHelpCommand(.)
-    | Ok(Lint) => runLintCommand(.)
+    | Ok() => ()
     | Error(error) =>
       switch error {
       | CommandNotFound => Js.log2("Command not found:", commandArguments->Js.Array2.joinWith(" "))
       | IllegalOption({optionName}) => Js.log2("Illegal option:", optionName)
+      | BsConfigLoadFailure => Js.log("Failed to load bsconfig.json")
+      | BsConfigParsingFailure(reason) => Js.log2("Failed to parse bsconfig.json:", reason)
+      | LintErrorHasGlobalyOpenedStdlib(moduleName) =>
+        Js.log(`Lint failed: Found globally opened module ${moduleName}`)
       }
       Process.process->Process.exitWithCode(1)
     }
