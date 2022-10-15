@@ -1,0 +1,45 @@
+{
+  "name": "rescript-stdlib-cli",
+  "version": "0.1.0",
+  "description": "The CLI to enforce usage of a single standard library in ReScript",
+  "keywords": [
+    "ReScript"
+  ],
+  "homepage": "https://github.com/DZakh/rescript-stdlib-cli#readme",
+  "bugs": {
+    "url": "https://github.com/DZakh/rescript-stdlib-cli/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DZakh/rescript-stdlib-cli.git"
+  },
+  "license": "MIT",
+  "author": "Dmitry Zakharov <dzakh.dev@gmail.com>",
+  "type": "module",
+  "files": [
+    "src/**/*.res",
+    "src/**/*.resi",
+    "bsconfig.json"
+  ],
+  "scripts": {
+    "res:build": "rescript build -with-deps",
+    "res:dev": "rescript build -with-deps -w",
+    "test": "ava"
+  },
+  "ava": {
+    "files": [
+      "__tests__/**/*_test.mjs"
+    ]
+  },
+  "dependencies": {
+    "@ryyppy/rescript-promise": "2.1.0",
+    "minimist": "^1.2.7",
+    "rescript": "10.0.1",
+    "rescript-nodejs": "^14.3.1",
+    "rescript-struct": "^2.0.0"
+  },
+  "devDependencies": {
+    "@dzakh/rescript-ava": "0.4.0",
+    "ava": "4.3.3"
+  }
+}
