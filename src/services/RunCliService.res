@@ -6,8 +6,8 @@ external parseCommandArguments: (array<string>, unit) => S.unknown = "default"
 type error =
   | CommandNotFound
   | IllegalOption({optionName: string})
-  | BsConfigLoadFailure
   | BsConfigParsingFailure(string)
+  | SourceDirsParsingFailure(string)
   | LintErrorHasGlobalyOpenedStdlib(string)
 type command = Help | Lint | LintHelp
 
@@ -71,8 +71,8 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
         | Lint =>
           runLintCommand(.)->Lib.Result.mapError((. lintCommandError) => {
             switch lintCommandError {
-            | #BS_CONFIG_LOAD_FAILURE => BsConfigLoadFailure
             | #BS_CONFIG_PARSE_FAILURE(reason) => BsConfigParsingFailure(reason)
+            | #SOURCE_DIRS_PARSE_FAILURE(reason) => SourceDirsParsingFailure(reason)
             | #HAS_GLOBALY_OPENED_STDLIB(moduleName) => LintErrorHasGlobalyOpenedStdlib(moduleName)
             }
           })
@@ -85,8 +85,12 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
       switch error {
       | CommandNotFound => Js.log2("Command not found:", commandArguments->Js.Array2.joinWith(" "))
       | IllegalOption({optionName}) => Js.log2("Illegal option:", optionName)
-      | BsConfigLoadFailure => Js.log("Failed to load bsconfig.json")
-      | BsConfigParsingFailure(reason) => Js.log2("Failed to parse bsconfig.json:", reason)
+      | BsConfigParsingFailure(reason) => Js.log2(`Failed to parse "bsconfig.json":`, reason)
+      | SourceDirsParsingFailure(reason) =>
+        Js.log2(
+          `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,
+          reason,
+        )
       | LintErrorHasGlobalyOpenedStdlib(moduleName) =>
         Js.log(`Lint failed: Found globally opened module ${moduleName}`)
       }

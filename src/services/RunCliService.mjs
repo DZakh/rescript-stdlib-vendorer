@@ -86,20 +86,22 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
                         };
               case /* Lint */1 :
                   return Lib$RescriptStdlibCli.Result.mapError(runLintCommand(), (function (lintCommandError) {
-                                if (typeof lintCommandError === "object") {
-                                  if (lintCommandError.NAME === "HAS_GLOBALY_OPENED_STDLIB") {
-                                    return {
-                                            TAG: /* LintErrorHasGlobalyOpenedStdlib */2,
-                                            _0: lintCommandError.VAL
-                                          };
-                                  } else {
-                                    return {
-                                            TAG: /* BsConfigParsingFailure */1,
-                                            _0: lintCommandError.VAL
-                                          };
-                                  }
+                                var variant = lintCommandError.NAME;
+                                if (variant === "BS_CONFIG_PARSE_FAILURE") {
+                                  return {
+                                          TAG: /* BsConfigParsingFailure */1,
+                                          _0: lintCommandError.VAL
+                                        };
+                                } else if (variant === "HAS_GLOBALY_OPENED_STDLIB") {
+                                  return {
+                                          TAG: /* LintErrorHasGlobalyOpenedStdlib */3,
+                                          _0: lintCommandError.VAL
+                                        };
                                 } else {
-                                  return /* BsConfigLoadFailure */1;
+                                  return {
+                                          TAG: /* SourceDirsParsingFailure */2,
+                                          _0: lintCommandError.VAL
+                                        };
                                 }
                               }));
               case /* LintHelp */2 :
@@ -115,20 +117,19 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
     }
     var error = result._0;
     if (typeof error === "number") {
-      if (error === /* CommandNotFound */0) {
-        console.log("Command not found:", commandArguments.join(" "));
-      } else {
-        console.log("Failed to load bsconfig.json");
-      }
+      console.log("Command not found:", commandArguments.join(" "));
     } else {
       switch (error.TAG | 0) {
         case /* IllegalOption */0 :
             console.log("Illegal option:", error.optionName);
             break;
         case /* BsConfigParsingFailure */1 :
-            console.log("Failed to parse bsconfig.json:", error._0);
+            console.log("Failed to parse \"bsconfig.json\":", error._0);
             break;
-        case /* LintErrorHasGlobalyOpenedStdlib */2 :
+        case /* SourceDirsParsingFailure */2 :
+            console.log("Failed to parse \".sourcedirs.json\". Check that you use compatible ReScript version. Parsing error:", error._0);
+            break;
+        case /* LintErrorHasGlobalyOpenedStdlib */3 :
             console.log("Lint failed: Found globally opened module " + error._0 + "");
             break;
         

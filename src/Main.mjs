@@ -2,9 +2,10 @@
 
 import * as RunCliService$RescriptStdlibCli from "./services/RunCliService.mjs";
 import * as LoadBsConfigService$RescriptStdlibCli from "./services/LoadBsConfigService.mjs";
+import * as LoadSourceDirsService$RescriptStdlibCli from "./services/LoadSourceDirsService.mjs";
 import * as RunLintCommandService$RescriptStdlibCli from "./services/RunLintCommandService.mjs";
 
-var runCli = RunCliService$RescriptStdlibCli.make(RunLintCommandService$RescriptStdlibCli.make(LoadBsConfigService$RescriptStdlibCli.make(undefined)), (function () {
+var runCli = RunCliService$RescriptStdlibCli.make(RunLintCommandService$RescriptStdlibCli.make(LoadBsConfigService$RescriptStdlibCli.make(undefined), LoadSourceDirsService$RescriptStdlibCli.make(undefined)), (function () {
         console.log("Help");
       }), (function () {
         console.log("Lint help");

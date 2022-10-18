@@ -6,3 +6,8 @@ module Result = {
     }
   }
 }
+
+module Array = {
+  @send
+  external flatMap: (array<'a>, 'a => array<'b>) => array<'b> = "flatMap"
+}

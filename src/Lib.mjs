@@ -16,7 +16,10 @@ var Result = {
   mapError: mapError
 };
 
+var $$Array = {};
+
 export {
   Result ,
+  $$Array ,
 }
 /* No side effect */
