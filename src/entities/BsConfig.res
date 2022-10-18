@@ -14,6 +14,19 @@ let getGlobalyOpenedModules = bsConfig => {
   })
 }
 
+let lint = (bsConfig, ~prohibitedModules) => {
+  let globalyOpenedModules = bsConfig->getGlobalyOpenedModules
+  let maybeOpenedProhibitedModule = prohibitedModules->Js.Array2.find(prohibitedModule => {
+    globalyOpenedModules->Js.Array2.some(globalyOpenedModule => {
+      globalyOpenedModule === prohibitedModule
+    })
+  })
+  switch maybeOpenedProhibitedModule {
+  | Some(openedProhibitedModule) => Error(#HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule))
+  | None => Ok()
+  }
+}
+
 let struct = {
   S.object1(. (
     "bsc-flags",

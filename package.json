@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "@ryyppy/rescript-promise": "2.1.0",
+    "colorette": "2.0.19",
     "minimist": "1.2.7",
     "rescript": "10.0.1",
     "rescript-nodejs": "14.3.1",

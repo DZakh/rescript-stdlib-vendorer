@@ -4,10 +4,12 @@ import * as S from "rescript-struct/src/S.mjs";
 import * as Js_exn from "rescript/lib/es6/js_exn.js";
 import * as Process from "process";
 import Minimist from "minimist";
+import * as Colorette from "colorette";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Belt_Result from "rescript/lib/es6/belt_Result.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import * as Lib$RescriptStdlibCli from "../Lib.mjs";
+import * as LintIssue$RescriptStdlibCli from "../entities/LintIssue.mjs";
 
 function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
   return function () {
@@ -86,23 +88,10 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
                         };
               case /* Lint */1 :
                   return Lib$RescriptStdlibCli.Result.mapError(runLintCommand(), (function (lintCommandError) {
-                                var variant = lintCommandError.NAME;
-                                if (variant === "BS_CONFIG_PARSE_FAILURE") {
-                                  return {
-                                          TAG: /* BsConfigParsingFailure */1,
-                                          _0: lintCommandError.VAL
-                                        };
-                                } else if (variant === "HAS_GLOBALY_OPENED_STDLIB") {
-                                  return {
-                                          TAG: /* LintErrorHasGlobalyOpenedStdlib */3,
-                                          _0: lintCommandError.VAL
-                                        };
-                                } else {
-                                  return {
-                                          TAG: /* SourceDirsParsingFailure */2,
-                                          _0: lintCommandError.VAL
-                                        };
-                                }
+                                return {
+                                        TAG: /* LintCommandError */1,
+                                        _0: lintCommandError
+                                      };
                               }));
               case /* LintHelp */2 :
                   return {
@@ -118,21 +107,22 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
     var error = result._0;
     if (typeof error === "number") {
       console.log("Command not found:", commandArguments.join(" "));
+    } else if (error.TAG === /* IllegalOption */0) {
+      console.log("Illegal option:", error.optionName);
     } else {
-      switch (error.TAG | 0) {
-        case /* IllegalOption */0 :
-            console.log("Illegal option:", error.optionName);
-            break;
-        case /* BsConfigParsingFailure */1 :
-            console.log("Failed to parse \"bsconfig.json\":", error._0);
-            break;
-        case /* SourceDirsParsingFailure */2 :
-            console.log("Failed to parse \".sourcedirs.json\". Check that you use compatible ReScript version. Parsing error:", error._0);
-            break;
-        case /* LintErrorHasGlobalyOpenedStdlib */3 :
-            console.log("Lint failed: Found globally opened module " + error._0 + "");
-            break;
-        
+      var match = error._0;
+      var variant = match.NAME;
+      if (variant === "BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE") {
+        console.log("Lint failed: Found globally opened module " + match.VAL + "");
+      } else if (variant === "LINT_FAILED_WITH_ISSUES") {
+        match.VAL.forEach(function (lintIssue) {
+              console.log(Colorette.underline(LintIssue$RescriptStdlibCli.getLink(lintIssue)), "\n", LintIssue$RescriptStdlibCli.getMessage(lintIssue), "\n");
+            });
+        console.log(Colorette.bold("Use your custom standard library instead."));
+      } else if (variant === "BS_CONFIG_PARSE_FAILURE") {
+        console.log("Failed to parse \"bsconfig.json\":", match.VAL);
+      } else {
+        console.log("Failed to parse \".sourcedirs.json\". Check that you use compatible ReScript version. Parsing error:", match.VAL);
       }
     }
     Process.exit(1);

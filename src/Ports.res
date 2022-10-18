@@ -1,20 +1,31 @@
-type runLintCommand = (
-  . unit,
-) => result<
-  unit,
-  [
+module RunLintCommand = {
+  type error = [
     | #BS_CONFIG_PARSE_FAILURE(string)
     | #SOURCE_DIRS_PARSE_FAILURE(string)
-    | #HAS_GLOBALY_OPENED_STDLIB(string)
-  ],
->
+    | #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(string)
+    | #LINT_FAILED_WITH_ISSUES(array<LintIssue.t>)
+  ]
+  type t = (. unit) => result<unit, error>
+}
 
-type runLintHelpCommand = (. unit) => unit
+module RunLintHelpCommand = {
+  type t = (. unit) => unit
+}
 
-type runHelpCommand = (. unit) => unit
+module RunHelpCommand = {
+  type t = (. unit) => unit
+}
 
-type loadBsConfig = (. unit) => result<BsConfig.t, [#PARSING_FAILURE(string)]>
+module LoadBsConfig = {
+  type error = [#PARSING_FAILURE(string)]
+  type t = (. unit) => result<BsConfig.t, error>
+}
 
-type loadSourceDirs = (. unit) => result<SourceDirs.t, [#PARSING_FAILURE(string)]>
+module LoadSourceDirs = {
+  type error = [#PARSING_FAILURE(string)]
+  type t = (. unit) => result<SourceDirs.t, error>
+}
 
-type runCli = (. unit) => unit
+module RunCli = {
+  type t = (. unit) => unit
+}

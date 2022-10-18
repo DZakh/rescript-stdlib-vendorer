@@ -1,1 +1,1 @@
-let make: unit => Ports.loadSourceDirs
+let make: unit => Ports.LoadSourceDirs.t

@@ -10,6 +10,29 @@ function getGlobalyOpenedModules(bsConfig) {
             });
 }
 
+function lint(bsConfig, prohibitedModules) {
+  var globalyOpenedModules = getGlobalyOpenedModules(bsConfig);
+  var maybeOpenedProhibitedModule = prohibitedModules.find(function (prohibitedModule) {
+        return globalyOpenedModules.some(function (globalyOpenedModule) {
+                    return globalyOpenedModule === prohibitedModule;
+                  });
+      });
+  if (maybeOpenedProhibitedModule !== undefined) {
+    return {
+            TAG: /* Error */1,
+            _0: {
+              NAME: "HAS_OPENED_PROHIBITED_MODULE",
+              VAL: maybeOpenedProhibitedModule
+            }
+          };
+  } else {
+    return {
+            TAG: /* Ok */0,
+            _0: undefined
+          };
+  }
+}
+
 var struct = S.transform(S.object1([
           "bsc-flags",
           S.defaulted(S.option(S.array(S.string(undefined))), [])
@@ -20,7 +43,7 @@ var struct = S.transform(S.object1([
       }), undefined, undefined);
 
 export {
-  getGlobalyOpenedModules ,
+  lint ,
   struct ,
 }
 /* struct Not a pure module */

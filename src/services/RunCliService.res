@@ -2,13 +2,15 @@ open NodeJs
 
 @module("minimist")
 external parseCommandArguments: (array<string>, unit) => S.unknown = "default"
+@module("colorette")
+external modifyCliTextToBold: string => string = "bold"
+@module("colorette")
+external modifyCliTextToUnderline: string => string = "underline"
 
 type error =
   | CommandNotFound
   | IllegalOption({optionName: string})
-  | BsConfigParsingFailure(string)
-  | SourceDirsParsingFailure(string)
-  | LintErrorHasGlobalyOpenedStdlib(string)
+  | LintCommandError(Ports.RunLintCommand.error)
 type command = Help | Lint | LintHelp
 
 let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
@@ -70,11 +72,7 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
         | LintHelp => runLintHelpCommand(.)->Ok
         | Lint =>
           runLintCommand(.)->Lib.Result.mapError((. lintCommandError) => {
-            switch lintCommandError {
-            | #BS_CONFIG_PARSE_FAILURE(reason) => BsConfigParsingFailure(reason)
-            | #SOURCE_DIRS_PARSE_FAILURE(reason) => SourceDirsParsingFailure(reason)
-            | #HAS_GLOBALY_OPENED_STDLIB(moduleName) => LintErrorHasGlobalyOpenedStdlib(moduleName)
-            }
+            LintCommandError(lintCommandError)
           })
         }
       })
@@ -85,14 +83,26 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
       switch error {
       | CommandNotFound => Js.log2("Command not found:", commandArguments->Js.Array2.joinWith(" "))
       | IllegalOption({optionName}) => Js.log2("Illegal option:", optionName)
-      | BsConfigParsingFailure(reason) => Js.log2(`Failed to parse "bsconfig.json":`, reason)
-      | SourceDirsParsingFailure(reason) =>
+      | LintCommandError(#BS_CONFIG_PARSE_FAILURE(reason)) =>
+        Js.log2(`Failed to parse "bsconfig.json":`, reason)
+      | LintCommandError(#SOURCE_DIRS_PARSE_FAILURE(reason)) =>
         Js.log2(
           `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,
           reason,
         )
-      | LintErrorHasGlobalyOpenedStdlib(moduleName) =>
+      | LintCommandError(#BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(moduleName)) =>
         Js.log(`Lint failed: Found globally opened module ${moduleName}`)
+      | LintCommandError(#LINT_FAILED_WITH_ISSUES(lintIssues)) => {
+          lintIssues->Js.Array2.forEach(lintIssue => {
+            Js.log4(
+              lintIssue->LintIssue.getLink->modifyCliTextToUnderline,
+              "\n",
+              lintIssue->LintIssue.getMessage,
+              "\n",
+            )
+          })
+          Js.log("Use your custom standard library instead."->modifyCliTextToBold)
+        }
       }
       Process.process->Process.exitWithCode(1)
     }

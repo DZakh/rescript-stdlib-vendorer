@@ -1,5 +1,5 @@
 let make = (~loadBsConfig, ~loadSourceDirs) => {
-  let standardLibModules = ["Belt", "Js", "ReScriptJs"]
+  let prohibitedModules = ["Belt", "Js", "ReScriptJs"]
 
   (. ()) => {
     loadBsConfig(.)
@@ -9,18 +9,14 @@ let make = (~loadBsConfig, ~loadSourceDirs) => {
       }
     })
     ->Belt.Result.flatMap(bsConfig => {
-      let globalyOpenedModules = bsConfig->BsConfig.getGlobalyOpenedModules
-      let maybeOpenedStandardLibModule = standardLibModules->Js.Array2.find(standardLibModule => {
-        globalyOpenedModules->Js.Array2.some(
-          globalyOpenedModule => {
-            globalyOpenedModule === standardLibModule
-          },
-        )
+      bsConfig
+      ->BsConfig.lint(~prohibitedModules)
+      ->Lib.Result.mapError((. error) => {
+        switch error {
+        | #HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule) =>
+          #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule)
+        }
       })
-      switch maybeOpenedStandardLibModule {
-      | Some(openedStandardLibModule) => Error(#HAS_GLOBALY_OPENED_STDLIB(openedStandardLibModule))
-      | None => Ok()
-      }
     })
     ->Belt.Result.flatMap(() => {
       loadSourceDirs(.)->Lib.Result.mapError((. loadSourceDirsError) =>
@@ -29,16 +25,36 @@ let make = (~loadBsConfig, ~loadSourceDirs) => {
         }
       )
     })
-    ->Belt.Result.map(sourceDirs => {
-      let resFilePaths =
+    ->Belt.Result.flatMap(sourceDirs => {
+      let resFiles =
         sourceDirs
         ->SourceDirs.getProjectDirs
         ->Lib.Array.flatMap(sourceDir => {
-          NodeJs.Fs.readdirSync(sourceDir)
+          open NodeJs
+          let fullDirPath = Path.resolve([Process.process->Process.cwd, sourceDir])
+          Fs.readdirSync(fullDirPath)
           ->Js.Array2.filter(dirItem => dirItem->Js.String2.endsWith(".res"))
-          ->Js.Array2.map(dirItem => `${sourceDir}/${dirItem}`)
+          ->Js.Array2.map(dirItem => `${fullDirPath}/${dirItem}`)
         })
-      Js.log(resFilePaths)
+        ->Js.Array2.map(resFilePath => {
+          open NodeJs
+          ResFile.make(
+            ~content=Fs.readFileSyncWith(
+              resFilePath,
+              Fs.readFileOptions(~encoding="utf8", ()),
+            )->Buffer.toString,
+            ~path=resFilePath,
+          )
+        })
+
+      let lintContext = LintContext.make()
+      resFiles->Js.Array2.forEach(resFile => {
+        resFile->ResFile.lint(~lintContext, ~prohibitedModules)
+      })
+      switch lintContext->LintContext.getIssues {
+      | [] => Ok()
+      | lintIssues => Error(#LINT_FAILED_WITH_ISSUES(lintIssues))
+      }
     })
   }
 }
