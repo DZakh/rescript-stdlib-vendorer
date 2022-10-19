@@ -1,7 +1,7 @@
-let runCli = RunCliService.make(
-  ~runLintCommand=RunLintCommandService.make(
-    ~loadBsConfig=LoadBsConfigService.make(),
-    ~loadSourceDirs=LoadSourceDirsService.make(),
+let runCli = RunCli.make(
+  ~runLintCommand=RunLintCommand.make(
+    ~loadBsConfig=LoadBsConfig.make(),
+    ~loadSourceDirs=LoadSourceDirs.make(),
   ),
   ~runHelpCommand=(. ()) => Js.log("Help"),
   ~runLintHelpCommand=(. ()) => Js.log("Lint help"),
