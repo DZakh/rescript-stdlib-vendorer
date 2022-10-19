@@ -10,10 +10,6 @@
     "module": "es6",
     "in-source": true
   },
-  "bs-dependencies": [
-    "rescript-nodejs",
-    "@ryyppy/rescript-promise",
-    "rescript-struct"
-  ],
+  "bs-dependencies": ["rescript-nodejs", "rescript-struct"],
   "suffix": ".mjs"
 }
