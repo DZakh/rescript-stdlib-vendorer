@@ -3,8 +3,7 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Process from "process";
-import * as Belt_Result from "rescript/lib/es6/belt_Result.js";
-import * as Lib$RescriptStdlibCli from "../Lib.mjs";
+import * as Stdlib$RescriptStdlibCli from "../Stdlib.mjs";
 import * as ResFile$RescriptStdlibCli from "../entities/ResFile.mjs";
 import * as BsConfig$RescriptStdlibCli from "../entities/BsConfig.mjs";
 import * as SourceDirs$RescriptStdlibCli from "../entities/SourceDirs.mjs";
@@ -17,20 +16,20 @@ function make(loadBsConfig, loadSourceDirs) {
     "ReScriptJs"
   ];
   return function () {
-    return Belt_Result.flatMap(Belt_Result.flatMap(Belt_Result.flatMap(Lib$RescriptStdlibCli.Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
+    return Stdlib$RescriptStdlibCli.Result.flatMap(Stdlib$RescriptStdlibCli.Result.flatMap(Stdlib$RescriptStdlibCli.Result.flatMap(Stdlib$RescriptStdlibCli.Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
                               return {
                                       NAME: "BS_CONFIG_PARSE_FAILURE",
                                       VAL: loadBsConfigError.VAL
                                     };
                             })), (function (bsConfig) {
-                          return Lib$RescriptStdlibCli.Result.mapError(BsConfig$RescriptStdlibCli.lint(bsConfig, prohibitedModules), (function (error) {
+                          return Stdlib$RescriptStdlibCli.Result.mapError(BsConfig$RescriptStdlibCli.lint(bsConfig, prohibitedModules), (function (error) {
                                         return {
                                                 NAME: "BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE",
                                                 VAL: error.VAL
                                               };
                                       }));
                         })), (function (param) {
-                      return Lib$RescriptStdlibCli.Result.mapError(loadSourceDirs(), (function (loadSourceDirsError) {
+                      return Stdlib$RescriptStdlibCli.Result.mapError(loadSourceDirs(), (function (loadSourceDirsError) {
                                     return {
                                             NAME: "SOURCE_DIRS_PARSE_FAILURE",
                                             VAL: loadSourceDirsError.VAL

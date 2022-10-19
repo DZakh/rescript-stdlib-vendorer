@@ -1,3 +1,5 @@
+open Stdlib
+
 let make = () => {
   (. ()) => {
     let jsonObj = {
@@ -8,11 +10,11 @@ let make = () => {
         Fs.readFileOptions(~encoding="utf8", ()),
       )
       ->Buffer.toString
-      ->Js.Json.parseExn
+      ->Json.parseExn
     }
     jsonObj
     ->S.parseWith(SourceDirs.struct)
-    ->Lib.Result.mapError((. error) => {
+    ->Result.mapError((. error) => {
       #PARSING_FAILURE(error->S.Error.toString)
     })
   }

@@ -3,8 +3,8 @@ let runCli = RunCli.make(
     ~loadBsConfig=LoadBsConfig.make(),
     ~loadSourceDirs=LoadSourceDirs.make(),
   ),
-  ~runHelpCommand=(. ()) => Js.log("Help"),
-  ~runLintHelpCommand=(. ()) => Js.log("Lint help"),
+  ~runHelpCommand=(. ()) => NodeJs.Console.console->NodeJs.Console.log("Help"),
+  ~runLintHelpCommand=(. ()) => NodeJs.Console.console->NodeJs.Console.log("Lint help"),
 )
 
 runCli(.)

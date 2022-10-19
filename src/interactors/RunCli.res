@@ -1,3 +1,4 @@
+open Stdlib
 open NodeJs
 
 @module("minimist")
@@ -15,7 +16,7 @@ type command = Help | Lint | LintHelp
 
 let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
   (. ()) => {
-    let commandArguments = Process.process->Process.argv->Js.Array2.sliceFrom(2)
+    let commandArguments = Process.process->Process.argv->Array.sliceFrom(2)
     let result =
       commandArguments
       ->parseCommandArguments()
@@ -38,22 +39,21 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
           ->S.transform(~parser=() => Lint, ()),
         ]),
       )
-      ->Lib.Result.mapError((. error) => {
+      ->Result.mapError((. error) => {
         switch error.code {
         | InvalidUnion(unionErrors) => {
             let maybeIllegalOptionName =
               unionErrors
-              ->Js.Array2.find(error =>
+              ->Array.find(error =>
                 switch error.code {
                 | ExcessField(_) => true
                 | _ => false
                 }
               )
-              ->Belt.Option.map(excessFieldError => {
+              ->Option.map(excessFieldError => {
                 switch excessFieldError.code {
                 | ExcessField(illegalOptionName) => illegalOptionName
-                | _ =>
-                  Js.Exn.raiseError("The excessFieldError always must have the ExcessField code")
+                | _ => Exn.raiseError("The excessFieldError always must have the ExcessField code")
                 }
               })
 
@@ -63,15 +63,15 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
             }
           }
 
-        | _ => Js.Exn.raiseError("Parsed error always must have the InvalidUnion code")
+        | _ => Exn.raiseError("Parsed error always must have the InvalidUnion code")
         }
       })
-      ->Belt.Result.flatMap(command => {
+      ->Result.flatMap((. command) => {
         switch command {
         | Help => runHelpCommand(.)->Ok
         | LintHelp => runLintHelpCommand(.)->Ok
         | Lint =>
-          runLintCommand(.)->Lib.Result.mapError((. lintCommandError) => {
+          runLintCommand(.)->Result.mapError((. lintCommandError) => {
             LintCommandError(lintCommandError)
           })
         }
@@ -81,27 +81,34 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
     | Ok() => ()
     | Error(error) =>
       switch error {
-      | CommandNotFound => Js.log2("Command not found:", commandArguments->Js.Array2.joinWith(" "))
-      | IllegalOption({optionName}) => Js.log2("Illegal option:", optionName)
+      | CommandNotFound =>
+        Console.console->Console.logMany([
+          "Command not found:",
+          commandArguments->Array.joinWith(" "),
+        ])
+      | IllegalOption({optionName}) =>
+        Console.console->Console.logMany(["Illegal option:", optionName])
       | LintCommandError(#BS_CONFIG_PARSE_FAILURE(reason)) =>
-        Js.log2(`Failed to parse "bsconfig.json":`, reason)
+        Console.console->Console.logMany([`Failed to parse "bsconfig.json":`, reason])
       | LintCommandError(#SOURCE_DIRS_PARSE_FAILURE(reason)) =>
-        Js.log2(
+        Console.console->Console.logMany([
           `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,
           reason,
-        )
+        ])
       | LintCommandError(#BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(moduleName)) =>
-        Js.log(`Lint failed: Found globally opened module ${moduleName}`)
+        Console.console->Console.log(`Lint failed: Found globally opened module ${moduleName}`)
       | LintCommandError(#LINT_FAILED_WITH_ISSUES(lintIssues)) => {
-          lintIssues->Js.Array2.forEach(lintIssue => {
-            Js.log4(
+          lintIssues->Array.forEach(lintIssue => {
+            Console.console->Console.logMany([
               lintIssue->LintIssue.getLink->modifyCliTextToUnderline,
               "\n",
               lintIssue->LintIssue.getMessage,
               "\n",
-            )
+            ])
           })
-          Js.log("Use your custom standard library instead."->modifyCliTextToBold)
+          Console.console->Console.log(
+            "Use your custom standard library instead."->modifyCliTextToBold,
+          )
         }
       }
       Process.process->Process.exitWithCode(1)

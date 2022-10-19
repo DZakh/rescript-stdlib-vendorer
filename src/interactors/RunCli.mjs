@@ -6,15 +6,14 @@ import * as Process from "process";
 import Minimist from "minimist";
 import * as Colorette from "colorette";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
-import * as Belt_Result from "rescript/lib/es6/belt_Result.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
-import * as Lib$RescriptStdlibCli from "../Lib.mjs";
+import * as Stdlib$RescriptStdlibCli from "../Stdlib.mjs";
 import * as LintIssue$RescriptStdlibCli from "../entities/LintIssue.mjs";
 
 function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
   return function () {
     var commandArguments = Process.argv.slice(2);
-    var result = Belt_Result.flatMap(Lib$RescriptStdlibCli.Result.mapError(S.parseWith(Minimist(commandArguments), S.union([
+    var result = Stdlib$RescriptStdlibCli.Result.flatMap(Stdlib$RescriptStdlibCli.Result.mapError(S.parseWith(Minimist(commandArguments), S.union([
                       S.transform(S.$$Object.strict(S.object1([
                                     "_",
                                     S.union([
@@ -87,7 +86,7 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
                           _0: runHelpCommand()
                         };
               case /* Lint */1 :
-                  return Lib$RescriptStdlibCli.Result.mapError(runLintCommand(), (function (lintCommandError) {
+                  return Stdlib$RescriptStdlibCli.Result.mapError(runLintCommand(), (function (lintCommandError) {
                                 return {
                                         TAG: /* LintCommandError */1,
                                         _0: lintCommandError

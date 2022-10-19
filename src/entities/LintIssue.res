@@ -1,3 +1,5 @@
+open Stdlib
+
 type kind =
   | ProhibitedModuleOpen(string)
   | ProhibitedModuleInclude(string)
@@ -9,7 +11,7 @@ let make = (~path, ~line, ~kind) => {
   {path, line, kind}
 }
 
-let getLink = lintIssue => `${lintIssue.path}:${lintIssue.line->Js.Int.toString}`
+let getLink = lintIssue => `${lintIssue.path}:${lintIssue.line->Int.toString}`
 
 let getMessage = lintIssue =>
   switch lintIssue.kind {
