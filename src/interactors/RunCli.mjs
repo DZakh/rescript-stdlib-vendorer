@@ -2,18 +2,18 @@
 
 import * as S from "rescript-struct/src/S.mjs";
 import * as Js_exn from "rescript/lib/es6/js_exn.js";
+import * as Stdlib from "../Stdlib.mjs";
 import * as Process from "process";
 import Minimist from "minimist";
+import * as LintIssue from "../entities/LintIssue.mjs";
 import * as Colorette from "colorette";
 import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
-import * as Stdlib$RescriptStdlibCli from "../Stdlib.mjs";
-import * as LintIssue$RescriptStdlibCli from "../entities/LintIssue.mjs";
 
 function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
   return function () {
     var commandArguments = Process.argv.slice(2);
-    var result = Stdlib$RescriptStdlibCli.Result.flatMap(Stdlib$RescriptStdlibCli.Result.mapError(S.parseWith(Minimist(commandArguments), S.union([
+    var result = Stdlib.Result.flatMap(Stdlib.Result.mapError(S.parseWith(Minimist(commandArguments), S.union([
                       S.transform(S.$$Object.strict(S.object1([
                                     "_",
                                     S.union([
@@ -86,7 +86,7 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
                           _0: runHelpCommand()
                         };
               case /* Lint */1 :
-                  return Stdlib$RescriptStdlibCli.Result.mapError(runLintCommand(), (function (lintCommandError) {
+                  return Stdlib.Result.mapError(runLintCommand(), (function (lintCommandError) {
                                 return {
                                         TAG: /* LintCommandError */1,
                                         _0: lintCommandError
@@ -115,7 +115,7 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
         console.log("Lint failed: Found globally opened module " + match.VAL + "");
       } else if (variant === "LINT_FAILED_WITH_ISSUES") {
         match.VAL.forEach(function (lintIssue) {
-              console.log(Colorette.underline(LintIssue$RescriptStdlibCli.getLink(lintIssue)), "\n", LintIssue$RescriptStdlibCli.getMessage(lintIssue), "\n");
+              console.log(Colorette.underline(LintIssue.getLink(lintIssue)), "\n", LintIssue.getMessage(lintIssue), "\n");
             });
         console.log(Colorette.bold("Use your custom standard library instead."));
       } else if (variant === "BS_CONFIG_PARSE_FAILURE") {
