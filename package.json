@@ -16,12 +16,16 @@
   "license": "MIT",
   "author": "Dmitry Zakharov <dzakh.dev@gmail.com>",
   "type": "module",
+  "bin": {
+    "rescript-stdlib-cli": "cli.js"
+  },
   "files": [
     "src/**/*.res",
     "src/**/*.resi",
     "bsconfig.json"
   ],
   "scripts": {
+    "lint": "node cli.js lint",
     "res:build": "rescript build -with-deps",
     "res:dev": "rescript build -with-deps -w",
     "test": "ava"
