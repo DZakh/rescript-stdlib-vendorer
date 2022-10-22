@@ -2,8 +2,6 @@
 
 import * as Belt_Result from "rescript/lib/es6/belt_Result.js";
 
-var flatMap = Belt_Result.flatMapU;
-
 function mapError(result, fn) {
   if (result.TAG === /* Ok */0) {
     return result;
@@ -15,33 +13,10 @@ function mapError(result, fn) {
   }
 }
 
-var Result = {
-  flatMap: flatMap,
-  mapError: mapError
-};
-
-var $$Array = {};
-
-var $$String;
-
-var $$Option;
-
-var Exn;
-
-var Json;
-
-var Re;
-
-var Int;
+var flatMap = Belt_Result.flatMapU;
 
 export {
-  Result ,
-  $$Array ,
-  $$String ,
-  $$Option ,
-  Exn ,
-  Json ,
-  Re ,
-  Int ,
+  flatMap ,
+  mapError ,
 }
 /* No side effect */

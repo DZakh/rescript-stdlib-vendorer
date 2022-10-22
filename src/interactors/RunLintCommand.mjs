@@ -2,12 +2,12 @@
 
 import * as Fs from "fs";
 import * as Path from "path";
-import * as Stdlib from "../Stdlib.mjs";
 import * as ResFile from "../entities/ResFile.mjs";
 import * as Process from "process";
 import * as BsConfig from "../entities/BsConfig.mjs";
 import * as SourceDirs from "../entities/SourceDirs.mjs";
 import * as LintContext from "../entities/LintContext.mjs";
+import * as Stdlib_Result from "../stdlib/Stdlib_Result.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
   var prohibitedModules = [
@@ -16,20 +16,20 @@ function make(loadBsConfig, loadSourceDirs) {
     "ReScriptJs"
   ];
   return function () {
-    return Stdlib.Result.flatMap(Stdlib.Result.flatMap(Stdlib.Result.flatMap(Stdlib.Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
+    return Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
                               return {
                                       NAME: "BS_CONFIG_PARSE_FAILURE",
                                       VAL: loadBsConfigError.VAL
                                     };
                             })), (function (bsConfig) {
-                          return Stdlib.Result.mapError(BsConfig.lint(bsConfig, prohibitedModules), (function (error) {
+                          return Stdlib_Result.mapError(BsConfig.lint(bsConfig, prohibitedModules), (function (error) {
                                         return {
                                                 NAME: "BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE",
                                                 VAL: error.VAL
                                               };
                                       }));
                         })), (function (param) {
-                      return Stdlib.Result.mapError(loadSourceDirs(), (function (loadSourceDirsError) {
+                      return Stdlib_Result.mapError(loadSourceDirs(), (function (loadSourceDirsError) {
                                     return {
                                             NAME: "SOURCE_DIRS_PARSE_FAILURE",
                                             VAL: loadSourceDirsError.VAL
