@@ -10,9 +10,9 @@ function getGlobalyOpenedModules(bsConfig) {
             });
 }
 
-function lint(bsConfig, prohibitedModules) {
+function lint(bsConfig, prohibitedModuleNames) {
   var globalyOpenedModules = getGlobalyOpenedModules(bsConfig);
-  var maybeOpenedProhibitedModule = prohibitedModules.find(function (prohibitedModule) {
+  var maybeOpenedProhibitedModule = prohibitedModuleNames.find(function (prohibitedModule) {
         return globalyOpenedModules.some(function (globalyOpenedModule) {
                     return globalyOpenedModule === prohibitedModule;
                   });

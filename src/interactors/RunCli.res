@@ -1,5 +1,7 @@
 open Stdlib
-open NodeJs
+
+module Process = NodeJs.Process
+module Console = NodeJs.Console
 
 @module("minimist")
 external parseCommandArguments: (array<string>, unit) => S.unknown = "default"
@@ -71,7 +73,9 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
         | Help => runHelpCommand(.)->Ok
         | LintHelp => runLintHelpCommand(.)->Ok
         | Lint =>
-          runLintCommand(.)->Result.mapError((. lintCommandError) => {
+          runLintCommand(.
+            ~maybeStdlibModuleOverride=None,
+          )->Result.mapError((. lintCommandError) => {
             LintCommandError(lintCommandError)
           })
         }

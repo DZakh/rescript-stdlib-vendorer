@@ -5,9 +5,9 @@ var $$Array;
 
 var Result;
 
-var $$String;
-
 var $$Option;
+
+var $$String;
 
 var Exn;
 
@@ -20,8 +20,8 @@ var Int;
 export {
   $$Array ,
   Result ,
-  $$String ,
   $$Option ,
+  $$String ,
   Exn ,
   Json ,
   Re ,

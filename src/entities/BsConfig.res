@@ -17,9 +17,9 @@ let getGlobalyOpenedModules = bsConfig => {
   })
 }
 
-let lint = (bsConfig, ~prohibitedModules) => {
+let lint = (bsConfig, ~prohibitedModuleNames) => {
   let globalyOpenedModules = bsConfig->getGlobalyOpenedModules
-  let maybeOpenedProhibitedModule = prohibitedModules->Array.find(prohibitedModule => {
+  let maybeOpenedProhibitedModule = prohibitedModuleNames->Array.find(prohibitedModule => {
     globalyOpenedModules->Array.some(globalyOpenedModule => {
       globalyOpenedModule === prohibitedModule
     })

@@ -5,24 +5,21 @@ import * as Path from "path";
 import * as ResFile from "../entities/ResFile.mjs";
 import * as Process from "process";
 import * as BsConfig from "../entities/BsConfig.mjs";
+import * as ModuleName from "../entities/ModuleName.mjs";
 import * as SourceDirs from "../entities/SourceDirs.mjs";
 import * as LintContext from "../entities/LintContext.mjs";
+import * as Stdlib_Option from "../stdlib/Stdlib_Option.mjs";
 import * as Stdlib_Result from "../stdlib/Stdlib_Result.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
-  var prohibitedModules = [
-    "Belt",
-    "Js",
-    "ReScriptJs"
-  ];
-  return function () {
+  return function (maybeStdlibModuleOverride) {
     return Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
                               return {
                                       NAME: "BS_CONFIG_PARSE_FAILURE",
                                       VAL: loadBsConfigError.VAL
                                     };
                             })), (function (bsConfig) {
-                          return Stdlib_Result.mapError(BsConfig.lint(bsConfig, prohibitedModules), (function (error) {
+                          return Stdlib_Result.mapError(BsConfig.lint(bsConfig, ModuleName.defaultProhibitedModuleNames), (function (error) {
                                         return {
                                                 NAME: "BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE",
                                                 VAL: error.VAL
@@ -37,24 +34,17 @@ function make(loadBsConfig, loadSourceDirs) {
                                   }));
                     })), (function (sourceDirs) {
                   var resFiles = SourceDirs.getProjectDirs(sourceDirs).flatMap(function (sourceDir) {
-                          var fullDirPath = Path.resolve(Process.cwd(), sourceDir);
-                          return Fs.readdirSync(fullDirPath).filter(function (dirItem) {
-                                        if (dirItem.endsWith(".res")) {
-                                          return true;
-                                        } else {
-                                          return dirItem.endsWith(".resi");
-                                        }
-                                      }).map(function (dirItem) {
-                                      return "" + fullDirPath + "/" + dirItem + "";
-                                    });
-                        }).map(function (resFilePath) {
-                        return ResFile.make(Fs.readFileSync(resFilePath, {
-                                          encoding: "utf8"
-                                        }).toString(), resFilePath);
+                        var fullDirPath = Path.resolve(Process.cwd(), sourceDir);
+                        return Fs.readdirSync(fullDirPath).filter(ResFile.checkIsResFile).map(function (dirItem) {
+                                    var resFilePath = "" + fullDirPath + "/" + dirItem + "";
+                                    return ResFile.make(Fs.readFileSync(resFilePath, {
+                                                      encoding: "utf8"
+                                                    }).toString(), resFilePath);
+                                  });
                       });
                   var lintContext = LintContext.make(undefined);
                   resFiles.forEach(function (resFile) {
-                        ResFile.lint(resFile, lintContext, prohibitedModules);
+                        ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, Stdlib_Option.getWithDefault(maybeStdlibModuleOverride, ModuleName.defaultStdlibModuleName));
                       });
                   var lintIssues = LintContext.getIssues(lintContext);
                   if (lintIssues.length !== 0) {

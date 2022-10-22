@@ -6,8 +6,8 @@ import * as Process from "process";
 import Minimist from "minimist";
 import * as LintIssue from "../entities/LintIssue.mjs";
 import * as Colorette from "colorette";
-import * as Belt_Option from "rescript/lib/es6/belt_Option.js";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
+import * as Stdlib_Option from "../stdlib/Stdlib_Option.mjs";
 import * as Stdlib_Result from "../stdlib/Stdlib_Result.mjs";
 
 function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
@@ -55,7 +55,7 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
                 if (unionErrors.TAG !== /* InvalidUnion */5) {
                   return Js_exn.raiseError("Parsed error always must have the InvalidUnion code");
                 }
-                var maybeIllegalOptionName = Belt_Option.map(Caml_option.undefined_to_opt(unionErrors._0.find(function (error) {
+                var maybeIllegalOptionName = Stdlib_Option.map(Caml_option.undefined_to_opt(unionErrors._0.find(function (error) {
                               var match = error.code;
                               if (typeof match === "number" || match.TAG !== /* ExcessField */4) {
                                 return false;
@@ -86,7 +86,7 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
                           _0: runHelpCommand()
                         };
               case /* Lint */1 :
-                  return Stdlib_Result.mapError(runLintCommand(), (function (lintCommandError) {
+                  return Stdlib_Result.mapError(runLintCommand(undefined), (function (lintCommandError) {
                                 return {
                                         TAG: /* LintCommandError */1,
                                         _0: lintCommandError

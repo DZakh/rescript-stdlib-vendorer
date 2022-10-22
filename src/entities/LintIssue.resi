@@ -1,8 +1,8 @@
 type kind =
-  | ProhibitedModuleOpen(string)
-  | ProhibitedModuleInclude(string)
-  | ProhibitedModuleAssign(string)
-  | ProhibitedModuleUsage(string)
+  | ProhibitedModuleOpen(ModuleName.t)
+  | ProhibitedModuleInclude(ModuleName.t)
+  | ProhibitedModuleAssign(ModuleName.t)
+  | ProhibitedModuleUsage(ModuleName.t)
 type t
 
 let make: (~path: string, ~line: int, ~kind: kind) => t
