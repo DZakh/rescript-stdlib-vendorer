@@ -2,7 +2,7 @@ type t
 
 let lint: (
   t,
-  ~prohibitedModules: array<string>,
-) => result<unit, [#HAS_OPENED_PROHIBITED_MODULE(string)]>
+  ~prohibitedModules: array<ModuleName.t>,
+) => result<unit, [#HAS_OPENED_PROHIBITED_MODULE(ModuleName.t)]>
 
 let struct: S.t<t>

@@ -8,7 +8,12 @@ let getGlobalyOpenedModules = bsConfig => {
     bscFlag->String.includes("-open")
   })
   ->Array.map(bscFlag => {
-    bscFlag->String.replace("-open", "")->String.trim->String.split(".")->Array.unsafe_get(0)
+    bscFlag
+    ->String.replace("-open", "")
+    ->String.trim
+    ->String.split(".")
+    ->Array.unsafe_get(0)
+    ->ModuleName.unsafeFromString
   })
 }
 

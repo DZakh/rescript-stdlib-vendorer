@@ -96,7 +96,9 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
           reason,
         ])
       | LintCommandError(#BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(moduleName)) =>
-        Console.console->Console.log(`Lint failed: Found globally opened module ${moduleName}`)
+        Console.console->Console.log(
+          `Lint failed: Found globally opened module ${moduleName->ModuleName.toString}`,
+        )
       | LintCommandError(#LINT_FAILED_WITH_ISSUES(lintIssues)) => {
           lintIssues->Array.forEach(lintIssue => {
             Console.console->Console.logMany([

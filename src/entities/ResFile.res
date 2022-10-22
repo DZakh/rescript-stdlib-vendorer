@@ -9,6 +9,7 @@ let lint = (resFile, ~lintContext, ~prohibitedModules) => {
   ->String.split("\n")
   ->Array.forEachi((line, idx) => {
     prohibitedModules->Array.forEach(moduleName => {
+      let moduleName = moduleName->ModuleName.toString
       let openRe = Re.fromString(`^ *open ${moduleName}($|\\.)`)
       if openRe->Re.test_(line) {
         lintContext->LintContext.addIssue(

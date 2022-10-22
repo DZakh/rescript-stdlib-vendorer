@@ -1,7 +1,11 @@
 open Stdlib
 
 let make = (~loadBsConfig, ~loadSourceDirs) => {
-  let prohibitedModules = ["Belt", "Js", "ReScriptJs"]
+  let prohibitedModules = [
+    "Belt"->ModuleName.unsafeFromString,
+    "Js"->ModuleName.unsafeFromString,
+    "ReScriptJs"->ModuleName.unsafeFromString,
+  ]
 
   (. ()) => {
     loadBsConfig(.)

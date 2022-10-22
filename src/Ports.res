@@ -2,7 +2,7 @@ module RunLintCommand = {
   type error = [
     | #BS_CONFIG_PARSE_FAILURE(string)
     | #SOURCE_DIRS_PARSE_FAILURE(string)
-    | #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(string)
+    | #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(ModuleName.t)
     | #LINT_FAILED_WITH_ISSUES(array<LintIssue.t>)
   ]
   type t = (. unit) => result<unit, error>
