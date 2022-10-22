@@ -13,46 +13,54 @@ function make(content, path) {
         };
 }
 
+function normalizeName(name) {
+  return name.replace(/\W/g, "").toLowerCase();
+}
+
 function lint(resFile, lintContext, prohibitedModuleNames, stdlibModuleName) {
   if (resFile.moduleName === stdlibModuleName || ModuleName.isSubmodule(resFile.moduleName, stdlibModuleName)) {
     var stdlibParentDirName = Stdlib_Option.getExnWithMessage(resFile.path.split("/").at(-2), "A ResFile should always have a directory name");
-    if (stdlibModuleName.replace(/\W/g, "").toLowerCase() !== stdlibParentDirName.replace(/\W/g, "").toLowerCase()) {
-      return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, 0, {
-                      TAG: /* ProhibitedModuleUsage */3,
-                      _0: stdlibModuleName
+    if (normalizeName(stdlibModuleName) !== normalizeName(stdlibParentDirName)) {
+      return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
+                      TAG: /* InvalidStdlibParentDirName */4,
+                      stdlibParentDirName: stdlibParentDirName
                     }));
     } else {
       return ;
     }
   }
   resFile.content.split("\n").forEach(function (line, idx) {
-        prohibitedModuleNames.forEach(function (prohibitedModule) {
-              var openRe = new RegExp("^ *open " + prohibitedModule + "($|\\.)");
+        prohibitedModuleNames.forEach(function (prohibitedModuleName) {
+              var openRe = new RegExp("^ *open " + prohibitedModuleName + "($|\\.)");
               if (openRe.test(line)) {
-                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
+                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
                           TAG: /* ProhibitedModuleOpen */0,
-                          _0: prohibitedModule
+                          line: idx + 1 | 0,
+                          prohibitedModuleName: prohibitedModuleName
                         }));
               }
-              var includeRe = new RegExp("^ *include " + prohibitedModule + "($|\\.)");
+              var includeRe = new RegExp("^ *include " + prohibitedModuleName + "($|\\.)");
               if (includeRe.test(line)) {
-                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
+                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
                           TAG: /* ProhibitedModuleInclude */1,
-                          _0: prohibitedModule
+                          line: idx + 1 | 0,
+                          prohibitedModuleName: prohibitedModuleName
                         }));
               }
-              var assignRe = new RegExp("module.+= " + prohibitedModule + "($|\\.)");
+              var assignRe = new RegExp("module.+= " + prohibitedModuleName + "($|\\.)");
               if (assignRe.test(line)) {
-                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
+                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
                           TAG: /* ProhibitedModuleAssign */2,
-                          _0: prohibitedModule
+                          line: idx + 1 | 0,
+                          prohibitedModuleName: prohibitedModuleName
                         }));
               }
-              var usageRe = new RegExp("\\W" + prohibitedModule + "\\.");
+              var usageRe = new RegExp("\\W" + prohibitedModuleName + "\\.");
               if (usageRe.test(line)) {
-                return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
+                return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
                                 TAG: /* ProhibitedModuleUsage */3,
-                                _0: prohibitedModule
+                                line: idx + 1 | 0,
+                                prohibitedModuleName: prohibitedModuleName
                               }));
               }
               

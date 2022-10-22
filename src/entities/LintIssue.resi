@@ -1,11 +1,12 @@
 type kind =
-  | ProhibitedModuleOpen(ModuleName.t)
-  | ProhibitedModuleInclude(ModuleName.t)
-  | ProhibitedModuleAssign(ModuleName.t)
-  | ProhibitedModuleUsage(ModuleName.t)
+  | ProhibitedModuleOpen({line: int, prohibitedModuleName: ModuleName.t})
+  | ProhibitedModuleInclude({line: int, prohibitedModuleName: ModuleName.t})
+  | ProhibitedModuleAssign({line: int, prohibitedModuleName: ModuleName.t})
+  | ProhibitedModuleUsage({line: int, prohibitedModuleName: ModuleName.t})
+  | InvalidStdlibParentDirName({stdlibParentDirName: string})
 type t
 
-let make: (~path: string, ~line: int, ~kind: kind) => t
+let make: (~path: string, ~kind: kind) => t
 
 let getLink: t => string
 
