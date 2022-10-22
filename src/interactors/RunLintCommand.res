@@ -36,7 +36,9 @@ let make = (~loadBsConfig, ~loadSourceDirs) => {
           open NodeJs
           let fullDirPath = Path.resolve([Process.process->Process.cwd, sourceDir])
           Fs.readdirSync(fullDirPath)
-          ->Array.filter(dirItem => dirItem->String.endsWith(".res"))
+          ->Array.filter(
+            dirItem => dirItem->String.endsWith(".res") || dirItem->String.endsWith(".resi"),
+          )
           ->Array.map(dirItem => `${fullDirPath}/${dirItem}`)
         })
         ->Array.map(resFilePath => {

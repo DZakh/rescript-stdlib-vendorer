@@ -39,7 +39,11 @@ function make(loadBsConfig, loadSourceDirs) {
                   var resFiles = SourceDirs.getProjectDirs(sourceDirs).flatMap(function (sourceDir) {
                           var fullDirPath = Path.resolve(Process.cwd(), sourceDir);
                           return Fs.readdirSync(fullDirPath).filter(function (dirItem) {
-                                        return dirItem.endsWith(".res");
+                                        if (dirItem.endsWith(".res")) {
+                                          return true;
+                                        } else {
+                                          return dirItem.endsWith(".resi");
+                                        }
                                       }).map(function (dirItem) {
                                       return "" + fullDirPath + "/" + dirItem + "";
                                     });
