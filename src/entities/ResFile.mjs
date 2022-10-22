@@ -13,28 +13,28 @@ function make(content, path) {
 function lint(resFile, lintContext, prohibitedModules) {
   resFile.content.split("\n").forEach(function (line, idx) {
         prohibitedModules.forEach(function (moduleName) {
-              var openRe = new RegExp("^ *open " + moduleName + "($|\.)");
+              var openRe = new RegExp("^ *open " + moduleName + "($|\\.)");
               if (openRe.test(line)) {
                 LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
                           TAG: /* ProhibitedModuleOpen */0,
                           _0: moduleName
                         }));
               }
-              var includeRe = new RegExp("^ *include " + moduleName + "($|\.)");
+              var includeRe = new RegExp("^ *include " + moduleName + "($|\\.)");
               if (includeRe.test(line)) {
                 LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
                           TAG: /* ProhibitedModuleInclude */1,
                           _0: moduleName
                         }));
               }
-              var assignRe = new RegExp("module.+= " + moduleName + "($|\.)");
+              var assignRe = new RegExp("module.+= " + moduleName + "($|\\.)");
               if (assignRe.test(line)) {
                 LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
                           TAG: /* ProhibitedModuleAssign */2,
                           _0: moduleName
                         }));
               }
-              var usageRe = new RegExp("\\W" + moduleName + "\.");
+              var usageRe = new RegExp("\\W" + moduleName + "\\.");
               if (usageRe.test(line)) {
                 return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, idx + 1 | 0, {
                                 TAG: /* ProhibitedModuleUsage */3,
