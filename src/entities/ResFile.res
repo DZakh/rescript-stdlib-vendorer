@@ -70,7 +70,7 @@ let lint = {
               ),
             )
           }
-          let usageRe = Re.fromString(`\\W${prohibitedModuleName->ModuleName.toString}\\.`)
+          let usageRe = Re.fromString(`(\\W|^)${prohibitedModuleName->ModuleName.toString}\\.`)
           if usageRe->Re.test_(line) {
             lintContext->LintContext.addIssue(
               LintIssue.make(

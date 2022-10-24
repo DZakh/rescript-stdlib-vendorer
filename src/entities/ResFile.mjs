@@ -55,7 +55,7 @@ function lint(resFile, lintContext, prohibitedModuleNames, stdlibModuleName) {
                           prohibitedModuleName: prohibitedModuleName
                         }));
               }
-              var usageRe = new RegExp("\\W" + prohibitedModuleName + "\\.");
+              var usageRe = new RegExp("(\\W|^)" + prohibitedModuleName + "\\.");
               if (usageRe.test(line)) {
                 return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
                                 TAG: /* ProhibitedModuleUsage */3,
