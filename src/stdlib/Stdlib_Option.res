@@ -1,5 +1,6 @@
 include Belt.Option
 
+@live
 let getExn = ()
 
 let getExnWithMessage = (option, message) => {
