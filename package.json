@@ -3,7 +3,13 @@
   "version": "0.1.0",
   "description": "The CLI to enforce usage of a single standard library in ReScript",
   "keywords": [
-    "ReScript"
+    "ReScript",
+    "Belt",
+    "Js",
+    "ReScriptJs",
+    "Stdlib",
+    "Lint",
+    "Eslint"
   ],
   "homepage": "https://github.com/DZakh/rescript-stdlib-cli#readme",
   "bugs": {
@@ -20,9 +26,8 @@
     "rescript-stdlib-cli": "cli.js"
   },
   "files": [
-    "src/**/*.res",
-    "src/**/*.resi",
-    "bsconfig.json"
+    "src/**/*.mjs",
+    "cli.js"
   ],
   "scripts": {
     "lint": "node cli.js lint",
