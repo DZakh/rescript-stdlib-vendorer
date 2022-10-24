@@ -5,18 +5,14 @@ module Console = NodeJs.Console
 
 @module("minimist")
 external parseCommandArguments: (array<string>, unit) => S.unknown = "default"
-@module("colorette")
-external modifyCliTextToBold: string => string = "bold"
-@module("colorette")
-external modifyCliTextToUnderline: string => string = "underline"
 
 type error =
   | CommandNotFound
   | IllegalOption({optionName: string})
-  | LintCommandError(Ports.RunLintCommand.error)
+
 type command = Help | Lint | LintHelp
 
-let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
+let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
   (. ()) => {
     let commandArguments = Process.process->Process.argv->Array.sliceFrom(2)
     let result =
@@ -68,16 +64,11 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
         | _ => Exn.raiseError("Parsed error always must have the InvalidUnion code")
         }
       })
-      ->Result.flatMap((. command) => {
+      ->Result.map((. command) => {
         switch command {
-        | Help => runHelpCommand(.)->Ok
-        | LintHelp => runLintHelpCommand(.)->Ok
-        | Lint =>
-          runLintCommand(.
-            ~maybeStdlibModuleOverride=None,
-          )->Result.mapError((. lintCommandError) => {
-            LintCommandError(lintCommandError)
-          })
+        | Help => runHelpCommand(.)
+        | LintHelp => runHelpLintCommand(.)
+        | Lint => runLintCommand(. ~maybeStdlibModuleOverride=None)
         }
       })
 
@@ -92,30 +83,6 @@ let make = (~runLintCommand, ~runHelpCommand, ~runLintHelpCommand) => {
         ])
       | IllegalOption({optionName}) =>
         Console.console->Console.logMany(["Illegal option:", optionName])
-      | LintCommandError(#BS_CONFIG_PARSE_FAILURE(reason)) =>
-        Console.console->Console.logMany([`Failed to parse "bsconfig.json":`, reason])
-      | LintCommandError(#SOURCE_DIRS_PARSE_FAILURE(reason)) =>
-        Console.console->Console.logMany([
-          `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,
-          reason,
-        ])
-      | LintCommandError(#BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(moduleName)) =>
-        Console.console->Console.log(
-          `Lint failed: Found globally opened module ${moduleName->ModuleName.toString}`,
-        )
-      | LintCommandError(#LINT_FAILED_WITH_ISSUES(lintIssues)) => {
-          lintIssues->Array.forEach(lintIssue => {
-            Console.console->Console.logMany([
-              lintIssue->LintIssue.getLink->modifyCliTextToUnderline,
-              "\n",
-              lintIssue->LintIssue.getMessage,
-              "\n",
-            ])
-          })
-          Console.console->Console.log(
-            "Use your custom standard library instead."->modifyCliTextToBold,
-          )
-        }
       }
       Process.process->Process.exitWithCode(1)
     }

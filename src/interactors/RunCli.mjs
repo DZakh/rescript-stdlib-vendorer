@@ -4,16 +4,14 @@ import * as S from "rescript-struct/src/S.mjs";
 import * as Js_exn from "rescript/lib/es6/js_exn.js";
 import * as Process from "process";
 import Minimist from "minimist";
-import * as LintIssue from "../entities/LintIssue.mjs";
-import * as Colorette from "colorette";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import * as Stdlib_Option from "../stdlib/Stdlib_Option.mjs";
 import * as Stdlib_Result from "../stdlib/Stdlib_Result.mjs";
 
-function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
+function make(runLintCommand, runHelpCommand, runHelpLintCommand) {
   return function () {
     var commandArguments = Process.argv.slice(2);
-    var result = Stdlib_Result.flatMap(Stdlib_Result.mapError(S.parseWith(Minimist(commandArguments), S.union([
+    var result = Stdlib_Result.map(Stdlib_Result.mapError(S.parseWith(Minimist(commandArguments), S.union([
                       S.transform(S.$$Object.strict(S.object1([
                                     "_",
                                     S.union([
@@ -71,8 +69,7 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
                         }
                       }));
                 if (maybeIllegalOptionName !== undefined) {
-                  return {
-                          TAG: /* IllegalOption */0,
+                  return /* IllegalOption */{
                           optionName: maybeIllegalOptionName
                         };
                 } else {
@@ -81,22 +78,11 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
               })), (function (command) {
             switch (command) {
               case /* Help */0 :
-                  return {
-                          TAG: /* Ok */0,
-                          _0: runHelpCommand()
-                        };
+                  return runHelpCommand();
               case /* Lint */1 :
-                  return Stdlib_Result.mapError(runLintCommand(undefined), (function (lintCommandError) {
-                                return {
-                                        TAG: /* LintCommandError */1,
-                                        _0: lintCommandError
-                                      };
-                              }));
+                  return runLintCommand(undefined);
               case /* LintHelp */2 :
-                  return {
-                          TAG: /* Ok */0,
-                          _0: runLintHelpCommand()
-                        };
+                  return runHelpLintCommand();
               
             }
           }));
@@ -104,25 +90,10 @@ function make(runLintCommand, runHelpCommand, runLintHelpCommand) {
       return ;
     }
     var error = result._0;
-    if (typeof error === "number") {
-      console.log("Command not found:", commandArguments.join(" "));
-    } else if (error.TAG === /* IllegalOption */0) {
+    if (error) {
       console.log("Illegal option:", error.optionName);
     } else {
-      var match = error._0;
-      var variant = match.NAME;
-      if (variant === "BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE") {
-        console.log("Lint failed: Found globally opened module " + match.VAL + "");
-      } else if (variant === "LINT_FAILED_WITH_ISSUES") {
-        match.VAL.forEach(function (lintIssue) {
-              console.log(Colorette.underline(LintIssue.getLink(lintIssue)), "\n", LintIssue.getMessage(lintIssue), "\n");
-            });
-        console.log(Colorette.bold("Use your custom standard library instead."));
-      } else if (variant === "BS_CONFIG_PARSE_FAILURE") {
-        console.log("Failed to parse \"bsconfig.json\":", match.VAL);
-      } else {
-        console.log("Failed to parse \".sourcedirs.json\". Check that you use compatible ReScript version. Parsing error:", match.VAL);
-      }
+      console.log("Command not found:", commandArguments.join(" "));
     }
     Process.exit(1);
   };

@@ -15,8 +15,11 @@ function mapError(result, fn) {
 
 var flatMap = Belt_Result.flatMapU;
 
+var map = Belt_Result.mapU;
+
 export {
   flatMap ,
+  map ,
   mapError ,
 }
 /* No side effect */

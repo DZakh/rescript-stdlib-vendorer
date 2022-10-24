@@ -1,4 +1,4 @@
-module RunLintCommand = {
+module Lint = {
   type error = [
     | #BS_CONFIG_PARSE_FAILURE(string)
     | #SOURCE_DIRS_PARSE_FAILURE(string)
@@ -8,7 +8,11 @@ module RunLintCommand = {
   type t = (. ~maybeStdlibModuleOverride: option<ModuleName.t>) => result<unit, error>
 }
 
-module RunLintHelpCommand = {
+module RunLintCommand = {
+  type t = (. ~maybeStdlibModuleOverride: option<ModuleName.t>) => unit
+}
+
+module RunHelpLintCommand = {
   type t = (. unit) => unit
 }
 

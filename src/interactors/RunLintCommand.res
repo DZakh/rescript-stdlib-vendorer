@@ -1,68 +1,38 @@
 open Stdlib
+module Console = NodeJs.Console
+module Process = NodeJs.Process
 
-let make = (~loadBsConfig, ~loadSourceDirs, . ~maybeStdlibModuleOverride) => {
-  let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
-
-  loadBsConfig(.)
-  ->Result.mapError((. loadBsConfigError) => {
-    switch loadBsConfigError {
-    | #PARSING_FAILURE(reason) => #BS_CONFIG_PARSE_FAILURE(reason)
-    }
-  })
-  ->Result.flatMap((. bsConfig) => {
-    bsConfig
-    ->BsConfig.lint(~prohibitedModuleNames)
-    ->Result.mapError((. error) => {
+let make = (~lint, . ~maybeStdlibModuleOverride) => {
+  switch lint(. ~maybeStdlibModuleOverride) {
+  | Ok() => ()
+  | Error(error) => {
       switch error {
-      | #HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule) =>
-        #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule)
-      }
-    })
-  })
-  // FIXME: There should be unit instead of underscore. Report to the compiler repo
-  ->Result.flatMap((. _) => {
-    loadSourceDirs(.)->Result.mapError((. loadSourceDirsError) =>
-      switch loadSourceDirsError {
-      | #PARSING_FAILURE(reason) => #SOURCE_DIRS_PARSE_FAILURE(reason)
-      }
-    )
-  })
-  ->Result.flatMap((. sourceDirs) => {
-    let resFiles =
-      sourceDirs
-      ->SourceDirs.getProjectDirs
-      ->Array.flatMap(sourceDir => {
-        open NodeJs
-        let fullDirPath = Path.resolve([Process.process->Process.cwd, sourceDir])
-        Fs.readdirSync(fullDirPath)
-        ->Array.filter(ResFile.checkIsResFile(~dirItem=_))
-        ->Array.map(
-          dirItem => {
-            let resFilePath = `${fullDirPath}/${dirItem}`
-            ResFile.make(
-              ~content=Fs.readFileSyncWith(
-                resFilePath,
-                Fs.readFileOptions(~encoding="utf8", ()),
-              )->Buffer.toString,
-              ~path=resFilePath,
-            )
-          },
+      | #BS_CONFIG_PARSE_FAILURE(reason) =>
+        Console.console->Console.logMany([`Failed to parse "bsconfig.json":`, reason])
+      | #SOURCE_DIRS_PARSE_FAILURE(reason) =>
+        Console.console->Console.logMany([
+          `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,
+          reason,
+        ])
+      | #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(moduleName) =>
+        Console.console->Console.log(
+          `Lint failed: Found globally opened module ${moduleName->ModuleName.toString}`,
         )
-      })
-
-    let lintContext = LintContext.make()
-    resFiles->Array.forEach(resFile => {
-      resFile->ResFile.lint(
-        ~lintContext,
-        ~prohibitedModuleNames,
-        ~stdlibModuleName=maybeStdlibModuleOverride->Option.getWithDefault(
-          ModuleName.defaultStdlibModuleName,
-        ),
-      )
-    })
-    switch lintContext->LintContext.getIssues {
-    | [] => Ok()
-    | lintIssues => Error(#LINT_FAILED_WITH_ISSUES(lintIssues))
+      | #LINT_FAILED_WITH_ISSUES(lintIssues) => {
+          lintIssues->Array.forEach(lintIssue => {
+            Console.console->Console.logMany([
+              lintIssue->LintIssue.getLink->Colorette.underline,
+              "\n",
+              lintIssue->LintIssue.getMessage,
+              "\n",
+            ])
+          })
+          Console.console->Console.log(
+            `Use your custom standard library. Read more in the article: ${"https://satin-lodge-4d6.notion.site/The-ultimate-answer-to-Belt-vs-Js-in-ReScript-b23caf1278144a2a81117bebf9d17617"->Colorette.underline}`->Colorette.bold,
+          )
+        }
+      }
+      Process.process->Process.exitWithCode(1)
     }
-  })
+  }
 }
