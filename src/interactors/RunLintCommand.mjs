@@ -18,7 +18,7 @@ function make(lint) {
       error$1.VAL.forEach(function (lintIssue) {
             console.log(Colorette.underline(LintIssue.getLink(lintIssue)), "\n", LintIssue.getMessage(lintIssue), "\n");
           });
-      console.log(Colorette.bold("Use your custom standard library. Read more in the article: " + Colorette.underline("https://satin-lodge-4d6.notion.site/The-ultimate-answer-to-Belt-vs-Js-in-ReScript-b23caf1278144a2a81117bebf9d17617") + ""));
+      console.log(Colorette.bold("Use custom standard library. Read more in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-cli") + ""));
     } else if (variant === "BS_CONFIG_PARSE_FAILURE") {
       console.log("Failed to parse \"bsconfig.json\":", error$1.VAL);
     } else {
