@@ -1,5 +1,3 @@
-open Stdlib
-
 type kind =
   | ProhibitedModuleOpen({line: int, prohibitedModuleName: ModuleName.t})
   | ProhibitedModuleInclude({line: int, prohibitedModuleName: ModuleName.t})

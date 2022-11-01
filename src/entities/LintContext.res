@@ -1,5 +1,3 @@
-open Stdlib
-
 type t = array<LintIssue.t>
 
 let make = () => []

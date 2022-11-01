@@ -1,5 +1,3 @@
-open Stdlib
-
 let make = (~loadBsConfig, ~loadSourceDirs, . ~maybeStdlibModuleOverride) => {
   let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
 

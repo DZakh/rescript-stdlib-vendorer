@@ -1,5 +1,6 @@
 {
   "name": "rescript-stdlib-cli",
+  "bsc-flags": ["-open Stdlib"],
   "sources": [
     {
       "dir": "src",
@@ -10,6 +11,6 @@
     "module": "es6",
     "in-source": true
   },
-  "bs-dependencies": ["rescript-nodejs", "rescript-struct"],
+  "bs-dependencies": ["rescript-nodejs", "rescript-struct", "stdlib"],
   "suffix": ".mjs"
 }

@@ -5,8 +5,8 @@ import * as Js_exn from "rescript/lib/es6/js_exn.js";
 import * as Process from "process";
 import Minimist from "minimist";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
-import * as Stdlib_Option from "../stdlib/Stdlib_Option.mjs";
-import * as Stdlib_Result from "../stdlib/Stdlib_Result.mjs";
+import * as Stdlib_Option from "stdlib/src/Stdlib_Option.mjs";
+import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
 
 function make(runLintCommand, runHelpCommand, runHelpLintCommand) {
   return function () {

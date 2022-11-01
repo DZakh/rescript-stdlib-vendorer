@@ -1,5 +1,3 @@
-open Stdlib
-
 let make = () => {
   (. ()) => {
     let jsonObj = {

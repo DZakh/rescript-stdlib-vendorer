@@ -5,7 +5,7 @@ import * as Fs from "fs";
 import * as Path from "path";
 import * as Process from "process";
 import * as SourceDirs from "../entities/SourceDirs.mjs";
-import * as Stdlib_Result from "../stdlib/Stdlib_Result.mjs";
+import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
 
 function make(param) {
   return function () {

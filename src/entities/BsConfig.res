@@ -1,5 +1,3 @@
-open Stdlib
-
 type t = {bscFlags: array<string>}
 
 let getGlobalyOpenedModules = bsConfig => {

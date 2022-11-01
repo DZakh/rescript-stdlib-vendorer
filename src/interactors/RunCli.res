@@ -1,5 +1,3 @@
-open Stdlib
-
 module Process = NodeJs.Process
 module Console = NodeJs.Console
 

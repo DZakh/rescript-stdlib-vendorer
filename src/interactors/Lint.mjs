@@ -8,8 +8,8 @@ import * as BsConfig from "../entities/BsConfig.mjs";
 import * as ModuleName from "../entities/ModuleName.mjs";
 import * as SourceDirs from "../entities/SourceDirs.mjs";
 import * as LintContext from "../entities/LintContext.mjs";
-import * as Stdlib_Option from "../stdlib/Stdlib_Option.mjs";
-import * as Stdlib_Result from "../stdlib/Stdlib_Result.mjs";
+import * as Stdlib_Option from "stdlib/src/Stdlib_Option.mjs";
+import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
   return function (maybeStdlibModuleOverride) {

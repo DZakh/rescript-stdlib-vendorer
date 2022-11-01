@@ -1,5 +1,3 @@
-open Stdlib
-
 include Opaque.String
 
 let defaultStdlibModuleName = "Stdlib"

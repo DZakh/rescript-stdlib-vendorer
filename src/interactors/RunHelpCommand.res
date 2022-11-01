@@ -1,4 +1,3 @@
-open Stdlib
 module Console = NodeJs.Console
 
 let make = () => {

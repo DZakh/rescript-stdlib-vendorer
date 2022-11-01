@@ -1,5 +1,3 @@
-open Stdlib
-
 type t = {content: string, path: string, moduleName: ModuleName.t}
 
 let make = (~content, ~path) => {

@@ -1,0 +1,14 @@
+{
+  "name": "stdlib",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "res:dev": "rescript build -with-deps -w"
+  },
+  "devDependencies": {
+    "rescript": "10.0.1"
+  },
+  "peerDependencies": {
+    "rescript": "10.0.x"
+  }
+}
