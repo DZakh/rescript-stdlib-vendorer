@@ -27,10 +27,14 @@ function make(loadBsConfig, loadSourceDirs) {
                                       }));
                         })), (function (param) {
                       return Stdlib_Result.mapError(loadSourceDirs(), (function (loadSourceDirsError) {
-                                    return {
-                                            NAME: "SOURCE_DIRS_PARSE_FAILURE",
-                                            VAL: loadSourceDirsError.VAL
-                                          };
+                                    if (loadSourceDirsError) {
+                                      return {
+                                              NAME: "SOURCE_DIRS_PARSE_FAILURE",
+                                              VAL: loadSourceDirsError._0
+                                            };
+                                    } else {
+                                      return "RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND";
+                                    }
                                   }));
                     })), (function (sourceDirs) {
                   var resFiles = SourceDirs.getProjectDirs(sourceDirs).flatMap(function (sourceDir) {

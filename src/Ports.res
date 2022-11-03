@@ -4,6 +4,7 @@ module Lint = {
     | #SOURCE_DIRS_PARSE_FAILURE(string)
     | #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(ModuleName.t)
     | #LINT_FAILED_WITH_ISSUES(array<LintIssue.t>)
+    | #RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND
   ]
   type t = (. ~maybeStdlibModuleOverride: option<ModuleName.t>) => result<unit, error>
 }
@@ -26,7 +27,7 @@ module LoadBsConfig = {
 }
 
 module LoadSourceDirs = {
-  type error = [#PARSING_FAILURE(string)]
+  type error = RescriptCompilerArtifactsNotFound | ParsingFailure(string)
   type t = (. unit) => result<SourceDirs.t, error>
 }
 

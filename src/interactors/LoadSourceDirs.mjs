@@ -9,14 +9,27 @@ import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
 
 function make(param) {
   return function () {
-    var jsonObj = JSON.parse(Fs.readFileSync(Path.resolve(Process.cwd(), "lib/bs/.sourcedirs.json"), {
+    var tmp;
+    try {
+      tmp = {
+        TAG: /* Ok */0,
+        _0: Fs.readFileSync(Path.resolve(Process.cwd(), "lib/bs/.sourcedirs.json"), {
                 encoding: "utf8"
-              }).toString());
-    return Stdlib_Result.mapError(S.parseWith(jsonObj, SourceDirs.struct), (function (error) {
-                  return {
-                          NAME: "PARSING_FAILURE",
-                          VAL: S.$$Error.toString(error)
-                        };
+              }).toString()
+      };
+    }
+    catch (exn){
+      tmp = {
+        TAG: /* Error */1,
+        _0: /* RescriptCompilerArtifactsNotFound */0
+      };
+    }
+    return Stdlib_Result.flatMap(tmp, (function (file) {
+                  return Stdlib_Result.mapError(S.parseWith(JSON.parse(file), SourceDirs.struct), (function (error) {
+                                return /* ParsingFailure */{
+                                        _0: S.$$Error.toString(error)
+                                      };
+                              }));
                 }));
   };
 }

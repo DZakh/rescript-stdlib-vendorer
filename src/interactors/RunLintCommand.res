@@ -8,6 +8,8 @@ let make = (~lint, . ~maybeStdlibModuleOverride) => {
       switch error {
       | #BS_CONFIG_PARSE_FAILURE(reason) =>
         Console.console->Console.logMany([`Failed to parse "bsconfig.json":`, reason])
+      | #RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND =>
+        Console.console->Console.log(`Couldn't find rescript compiler artifacts in the ./lib/bs/ directory. Try to run compiler before the lint script.`)
       | #SOURCE_DIRS_PARSE_FAILURE(reason) =>
         Console.console->Console.logMany([
           `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,

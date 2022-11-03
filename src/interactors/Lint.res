@@ -1,4 +1,8 @@
-let make = (~loadBsConfig, ~loadSourceDirs, . ~maybeStdlibModuleOverride) => {
+let make = (
+  ~loadBsConfig,
+  ~loadSourceDirs: Ports.LoadSourceDirs.t,
+  . ~maybeStdlibModuleOverride,
+) => {
   let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
 
   loadBsConfig(.)
@@ -21,7 +25,8 @@ let make = (~loadBsConfig, ~loadSourceDirs, . ~maybeStdlibModuleOverride) => {
   ->Result.flatMap((. _) => {
     loadSourceDirs(.)->Result.mapError((. loadSourceDirsError) =>
       switch loadSourceDirsError {
-      | #PARSING_FAILURE(reason) => #SOURCE_DIRS_PARSE_FAILURE(reason)
+      | ParsingFailure(reason) => #SOURCE_DIRS_PARSE_FAILURE(reason)
+      | RescriptCompilerArtifactsNotFound => #RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND
       }
     )
   })
