@@ -26,49 +26,54 @@ A few times, we even end up using `Pervasives` by mistake.
 
 ## Solution
 
-I will not create intrigue and say that the solution is to group everything together in one module and enforce the usage of this sole module across the codebase.
+I will not create intrigue and say that the solution is to group everything in a vendored standard library and enforce its usage across the codebase. Opening an opportunity to reuse any existing module like `Js`, `Belt`, or `RescriptJs`; and extend them for project-specific needs.
 
-Having a dedicated module, we will be able to reuse whatever module is for our liking `Js` / `Belt` / `RescriptJs`, and extend it with project-specific helper functions. The part with enforcing is even more crucial because if we don’t have it automated, people will continue using all different modules instead of the only one `PerfectStdLib.res` we’ve just created.
+The enforcing part is even more crucial because if we don't have it automated, developers will continue using all different modules instead of the single `Stdlib.res` we vendored.
 
-To achieve these two parts as effortlessly as possible, I’ve created a cli with two commands: `init` and `lint`.
+I've created a CLI that anyone can easily use to achieve these two parts. For now, it only has the `lint` command, but I'm going to add `init` and `migrate` for easier adoption.
 
-> At the time of writing the article, the cli exists only in my head, but I write as if it exists in real life to get your feedback.
+### Create vendored standard library
 
-Open your ReScript project and run:
+TBD. You can use the CLI library repository as a reference.
 
-```bash
-npx rescript-stdlib-cli init
+### Linting
+
+The linting script I've mentioned above does a straightforward thing - It checks all project files and detects the usage of prohibited modules.
+
+By default, prohibited modules are `Js`, `Belt`, and `ReScriptJs`. In future versions, the linter will also complain on private modules like `Js_Dict`, including the ones prefixed with `Stdlib_`.
+
+Opening a prohibited module with a `bs-flag` will also cause an error.
+
+To start using the linter in your project, install `rescript-stdlib-cli` as a dev dependency. Let's also add an npm run script for convenience.
+
+```
+npm install -D rescript-stdlib-cli
+npm pkg set scripts.lint:stdlib="rescript-stdlib-cli lint"
 ```
 
-It will do the following things:
+As a result, we should get a `package.json` like this:
 
-1. Create a `Stdlib.res` module containing following code:
-
-```reason
-include RescriptJs.Js
-module Option = Belt.Option
-module Result = Belt.Result
+```diff
+{
+  "name": "your-awesome-project",
+  "scripts": {
++   "lint:stdlib": "rescript-stdlib-cli lint"
+  },
+  "dependencies": {
+    "stdlib": "file:stdlib"
+  },
+  "devDependencies": {
++   "rescript-stdlib-cli": "*"
+  }
+}
 ```
 
-1. Add `rescript-js` to `dependencies` and `bs-dependencies`
-2. Add an npm script `"lint-rescript-stdlib": "rescript-stdlib-cli lint"`
+The only thing is left to run:
 
-> If you don’t like rescript-js or some other defaults, you can configure everything with your own hands and only use the lint script.
-
-As of `rescript-stdlib-cli lint`, it’ll try to find the usage of `Js`, `Belt`, or `RescriptJs` in the project and report an error if there is some.
-
-## ReScriptJs as default
-
-The [ReScriptJs](https://github.com/bloodyowl/rescript-js) is a little bit controversial, in my opinion. The usage of userland standard libraries is not supported by the core team.
-
-> **From the website**: we do not recommend other userland standard library alternatives (unless it’s DOM bindings). These cause confusion and split points for the community.
-
-At the same time, you can hear from some members that `ReScriptJs` is considered a future replacement for `Js` module.
-
-Personally, I find it a good choice in the `Belt` vs `Js` argument because it has taken the safety-first approach from `Belt` and keeps familiar JavaScript APIs like `Js`. Another advantage is that it ships as an npm module with the ability to version.
-
-There’s still a big area for improvement, such as missing tests. But contributions are accepted, and the API is stable with a minimum risk of breaking changes.
+```
+npm run lint:stdlib
+```
 
 ## Migration guide
 
-Here I’ll write how to use code modes to migrate an existing codebase to be able to use `rescript-stdlib-cli lint`.
+TBD. Here I'll describe how to migrate a big codebase to the desired solution painlessly.
