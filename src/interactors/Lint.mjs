@@ -15,25 +15,25 @@ function make(loadBsConfig, loadSourceDirs) {
   return function (maybeStdlibModuleOverride) {
     return Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
                               return {
-                                      NAME: "BS_CONFIG_PARSE_FAILURE",
-                                      VAL: loadBsConfigError.VAL
+                                      TAG: /* BsConfigParseFailure */0,
+                                      _0: loadBsConfigError._0
                                     };
                             })), (function (bsConfig) {
                           return Stdlib_Result.mapError(BsConfig.lint(bsConfig, ModuleName.defaultProhibitedModuleNames), (function (error) {
                                         return {
-                                                NAME: "BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE",
-                                                VAL: error.VAL
+                                                TAG: /* BsConfigHasOpenedProhibitedModule */2,
+                                                _0: error.VAL
                                               };
                                       }));
                         })), (function (param) {
                       return Stdlib_Result.mapError(loadSourceDirs(), (function (loadSourceDirsError) {
                                     if (loadSourceDirsError) {
                                       return {
-                                              NAME: "SOURCE_DIRS_PARSE_FAILURE",
-                                              VAL: loadSourceDirsError._0
+                                              TAG: /* SourceDirsParseFailure */1,
+                                              _0: loadSourceDirsError._0
                                             };
                                     } else {
-                                      return "RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND";
+                                      return /* RescriptCompilerArtifactsNotFound */0;
                                     }
                                   }));
                     })), (function (sourceDirs) {
@@ -55,8 +55,8 @@ function make(loadBsConfig, loadSourceDirs) {
                     return {
                             TAG: /* Error */1,
                             _0: {
-                              NAME: "LINT_FAILED_WITH_ISSUES",
-                              VAL: lintIssues
+                              TAG: /* LintFailedWithIssues */3,
+                              _0: lintIssues
                             }
                           };
                   } else {

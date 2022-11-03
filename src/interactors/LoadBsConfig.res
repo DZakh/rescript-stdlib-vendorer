@@ -12,7 +12,7 @@ let make = () => {
     jsonObj
     ->S.parseWith(BsConfig.struct)
     ->Result.mapError((. error) => {
-      #PARSING_FAILURE(error->S.Error.toString)
+      Port.LoadBsConfig.ParsingFailure(error->S.Error.toString)
     })
   }
 }

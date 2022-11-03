@@ -1,5 +1,5 @@
 let make: (
-  ~runLintCommand: Ports.RunLintCommand.t,
-  ~runHelpCommand: Ports.RunHelpCommand.t,
-  ~runHelpLintCommand: Ports.RunHelpLintCommand.t,
-) => Ports.RunCli.t
+  ~runLintCommand: Port.RunLintCommand.t,
+  ~runHelpCommand: Port.RunHelpCommand.t,
+  ~runHelpLintCommand: Port.RunHelpLintCommand.t,
+) => Port.RunCli.t

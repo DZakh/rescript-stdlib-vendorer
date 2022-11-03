@@ -13,9 +13,8 @@ function make(param) {
                 encoding: "utf8"
               }).toString());
     return Stdlib_Result.mapError(S.parseWith(jsonObj, BsConfig.struct), (function (error) {
-                  return {
-                          NAME: "PARSING_FAILURE",
-                          VAL: S.$$Error.toString(error)
+                  return /* ParsingFailure */{
+                          _0: S.$$Error.toString(error)
                         };
                 }));
   };

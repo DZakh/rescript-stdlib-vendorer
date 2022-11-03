@@ -1,1 +1,1 @@
-let make: unit => Ports.RunHelpLintCommand.t
+let make: unit => Port.RunHelpLintCommand.t

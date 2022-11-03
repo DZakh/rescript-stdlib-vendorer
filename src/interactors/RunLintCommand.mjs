@@ -11,22 +11,27 @@ function make(lint) {
       return ;
     }
     var error$1 = error._0;
-    if (typeof error$1 === "object") {
-      var variant = error$1.NAME;
-      if (variant === "BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE") {
-        console.log("Lint failed: Found globally opened module " + error$1.VAL + "");
-      } else if (variant === "LINT_FAILED_WITH_ISSUES") {
-        error$1.VAL.forEach(function (lintIssue) {
-              console.log(Colorette.underline(LintIssue.getLink(lintIssue)), "\n", LintIssue.getMessage(lintIssue), "\n");
-            });
-        console.log(Colorette.bold("Use custom standard library. Read more in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-cli") + ""));
-      } else if (variant === "BS_CONFIG_PARSE_FAILURE") {
-        console.log("Failed to parse \"bsconfig.json\":", error$1.VAL);
-      } else {
-        console.log("Failed to parse \".sourcedirs.json\". Check that you use compatible ReScript version. Parsing error:", error$1.VAL);
-      }
+    if (typeof error$1 === "number") {
+      console.log("Couldn't find rescript compiler artifacts in the \"./lib/bs/\" directory. Try to run compiler before the lint script.");
     } else {
-      console.log("Couldn't find rescript compiler artifacts in the ./lib/bs/ directory. Try to run compiler before the lint script.");
+      switch (error$1.TAG | 0) {
+        case /* BsConfigParseFailure */0 :
+            console.log("Failed to parse \"bsconfig.json\":", error$1._0);
+            break;
+        case /* SourceDirsParseFailure */1 :
+            console.log("Failed to parse \".sourcedirs.json\". Check that you use compatible ReScript version. Parsing error:", error$1._0);
+            break;
+        case /* BsConfigHasOpenedProhibitedModule */2 :
+            console.log("Lint failed: Found globally opened module " + error$1._0 + "");
+            break;
+        case /* LintFailedWithIssues */3 :
+            error$1._0.forEach(function (lintIssue) {
+                  console.log(Colorette.underline(LintIssue.getLink(lintIssue)), "\n", LintIssue.getMessage(lintIssue), "\n");
+                });
+            console.log(Colorette.bold("Use custom standard library. Read more in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-cli") + ""));
+            break;
+        
+      }
     }
     Process.exit(1);
   };

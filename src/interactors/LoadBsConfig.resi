@@ -1,1 +1,1 @@
-let make: unit => Ports.LoadBsConfig.t
+let make: unit => Port.LoadBsConfig.t

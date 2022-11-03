@@ -1,6 +1,6 @@
 let make = (
-  ~loadBsConfig,
-  ~loadSourceDirs: Ports.LoadSourceDirs.t,
+  ~loadBsConfig: Port.LoadBsConfig.t,
+  ~loadSourceDirs: Port.LoadSourceDirs.t,
   . ~maybeStdlibModuleOverride,
 ) => {
   let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
@@ -8,7 +8,7 @@ let make = (
   loadBsConfig(.)
   ->Result.mapError((. loadBsConfigError) => {
     switch loadBsConfigError {
-    | #PARSING_FAILURE(reason) => #BS_CONFIG_PARSE_FAILURE(reason)
+    | ParsingFailure(reason) => Port.Lint.BsConfigParseFailure(reason)
     }
   })
   ->Result.flatMap((. bsConfig) => {
@@ -17,7 +17,7 @@ let make = (
     ->Result.mapError((. error) => {
       switch error {
       | #HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule) =>
-        #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule)
+        Port.Lint.BsConfigHasOpenedProhibitedModule(openedProhibitedModule)
       }
     })
   })
@@ -25,8 +25,8 @@ let make = (
   ->Result.flatMap((. _) => {
     loadSourceDirs(.)->Result.mapError((. loadSourceDirsError) =>
       switch loadSourceDirsError {
-      | ParsingFailure(reason) => #SOURCE_DIRS_PARSE_FAILURE(reason)
-      | RescriptCompilerArtifactsNotFound => #RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND
+      | ParsingFailure(reason) => Port.Lint.SourceDirsParseFailure(reason)
+      | RescriptCompilerArtifactsNotFound => Port.Lint.RescriptCompilerArtifactsNotFound
       }
     )
   })
@@ -65,7 +65,7 @@ let make = (
     })
     switch lintContext->LintContext.getIssues {
     | [] => Ok()
-    | lintIssues => Error(#LINT_FAILED_WITH_ISSUES(lintIssues))
+    | lintIssues => Error(Port.Lint.LintFailedWithIssues(lintIssues))
     }
   })
 }

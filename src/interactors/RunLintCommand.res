@@ -1,25 +1,25 @@
 module Console = NodeJs.Console
 module Process = NodeJs.Process
 
-let make = (~lint, . ~maybeStdlibModuleOverride) => {
+let make = (~lint: Port.Lint.t, . ~maybeStdlibModuleOverride) => {
   switch lint(. ~maybeStdlibModuleOverride) {
   | Ok() => ()
   | Error(error) => {
       switch error {
-      | #BS_CONFIG_PARSE_FAILURE(reason) =>
+      | BsConfigParseFailure(reason) =>
         Console.console->Console.logMany([`Failed to parse "bsconfig.json":`, reason])
-      | #RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND =>
-        Console.console->Console.log(`Couldn't find rescript compiler artifacts in the ./lib/bs/ directory. Try to run compiler before the lint script.`)
-      | #SOURCE_DIRS_PARSE_FAILURE(reason) =>
+      | RescriptCompilerArtifactsNotFound =>
+        Console.console->Console.log(`Couldn't find rescript compiler artifacts in the "./lib/bs/" directory. Try to run compiler before the lint script.`)
+      | SourceDirsParseFailure(reason) =>
         Console.console->Console.logMany([
           `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,
           reason,
         ])
-      | #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(moduleName) =>
+      | BsConfigHasOpenedProhibitedModule(moduleName) =>
         Console.console->Console.log(
           `Lint failed: Found globally opened module ${moduleName->ModuleName.toString}`,
         )
-      | #LINT_FAILED_WITH_ISSUES(lintIssues) => {
+      | LintFailedWithIssues(lintIssues) => {
           lintIssues->Array.forEach(lintIssue => {
             Console.console->Console.logMany([
               lintIssue->LintIssue.getLink->Colorette.underline,

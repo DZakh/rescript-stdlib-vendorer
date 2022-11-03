@@ -1,11 +1,10 @@
 module Lint = {
-  type error = [
-    | #BS_CONFIG_PARSE_FAILURE(string)
-    | #SOURCE_DIRS_PARSE_FAILURE(string)
-    | #BS_CONFIG_HAS_OPENED_PROHIBITED_MODULE(ModuleName.t)
-    | #LINT_FAILED_WITH_ISSUES(array<LintIssue.t>)
-    | #RESCRIPT_COMPILER_ARTIFACTS_NOT_FOUND
-  ]
+  type error =
+    | BsConfigParseFailure(string)
+    | SourceDirsParseFailure(string)
+    | BsConfigHasOpenedProhibitedModule(ModuleName.t)
+    | LintFailedWithIssues(array<LintIssue.t>)
+    | RescriptCompilerArtifactsNotFound
   type t = (. ~maybeStdlibModuleOverride: option<ModuleName.t>) => result<unit, error>
 }
 
@@ -22,7 +21,7 @@ module RunHelpCommand = {
 }
 
 module LoadBsConfig = {
-  type error = [#PARSING_FAILURE(string)]
+  type error = ParsingFailure(string)
   type t = (. unit) => result<BsConfig.t, error>
 }
 

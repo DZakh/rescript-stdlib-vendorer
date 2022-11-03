@@ -1,4 +1,4 @@
 let make: (
-  ~loadBsConfig: Ports.LoadBsConfig.t,
-  ~loadSourceDirs: Ports.LoadSourceDirs.t,
-) => Ports.Lint.t
+  ~loadBsConfig: Port.LoadBsConfig.t,
+  ~loadSourceDirs: Port.LoadSourceDirs.t,
+) => Port.Lint.t

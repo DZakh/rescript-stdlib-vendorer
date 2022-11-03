@@ -1,1 +1,1 @@
-let make: (~lint: Ports.Lint.t) => Ports.RunLintCommand.t
+let make: (~lint: Port.Lint.t) => Port.RunLintCommand.t
