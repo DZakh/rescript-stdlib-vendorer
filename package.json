@@ -1,7 +1,7 @@
 {
   "name": "rescript-stdlib-cli",
   "version": "0.2.0",
-  "description": "The CLI to enforce usage of a single standard library in ReScript",
+  "description": "The CLI to enforce usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
     "Belt",
