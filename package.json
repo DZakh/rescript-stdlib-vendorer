@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The CLI to enforce usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
@@ -27,6 +27,7 @@
   },
   "files": [
     "src/**/*.mjs",
+    "stdlib/**/*.mjs",
     "cli.js"
   ],
   "scripts": {
@@ -41,15 +42,17 @@
     ]
   },
   "dependencies": {
-    "colorette": "2.0.19",
-    "minimist": "1.2.7",
-    "rescript": "10.0.1",
-    "rescript-nodejs": "14.3.1",
-    "rescript-struct": "2.0.0",
-    "stdlib": "file:stdlib"
+    "colorette": "~2.0.19",
+    "minimist": "~1.2.7",
+    "rescript": "~10.0.1",
+    "rescript-nodejs": "~14.3.1",
+    "rescript-struct": "~2.0.0"
   },
   "devDependencies": {
-    "@dzakh/rescript-ava": "0.4.0",
-    "ava": "4.3.3"
-  }
+    "@dzakh/rescript-ava": "~1.0.0",
+    "ava": "~5.0.1"
+  },
+  "workspaces": [
+    "stdlib"
+  ]
 }
