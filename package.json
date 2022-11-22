@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-cli",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "The CLI to enforce usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
