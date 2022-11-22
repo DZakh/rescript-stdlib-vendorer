@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-cli",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "The CLI to enforce usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
@@ -23,15 +23,14 @@
   "author": "Dmitry Zakharov <dzakh.dev@gmail.com>",
   "type": "module",
   "bin": {
-    "rescript-stdlib-cli": "cli.js"
+    "rescript-stdlib-cli": "dist/rescript-stdlib-cli.modern.js"
   },
   "files": [
-    "src/**/*.mjs",
-    "stdlib/**/*.mjs",
-    "stdlib/package.json",
-    "cli.js"
+    "dist/*"
   ],
   "scripts": {
+    "bundle": "microbundle --entry cli.js --output dist --format modern --target node",
+    "build": "npm run res:build && npm run bundle",
     "lint": "node cli.js lint",
     "res:build": "rescript build -with-deps",
     "res:dev": "rescript build -with-deps -w",
@@ -51,9 +50,8 @@
   },
   "devDependencies": {
     "@dzakh/rescript-ava": "~1.0.0",
-    "ava": "~5.0.1"
-  },
-  "workspaces": [
-    "stdlib"
-  ]
+    "ava": "~5.0.1",
+    "microbundle": "^0.15.1",
+    "stdlib": "file:stdlib"
+  }
 }
