@@ -27,6 +27,7 @@
   },
   "files": [
     "src/**/*.mjs",
+    "stdlib/**/*.mjs",
     "cli.js"
   ],
   "scripts": {
