@@ -28,6 +28,7 @@
   "files": [
     "src/**/*.mjs",
     "stdlib/**/*.mjs",
+    "stdlib/package.json",
     "cli.js"
   ],
   "scripts": {
