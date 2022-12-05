@@ -2,7 +2,7 @@ module Process = NodeJs.Process
 module Console = NodeJs.Console
 
 @module("minimist")
-external parseCommandArguments: (array<string>, unit) => S.unknown = "default"
+external parseCommandArguments: (array<string>, unit) => unknown = "default"
 
 type error =
   | CommandNotFound
@@ -18,21 +18,21 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
       ->parseCommandArguments()
       ->S.parseWith(
         S.union([
-          S.object1(. (
-            "_",
-            S.union([S.tuple0(.), S.tuple1(. S.literalVariant(String("help"), ()))]),
-          ))
-          ->S.Object.strict
-          ->S.transform(~parser=() => Help, ()),
-          S.object1(. (
-            "_",
-            S.tuple2(. S.literalVariant(String("help"), ()), S.literalVariant(String("lint"), ())),
-          ))
-          ->S.Object.strict
-          ->S.transform(~parser=(((), ())) => LintHelp, ()),
-          S.object1(. ("_", S.tuple1(. S.literalVariant(String("lint"), ()))))
-          ->S.Object.strict
-          ->S.transform(~parser=() => Lint, ()),
+          S.object(o => {
+            o->S.discriminant(
+              "_",
+              S.union([S.tuple0(.), S.tuple1(. S.literalVariant(String("help"), ()))]),
+            )
+            Help
+          })->S.Object.strict,
+          S.object(o => {
+            o->S.discriminant("_", S.tuple2(. S.literal(String("help")), S.literal(String("lint"))))
+            LintHelp
+          })->S.Object.strict,
+          S.object(o => {
+            o->S.discriminant("_", S.tuple1(. S.literal(String("lint"))))
+            Lint
+          })->S.Object.strict,
         ]),
       )
       ->Result.mapError((. error) => {

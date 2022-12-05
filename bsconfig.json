@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-cli",
-  "bsc-flags": ["-open Stdlib"],
+  "bsc-flags": ["-open Stdlib", "-open ReScriptStruct"],
   "sources": [
     {
       "dir": "src",
