@@ -28,9 +28,6 @@ let lint = (bsConfig, ~prohibitedModuleNames) => {
   }
 }
 
-let struct = {
-  S.object1(. (
-    "bsc-flags",
-    S.option(S.array(S.string()))->S.defaulted([]),
-  ))->S.transform(~parser=bscFlags => {bscFlags: bscFlags}, ())
-}
+let struct = S.object(o => {
+  bscFlags: o->S.field("bsc-flags", S.option(S.array(S.string()))->S.defaulted([])),
+})
