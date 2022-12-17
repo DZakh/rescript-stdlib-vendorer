@@ -12,5 +12,5 @@
     "in-source": true
   },
   "bs-dependencies": ["rescript-nodejs", "rescript-struct", "stdlib"],
-  "suffix": ".mjs"
+  "suffix": ".bs.mjs"
 }

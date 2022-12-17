@@ -2,14 +2,14 @@
 
 import * as Fs from "fs";
 import * as Path from "path";
-import * as ResFile from "../entities/ResFile.mjs";
+import * as ResFile from "../entities/ResFile.bs.mjs";
 import * as Process from "process";
-import * as BsConfig from "../entities/BsConfig.mjs";
-import * as ModuleName from "../entities/ModuleName.mjs";
-import * as SourceDirs from "../entities/SourceDirs.mjs";
-import * as LintContext from "../entities/LintContext.mjs";
-import * as Stdlib_Option from "stdlib/src/Stdlib_Option.mjs";
-import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
+import * as BsConfig from "../entities/BsConfig.bs.mjs";
+import * as ModuleName from "../entities/ModuleName.bs.mjs";
+import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
+import * as LintContext from "../entities/LintContext.bs.mjs";
+import * as Stdlib_Option from "stdlib/src/Stdlib_Option.bs.mjs";
+import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
   return function (maybeStdlibModuleOverride) {

@@ -3,9 +3,9 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Process from "process";
-import * as SourceDirs from "../entities/SourceDirs.mjs";
-import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
-import * as S$ReScriptStruct from "rescript-struct/src/S.mjs";
+import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
+import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
+import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function make(param) {
   return function () {

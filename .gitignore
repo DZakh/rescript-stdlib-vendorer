@@ -3,4 +3,4 @@ node_modules
 .bsb.lock
 lib
 dist
-**/*_test.mjs
+**/*_test.bs.mjs
