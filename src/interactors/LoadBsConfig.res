@@ -1,18 +1,15 @@
-let make = () => {
+let make = (~projectPath) => {
   (. ()) => {
-    let jsonObj = {
+    {
       open NodeJs
       Fs.readFileSyncWith(
-        Path.resolve([Process.process->Process.cwd, "bsconfig.json"]),
+        Path.resolve([projectPath, "bsconfig.json"]),
         Fs.readFileOptions(~encoding="utf8", ()),
-      )
-      ->Buffer.toString
-      ->Json.parseExn
+      )->Buffer.toString
     }
-    jsonObj
-    ->S.parseWith(BsConfig.struct)
+    ->BsConfig.fromJsonString
     ->Result.mapError((. error) => {
-      Port.LoadBsConfig.ParsingFailure(error->S.Error.toString)
+      Port.LoadBsConfig.ParsingFailure(error)
     })
   }
 }

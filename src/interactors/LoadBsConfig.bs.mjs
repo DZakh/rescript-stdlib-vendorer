@@ -2,19 +2,16 @@
 
 import * as Fs from "fs";
 import * as Path from "path";
-import * as Process from "process";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
-import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
-function make(param) {
+function make(projectPath) {
   return function () {
-    var jsonObj = JSON.parse(Fs.readFileSync(Path.resolve(Process.cwd(), "bsconfig.json"), {
-                encoding: "utf8"
-              }).toString());
-    return Stdlib_Result.mapError(S$ReScriptStruct.parseWith(jsonObj, BsConfig.struct), (function (error) {
+    return Stdlib_Result.mapError(BsConfig.fromJsonString(Fs.readFileSync(Path.resolve(projectPath, "bsconfig.json"), {
+                          encoding: "utf8"
+                        }).toString()), (function (error) {
                   return /* ParsingFailure */{
-                          _0: S$ReScriptStruct.$$Error.toString(error)
+                          _0: error
                         };
                 }));
   };

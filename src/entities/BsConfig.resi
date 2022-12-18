@@ -5,4 +5,8 @@ let lint: (
   ~prohibitedModuleNames: array<ModuleName.t>,
 ) => result<unit, [#HAS_OPENED_PROHIBITED_MODULE(ModuleName.t)]>
 
-let struct: S.t<t>
+let fromJsonString: string => result<t, string>
+
+module TestData: {
+  let make: (~bscFlags: array<string>) => t
+}

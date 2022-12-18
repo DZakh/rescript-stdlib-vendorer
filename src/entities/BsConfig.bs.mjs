@@ -33,14 +33,29 @@ function lint(bsConfig, prohibitedModuleNames) {
   }
 }
 
-var struct = S$ReScriptStruct.object(function (o) {
-      return {
-              bscFlags: S$ReScriptStruct.field(o, "bsc-flags", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.array(S$ReScriptStruct.string(undefined))), []))
-            };
-    });
+var struct = S$ReScriptStruct.json(S$ReScriptStruct.object(function (o) {
+          return {
+                  bscFlags: S$ReScriptStruct.field(o, "bsc-flags", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.array(S$ReScriptStruct.string(undefined))), []))
+                };
+        }));
+
+function fromJsonString(jsonString) {
+  return S$ReScriptStruct.Result.mapErrorToString(S$ReScriptStruct.parseWith(jsonString, struct));
+}
+
+function make(bscFlags) {
+  return {
+          bscFlags: bscFlags
+        };
+}
+
+var TestData = {
+  make: make
+};
 
 export {
   lint ,
-  struct ,
+  fromJsonString ,
+  TestData ,
 }
 /* struct Not a pure module */

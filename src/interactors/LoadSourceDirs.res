@@ -13,10 +13,9 @@ let make = () => {
     | _ => Error(Port.LoadSourceDirs.RescriptCompilerArtifactsNotFound)
     }->Result.flatMap((. file) =>
       file
-      ->Json.parseExn
-      ->S.parseWith(SourceDirs.struct)
+      ->SourceDirs.fromJsonString
       ->Result.mapError((. error): Port.LoadSourceDirs.error => {
-        ParsingFailure(error->S.Error.toString)
+        ParsingFailure(error)
       })
     )
   }

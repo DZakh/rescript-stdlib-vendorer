@@ -28,6 +28,16 @@ let lint = (bsConfig, ~prohibitedModuleNames) => {
   }
 }
 
-let struct = S.object(o => {
-  bscFlags: o->S.field("bsc-flags", S.option(S.array(S.string()))->S.defaulted([])),
-})
+let struct = S.json(
+  S.object(o => {
+    bscFlags: o->S.field("bsc-flags", S.option(S.array(S.string()))->S.defaulted([])),
+  }),
+)
+
+let fromJsonString = jsonString => jsonString->S.parseWith(struct)->S.Result.mapErrorToString
+
+module TestData = {
+  let make = (~bscFlags) => {
+    bscFlags: bscFlags,
+  }
+}

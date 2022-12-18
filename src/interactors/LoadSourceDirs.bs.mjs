@@ -5,7 +5,6 @@ import * as Path from "path";
 import * as Process from "process";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
-import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function make(param) {
   return function () {
@@ -25,9 +24,9 @@ function make(param) {
       };
     }
     return Stdlib_Result.flatMap(tmp, (function (file) {
-                  return Stdlib_Result.mapError(S$ReScriptStruct.parseWith(JSON.parse(file), SourceDirs.struct), (function (error) {
+                  return Stdlib_Result.mapError(SourceDirs.fromJsonString(file), (function (error) {
                                 return /* ParsingFailure */{
-                                        _0: S$ReScriptStruct.$$Error.toString(error)
+                                        _0: error
                                       };
                               }));
                 }));

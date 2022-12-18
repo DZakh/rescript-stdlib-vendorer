@@ -2,16 +2,29 @@
 
 import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
-function getProjectDirs(sourceDirs) {
-  return sourceDirs;
+function getProjectDirs(projectDirs) {
+  return projectDirs;
 }
 
-var struct = S$ReScriptStruct.object(function (o) {
-      return S$ReScriptStruct.field(o, "dirs", S$ReScriptStruct.array(S$ReScriptStruct.string(undefined)));
-    });
+var struct = S$ReScriptStruct.json(S$ReScriptStruct.object(function (o) {
+          return S$ReScriptStruct.field(o, "dirs", S$ReScriptStruct.array(S$ReScriptStruct.string(undefined)));
+        }));
+
+function fromJsonString(jsonString) {
+  return S$ReScriptStruct.Result.mapErrorToString(S$ReScriptStruct.parseWith(jsonString, struct));
+}
+
+function make(projectDirs) {
+  return projectDirs;
+}
+
+var TestData = {
+  make: make
+};
 
 export {
   getProjectDirs ,
-  struct ,
+  fromJsonString ,
+  TestData ,
 }
 /* struct Not a pure module */
