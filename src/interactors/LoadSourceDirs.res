@@ -1,9 +1,9 @@
-let make = () => {
+let make = (~projectPath) => {
   (. ()) => {
     try {
       open NodeJs
       Fs.readFileSyncWith(
-        Path.resolve([Process.process->Process.cwd, "lib/bs/.sourcedirs.json"]),
+        Path.resolve([projectPath, "lib/bs/.sourcedirs.json"]),
         Fs.readFileOptions(~encoding="utf8", ()),
       )
       ->Buffer.toString

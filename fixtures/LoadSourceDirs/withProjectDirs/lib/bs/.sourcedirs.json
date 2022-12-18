@@ -1,0 +1,5 @@
+{
+  "dirs": ["src", "src/entities", "src/interactors", "src/bindings"],
+  "pkgs": [],
+  "generated": []
+}

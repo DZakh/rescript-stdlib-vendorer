@@ -5,7 +5,10 @@ const packageJson = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 const tests = packageJson.ava.files;
 
 export default () => ({
-  files: ["src/**/*.bs.mjs", "fixtures/**"].concat(
+  files: [
+    "src/**/*.bs.mjs",
+    { pattern: "fixtures/**", instrument: false },
+  ].concat(
     tests.map((testPattern) => ({
       pattern: testPattern,
       ignore: true,
@@ -19,4 +22,5 @@ export default () => ({
     },
   },
   testFramework: "ava",
+  dot: true,
 });

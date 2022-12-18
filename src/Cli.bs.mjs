@@ -9,11 +9,13 @@ import * as RunHelpCommand from "./interactors/RunHelpCommand.bs.mjs";
 import * as RunLintCommand from "./interactors/RunLintCommand.bs.mjs";
 import * as RunHelpLintCommand from "./interactors/RunHelpLintCommand.bs.mjs";
 
-var runCli = RunCli.make(RunLintCommand.make(Lint.make(LoadBsConfig.make(Process.cwd()), LoadSourceDirs.make(undefined))), RunHelpCommand.make(undefined), RunHelpLintCommand.make(undefined));
+var projectPath = Process.cwd();
+
+var runCli = RunCli.make(RunLintCommand.make(Lint.make(LoadBsConfig.make(projectPath), LoadSourceDirs.make(projectPath))), RunHelpCommand.make(undefined), RunHelpLintCommand.make(undefined));
 
 runCli();
 
 export {
-  runCli ,
+  
 }
-/* runCli Not a pure module */
+/* projectPath Not a pure module */
