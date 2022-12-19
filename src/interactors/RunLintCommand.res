@@ -30,7 +30,7 @@ let make = (~lint: Port.Lint.t) =>
               ])
             })
             Console.console->Console.log(
-              `Use custom standard library. Read more in the documentation: ${"https://github.com/DZakh/rescript-stdlib-lint"->Colorette.underline}`->Colorette.bold,
+              `Use custom standard library. Read more in the documentation: ${"https://github.com/DZakh/rescript-stdlib-vendorer"->Colorette.underline}`->Colorette.bold,
             )
           }
         }

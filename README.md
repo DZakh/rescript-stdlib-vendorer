@@ -44,11 +44,11 @@ By default, prohibited modules are `Js`, `Belt`, and `ReScriptJs`. In future ver
 
 Opening a prohibited module with a `bs-flag` will also cause an error.
 
-To start using the linter in your project, install `rescript-stdlib-lint` as a dev dependency. Let's also add an npm run script for convenience.
+To start using the linter in your project, install `rescript-stdlib-vendorer` as a dev dependency. Let's also add an npm run script for convenience.
 
 ```
-npm install -D rescript-stdlib-lint
-npm pkg set scripts.lint:stdlib="rescript-stdlib-lint lint"
+npm install -D rescript-stdlib-vendorer
+npm pkg set scripts.lint:stdlib="rescript-stdlib-vendorer lint"
 ```
 
 As a result, we should get a `package.json` like this:
@@ -57,13 +57,13 @@ As a result, we should get a `package.json` like this:
 {
   "name": "your-awesome-project",
   "scripts": {
-+   "lint:stdlib": "rescript-stdlib-lint lint"
++   "lint:stdlib": "rescript-stdlib-vendorer lint"
   },
   "dependencies": {
     "stdlib": "file:stdlib"
   },
   "devDependencies": {
-+   "rescript-stdlib-lint": "*"
++   "rescript-stdlib-vendorer": "*"
   }
 }
 ```

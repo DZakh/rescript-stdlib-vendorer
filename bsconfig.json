@@ -1,5 +1,5 @@
 {
-  "name": "rescript-stdlib-lint",
+  "name": "rescript-stdlib-vendorer",
   "bsc-flags": ["-open Stdlib", "-open ReScriptStruct"],
   "sources": [
     {

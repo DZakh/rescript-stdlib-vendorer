@@ -11,7 +11,7 @@ let make = () => {
         `* ${"help <command>"->Colorette.bold} - Show more information about a command`,
         `* ${"lint"->Colorette.bold} - Lint rescript standard libriries usage`,
         "",
-        `You can find more information about the reasoning behind the tool in the documentation: ${"https://github.com/DZakh/rescript-stdlib-lint"->Colorette.underline}`,
+        `You can find more information about the reasoning behind the tool in the documentation: ${"https://github.com/DZakh/rescript-stdlib-vendorer"->Colorette.underline}`,
         "",
       ]->Array.joinWith("\n"),
     )

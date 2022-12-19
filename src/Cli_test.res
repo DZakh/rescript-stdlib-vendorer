@@ -21,7 +21,7 @@ asyncTest("Shows help when command is not specified", async t => {
       "* help <command> - Show more information about a command",
       "* lint - Lint rescript standard libriries usage",
       "",
-      "You can find more information about the reasoning behind the tool in the documentation: https://github.com/DZakh/rescript-stdlib-lint",
+      "You can find more information about the reasoning behind the tool in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer",
       "",
     ]->Array.joinWith("\n"),
     (),
