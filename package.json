@@ -1,6 +1,6 @@
 {
-  "name": "rescript-stdlib-cli",
-  "version": "0.3.2",
+  "name": "rescript-stdlib-lint",
+  "version": "0.4.0",
   "description": "The CLI to enforce usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
@@ -11,19 +11,19 @@
     "Lint",
     "Eslint"
   ],
-  "homepage": "https://github.com/DZakh/rescript-stdlib-cli#readme",
+  "homepage": "https://github.com/DZakh/rescript-stdlib-lint#readme",
   "bugs": {
-    "url": "https://github.com/DZakh/rescript-stdlib-cli/issues"
+    "url": "https://github.com/DZakh/rescript-stdlib-lint/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DZakh/rescript-stdlib-cli.git"
+    "url": "git+https://github.com/DZakh/rescript-stdlib-lint.git"
   },
   "license": "MIT",
   "author": "Dmitry Zakharov <dzakh.dev@gmail.com>",
   "type": "module",
   "bin": {
-    "rescript-stdlib-cli": "dist/rescript-stdlib-cli.modern.js"
+    "rescript-stdlib-lint": "dist/rescript-stdlib-lint.modern.js"
   },
   "files": [
     "dist/*"
@@ -46,9 +46,9 @@
     ]
   },
   "dependencies": {
-    "colorette": "2.0.19",
-    "minimist": "1.2.7",
-    "rescript": "10.1.0"
+    "colorette": "^2.0.19",
+    "minimist": "^1.2.7",
+    "rescript": "^10.1.0"
   },
   "devDependencies": {
     "@dzakh/rescript-ava": "2.1.0",
