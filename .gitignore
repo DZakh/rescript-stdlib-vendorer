@@ -1,6 +1,8 @@
 node_modules
 .merlin
 .bsb.lock
-lib
+/lib
+/stdlib/lib
+coverage
 dist
-**/*_test.mjs
+**/*_test.bs.mjs

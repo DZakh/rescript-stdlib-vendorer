@@ -4,9 +4,9 @@ import * as Js_exn from "rescript/lib/es6/js_exn.js";
 import * as Process from "process";
 import Minimist from "minimist";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
-import * as Stdlib_Option from "stdlib/src/Stdlib_Option.mjs";
-import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
-import * as S$ReScriptStruct from "rescript-struct/src/S.mjs";
+import * as Stdlib_Option from "stdlib/src/Stdlib_Option.bs.mjs";
+import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
+import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function make(runLintCommand, runHelpCommand, runHelpLintCommand) {
   return function () {
@@ -74,7 +74,7 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand) {
               case /* Help */0 :
                   return runHelpCommand();
               case /* Lint */1 :
-                  return runLintCommand(undefined);
+                  return runLintCommand();
               case /* LintHelp */2 :
                   return runHelpLintCommand();
               

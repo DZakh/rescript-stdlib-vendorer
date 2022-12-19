@@ -29,16 +29,20 @@
     "dist/*"
   ],
   "scripts": {
-    "bundle": "microbundle --entry cli.js --output dist --format modern --target node",
     "build": "npm run res:build && npm run bundle",
-    "lint": "node cli.js lint",
+    "bundle": "microbundle --entry cli.mjs --output dist --format modern --target node",
+    "coverage": "c8 --reporter=lcov npm test",
+    "lint": "npm run lint:rescript-format && npm run lint:stdlib",
+    "lint:rescript-format": "rescript format -check",
+    "lint:stdlib": "node cli.mjs lint",
     "res:build": "rescript build -with-deps",
     "res:dev": "rescript build -with-deps -w",
-    "test": "ava"
+    "test": "ava",
+    "test:watch": "ava --watch"
   },
   "ava": {
     "files": [
-      "__tests__/**/*_test.mjs"
+      "src/**/*_test.bs.mjs"
     ]
   },
   "dependencies": {
@@ -49,6 +53,8 @@
   "devDependencies": {
     "@dzakh/rescript-ava": "2.1.0",
     "ava": "5.1.0",
+    "c8": "7.12.0",
+    "execa": "6.1.0",
     "microbundle": "0.15.1",
     "rescript-nodejs": "14.3.1",
     "rescript-struct": "3.0.0",

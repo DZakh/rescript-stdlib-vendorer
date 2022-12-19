@@ -11,6 +11,11 @@
     "module": "es6",
     "in-source": true
   },
-  "bs-dependencies": ["rescript-nodejs", "rescript-struct", "stdlib"],
-  "suffix": ".mjs"
+  "bs-dependencies": [
+    "rescript-nodejs",
+    "rescript-struct",
+    "stdlib",
+    "@dzakh/rescript-ava"
+  ],
+  "suffix": ".bs.mjs"
 }

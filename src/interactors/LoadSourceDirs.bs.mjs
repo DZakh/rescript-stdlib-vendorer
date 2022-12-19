@@ -2,18 +2,16 @@
 
 import * as Fs from "fs";
 import * as Path from "path";
-import * as Process from "process";
-import * as SourceDirs from "../entities/SourceDirs.mjs";
-import * as Stdlib_Result from "stdlib/src/Stdlib_Result.mjs";
-import * as S$ReScriptStruct from "rescript-struct/src/S.mjs";
+import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
+import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
 
-function make(param) {
+function make(projectPath) {
   return function () {
     var tmp;
     try {
       tmp = {
         TAG: /* Ok */0,
-        _0: Fs.readFileSync(Path.resolve(Process.cwd(), "lib/bs/.sourcedirs.json"), {
+        _0: Fs.readFileSync(Path.resolve(projectPath, "lib/bs/.sourcedirs.json"), {
                 encoding: "utf8"
               }).toString()
       };
@@ -25,9 +23,9 @@ function make(param) {
       };
     }
     return Stdlib_Result.flatMap(tmp, (function (file) {
-                  return Stdlib_Result.mapError(S$ReScriptStruct.parseWith(JSON.parse(file), SourceDirs.struct), (function (error) {
+                  return Stdlib_Result.mapError(SourceDirs.fromJsonString(file), (function (error) {
                                 return /* ParsingFailure */{
-                                        _0: S$ReScriptStruct.$$Error.toString(error)
+                                        _0: error
                                       };
                               }));
                 }));

@@ -6,3 +6,4 @@ module Exn = Js.Exn
 module Json = Js.Json
 module Re = Js.Re
 module Int = Js.Int
+module Dict = Js.Dict

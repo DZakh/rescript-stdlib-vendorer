@@ -2,4 +2,8 @@ type t
 
 let getProjectDirs: t => array<string>
 
-let struct: S.t<t>
+let fromJsonString: string => result<t, string>
+
+module TestData: {
+  let make: (~projectDirs: array<string>) => t
+}

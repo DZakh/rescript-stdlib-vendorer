@@ -66,7 +66,7 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
         switch command {
         | Help => runHelpCommand(.)
         | LintHelp => runHelpLintCommand(.)
-        | Lint => runLintCommand(. ~maybeStdlibModuleOverride=None)
+        | Lint => runLintCommand(.)
         }
       })
 

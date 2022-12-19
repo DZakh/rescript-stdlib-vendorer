@@ -1,9 +1,9 @@
-let make = () => {
+let make = (~projectPath) => {
   (. ()) => {
     try {
       open NodeJs
       Fs.readFileSyncWith(
-        Path.resolve([Process.process->Process.cwd, "lib/bs/.sourcedirs.json"]),
+        Path.resolve([projectPath, "lib/bs/.sourcedirs.json"]),
         Fs.readFileOptions(~encoding="utf8", ()),
       )
       ->Buffer.toString
@@ -13,10 +13,9 @@ let make = () => {
     | _ => Error(Port.LoadSourceDirs.RescriptCompilerArtifactsNotFound)
     }->Result.flatMap((. file) =>
       file
-      ->Json.parseExn
-      ->S.parseWith(SourceDirs.struct)
+      ->SourceDirs.fromJsonString
       ->Result.mapError((. error): Port.LoadSourceDirs.error => {
-        ParsingFailure(error->S.Error.toString)
+        ParsingFailure(error)
       })
     )
   }

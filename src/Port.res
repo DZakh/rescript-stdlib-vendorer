@@ -5,11 +5,11 @@ module Lint = {
     | BsConfigHasOpenedProhibitedModule(ModuleName.t)
     | LintFailedWithIssues(array<LintIssue.t>)
     | RescriptCompilerArtifactsNotFound
-  type t = (. ~maybeStdlibModuleOverride: option<ModuleName.t>) => result<unit, error>
+  type t = (. unit) => result<unit, error>
 }
 
 module RunLintCommand = {
-  type t = (. ~maybeStdlibModuleOverride: option<ModuleName.t>) => unit
+  type t = (. unit) => unit
 }
 
 module RunHelpLintCommand = {
