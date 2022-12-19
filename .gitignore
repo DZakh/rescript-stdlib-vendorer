@@ -3,5 +3,6 @@ node_modules
 .bsb.lock
 /lib
 /stdlib/lib
+coverage
 dist
 **/*_test.bs.mjs

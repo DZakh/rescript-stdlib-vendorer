@@ -11,8 +11,8 @@ module FromBscFlag = {
 
   test("fromBscFlag returns the parent module from a nested one", t => {
     t->Assert.deepEqual(
-      ModuleName.fromBscFlag("-open Belt.Array"),
-      Some(ModuleName.TestData.make("Belt")),
+      ModuleName.fromBscFlag("-open Stdlib.Array"),
+      Some(ModuleName.TestData.make("Stdlib")),
       (),
     )
   })
