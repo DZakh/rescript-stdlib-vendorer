@@ -12,7 +12,7 @@ function make(param) {
             "* " + Colorette.bold("help <command>") + " - Show more information about a command",
             "* " + Colorette.bold("lint") + " - Lint rescript standard libriries usage",
             "",
-            "You can find more information about the reasoning behind the tool in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-cli") + "",
+            "You can find more information about the reasoning behind the tool in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-lint") + "",
             ""
           ].join("\n"));
   };
