@@ -28,7 +28,7 @@ function make(lint) {
             error$1._0.forEach(function (lintIssue) {
                   console.log(Colorette.underline(LintIssue.getLink(lintIssue)), "\n", LintIssue.getMessage(lintIssue), "\n");
                 });
-            console.log(Colorette.bold("Use custom standard library. Read more in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-lint") + ""));
+            console.log(Colorette.bold("Use custom standard library. Read more in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-vendorer") + ""));
             break;
         
       }

@@ -1,6 +1,6 @@
 {
-  "name": "rescript-stdlib-lint",
-  "version": "0.4.1",
+  "name": "rescript-stdlib-vendorer",
+  "version": "0.4.0",
   "description": "Tool to support usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
@@ -12,19 +12,19 @@
     "Lint",
     "Eslint"
   ],
-  "homepage": "https://github.com/DZakh/rescript-stdlib-lint#readme",
+  "homepage": "https://github.com/DZakh/rescript-stdlib-vendorer#readme",
   "bugs": {
-    "url": "https://github.com/DZakh/rescript-stdlib-lint/issues"
+    "url": "https://github.com/DZakh/rescript-stdlib-vendorer/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DZakh/rescript-stdlib-lint.git"
+    "url": "git+https://github.com/DZakh/rescript-stdlib-vendorer.git"
   },
   "license": "MIT",
   "author": "Dmitry Zakharov <dzakh.dev@gmail.com>",
   "type": "module",
   "bin": {
-    "rescript-stdlib-lint": "dist/rescript-stdlib-lint.modern.js"
+    "rescript-stdlib-vendorer": "dist/rescript-stdlib-vendorer.modern.js"
   },
   "files": [
     "dist/*"
