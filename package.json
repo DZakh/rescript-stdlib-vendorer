@@ -1,13 +1,14 @@
 {
   "name": "rescript-stdlib-lint",
   "version": "0.4.0",
-  "description": "The CLI to enforce usage of a vendored standard library in ReScript",
+  "description": "Tool to support usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
+    "Stdlib",
+    "Vendored",
     "Belt",
     "Js",
     "ReScriptJs",
-    "Stdlib",
     "Lint",
     "Eslint"
   ],
