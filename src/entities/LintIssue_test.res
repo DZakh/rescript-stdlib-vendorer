@@ -6,7 +6,7 @@ module GetLink = {
       LintIssue.make(
         ~kind=ProhibitedModuleOpen({
           line: 5,
-          prohibitedModuleName: ModuleName.unsafeFromString("Js"),
+          prohibitedModuleName: ModuleName.TestData.make("Js"),
         }),
         ~path="/path/LintIssue_test.res",
       )->LintIssue.getLink,
@@ -47,7 +47,7 @@ module GetMessage = {
     t->Assert.deepEqual(
       LintIssue.make(
         ~kind=ProhibitedModuleOpen({
-          prohibitedModuleName: ModuleName.unsafeFromString("Js"),
+          prohibitedModuleName: ModuleName.TestData.make("Js"),
           line: 5,
         }),
         ~path="/path/LintIssue_test.res",
@@ -61,7 +61,7 @@ module GetMessage = {
     t->Assert.deepEqual(
       LintIssue.make(
         ~kind=ProhibitedModuleInclude({
-          prohibitedModuleName: ModuleName.unsafeFromString("Js"),
+          prohibitedModuleName: ModuleName.TestData.make("Js"),
           line: 5,
         }),
         ~path="/path/LintIssue_test.res",
@@ -75,7 +75,7 @@ module GetMessage = {
     t->Assert.deepEqual(
       LintIssue.make(
         ~kind=ProhibitedModuleUsage({
-          prohibitedModuleName: ModuleName.unsafeFromString("Js"),
+          prohibitedModuleName: ModuleName.TestData.make("Js"),
           line: 5,
         }),
         ~path="/path/LintIssue_test.res",
@@ -89,7 +89,7 @@ module GetMessage = {
     t->Assert.deepEqual(
       LintIssue.make(
         ~kind=ProhibitedModuleAssign({
-          prohibitedModuleName: ModuleName.unsafeFromString("Js"),
+          prohibitedModuleName: ModuleName.TestData.make("Js"),
           line: 5,
         }),
         ~path="/path/LintIssue_test.res",

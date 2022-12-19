@@ -1,18 +1,15 @@
 type t = {bscFlags: array<string>}
 
 let getGlobalyOpenedModules = bsConfig => {
-  bsConfig.bscFlags
-  ->Array.filter(bscFlag => {
-    bscFlag->String.includes("-open")
-  })
-  ->Array.map(bscFlag => {
+  let globalyOpenedModules = []
+  bsConfig.bscFlags->Array.forEach(bscFlag => {
     bscFlag
-    ->String.replace("-open", "")
-    ->String.trim
-    ->String.split(".")
-    ->Array.unsafe_get(0)
-    ->ModuleName.unsafeFromString
+    ->ModuleName.fromBscFlag
+    ->Option.forEach(moduleName => {
+      globalyOpenedModules->Array.push(moduleName)->ignore
+    })
   })
+  globalyOpenedModules
 }
 
 let lint = (bsConfig, ~prohibitedModuleNames) => {

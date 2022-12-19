@@ -1,5 +1,9 @@
-let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSourceDirs.t) =>
-  (. ~maybeStdlibModuleOverride) => {
+let make = (
+  ~projectPath,
+  ~loadBsConfig: Port.LoadBsConfig.t,
+  ~loadSourceDirs: Port.LoadSourceDirs.t,
+) =>
+  (. ()) => {
     let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
 
     loadBsConfig(.)
@@ -33,7 +37,7 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
         ->SourceDirs.getProjectDirs
         ->Array.flatMap(sourceDir => {
           open NodeJs
-          let fullDirPath = Path.resolve([Process.process->Process.cwd, sourceDir])
+          let fullDirPath = Path.resolve([projectPath, sourceDir])
           Fs.readdirSync(fullDirPath)
           ->Array.filter(ResFile.checkIsResFile(~dirItem=_))
           ->Array.map(
@@ -55,9 +59,7 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
         resFile->ResFile.lint(
           ~lintContext,
           ~prohibitedModuleNames,
-          ~stdlibModuleName=maybeStdlibModuleOverride->Option.getWithDefault(
-            ModuleName.defaultStdlibModuleName,
-          ),
+          ~stdlibModuleName=ModuleName.defaultStdlibModuleName,
         )
       })
       switch lintContext->LintContext.getIssues {

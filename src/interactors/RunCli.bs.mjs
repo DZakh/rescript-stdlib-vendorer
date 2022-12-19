@@ -74,7 +74,7 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand) {
               case /* Help */0 :
                   return runHelpCommand();
               case /* Lint */1 :
-                  return runLintCommand(undefined);
+                  return runLintCommand();
               case /* LintHelp */2 :
                   return runHelpLintCommand();
               

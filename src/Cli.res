@@ -6,6 +6,7 @@ let projectPath = {
 let runCli = RunCli.make(
   ~runLintCommand=RunLintCommand.make(
     ~lint=Lint.make(
+      ~projectPath,
       ~loadBsConfig=LoadBsConfig.make(~projectPath),
       ~loadSourceDirs=LoadSourceDirs.make(~projectPath),
     ),

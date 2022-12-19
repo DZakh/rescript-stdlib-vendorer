@@ -11,7 +11,7 @@ import * as RunHelpLintCommand from "./interactors/RunHelpLintCommand.bs.mjs";
 
 var projectPath = Process.cwd();
 
-var runCli = RunCli.make(RunLintCommand.make(Lint.make(LoadBsConfig.make(projectPath), LoadSourceDirs.make(projectPath))), RunHelpCommand.make(undefined), RunHelpLintCommand.make(undefined));
+var runCli = RunCli.make(RunLintCommand.make(Lint.make(projectPath, LoadBsConfig.make(projectPath), LoadSourceDirs.make(projectPath))), RunHelpCommand.make(undefined), RunHelpLintCommand.make(undefined));
 
 runCli();
 

@@ -3,16 +3,14 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as ResFile from "../entities/ResFile.bs.mjs";
-import * as Process from "process";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as ModuleName from "../entities/ModuleName.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as LintContext from "../entities/LintContext.bs.mjs";
-import * as Stdlib_Option from "stdlib/src/Stdlib_Option.bs.mjs";
 import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
 
-function make(loadBsConfig, loadSourceDirs) {
-  return function (maybeStdlibModuleOverride) {
+function make(projectPath, loadBsConfig, loadSourceDirs) {
+  return function () {
     return Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
                               return {
                                       TAG: /* BsConfigParseFailure */0,
@@ -38,7 +36,7 @@ function make(loadBsConfig, loadSourceDirs) {
                                   }));
                     })), (function (sourceDirs) {
                   var resFiles = SourceDirs.getProjectDirs(sourceDirs).flatMap(function (sourceDir) {
-                        var fullDirPath = Path.resolve(Process.cwd(), sourceDir);
+                        var fullDirPath = Path.resolve(projectPath, sourceDir);
                         return Fs.readdirSync(fullDirPath).filter(ResFile.checkIsResFile).map(function (dirItem) {
                                     var resFilePath = "" + fullDirPath + "/" + dirItem + "";
                                     return ResFile.make(Fs.readFileSync(resFilePath, {
@@ -48,7 +46,7 @@ function make(loadBsConfig, loadSourceDirs) {
                       });
                   var lintContext = LintContext.make(undefined);
                   resFiles.forEach(function (resFile) {
-                        ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, Stdlib_Option.getWithDefault(maybeStdlibModuleOverride, ModuleName.defaultStdlibModuleName));
+                        ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, ModuleName.defaultStdlibModuleName);
                       });
                   var lintIssues = LintContext.getIssues(lintContext);
                   if (lintIssues.length !== 0) {

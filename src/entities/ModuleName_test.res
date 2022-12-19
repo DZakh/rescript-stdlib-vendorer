@@ -1,10 +1,32 @@
 open Ava
 
+module FromBscFlag = {
+  test("fromBscFlag works with Belt", t => {
+    t->Assert.deepEqual(
+      ModuleName.fromBscFlag("-open Belt"),
+      Some(ModuleName.TestData.make("Belt")),
+      (),
+    )
+  })
+
+  test("fromBscFlag returns the parent module from a nested one", t => {
+    t->Assert.deepEqual(
+      ModuleName.fromBscFlag("-open Belt.Array"),
+      Some(ModuleName.TestData.make("Belt")),
+      (),
+    )
+  })
+
+  test("fromBscFlag returns None if it's not an -open bscFlag", t => {
+    t->Assert.deepEqual(ModuleName.fromBscFlag("-smthelse"), None, ())
+  })
+}
+
 module FromPath = {
   test("fromPath works with .res file", t => {
     t->Assert.deepEqual(
       ModuleName.fromPath("/path/to/ModuleName.res"),
-      Some(ModuleName.unsafeFromString("ModuleName")),
+      Some(ModuleName.TestData.make("ModuleName")),
       (),
     )
   })
@@ -12,7 +34,7 @@ module FromPath = {
   test("fromPath works with .resi file", t => {
     t->Assert.deepEqual(
       ModuleName.fromPath("/path/to/ModuleName.resi"),
-      Some(ModuleName.unsafeFromString("ModuleName")),
+      Some(ModuleName.TestData.make("ModuleName")),
       (),
     )
   })
@@ -25,36 +47,36 @@ module FromPath = {
 module IsSubmodule = {
   test("isSubmodule works", t => {
     t->Assert.deepEqual(
-      ModuleName.unsafeFromString("ModuleName")->ModuleName.isSubmodule(
-        ~ofModule=ModuleName.unsafeFromString("ModuleName"),
+      ModuleName.TestData.make("ModuleName")->ModuleName.isSubmodule(
+        ~ofModule=ModuleName.TestData.make("ModuleName"),
       ),
       false,
       (),
     )
     t->Assert.deepEqual(
-      ModuleName.unsafeFromString("ModuleName_Foo")->ModuleName.isSubmodule(
-        ~ofModule=ModuleName.unsafeFromString("ModuleName"),
+      ModuleName.TestData.make("ModuleName_Foo")->ModuleName.isSubmodule(
+        ~ofModule=ModuleName.TestData.make("ModuleName"),
       ),
       true,
       (),
     )
     t->Assert.deepEqual(
-      ModuleName.unsafeFromString("ModuleName_foo")->ModuleName.isSubmodule(
-        ~ofModule=ModuleName.unsafeFromString("ModuleName"),
+      ModuleName.TestData.make("ModuleName_foo")->ModuleName.isSubmodule(
+        ~ofModule=ModuleName.TestData.make("ModuleName"),
       ),
       true,
       (),
     )
     t->Assert.deepEqual(
-      ModuleName.unsafeFromString("ModuleName__foo")->ModuleName.isSubmodule(
-        ~ofModule=ModuleName.unsafeFromString("ModuleName"),
+      ModuleName.TestData.make("ModuleName__foo")->ModuleName.isSubmodule(
+        ~ofModule=ModuleName.TestData.make("ModuleName"),
       ),
       true,
       (),
     )
     t->Assert.deepEqual(
-      ModuleName.unsafeFromString("ModuleNames_Foo")->ModuleName.isSubmodule(
-        ~ofModule=ModuleName.unsafeFromString("ModuleName"),
+      ModuleName.TestData.make("ModuleNames_Foo")->ModuleName.isSubmodule(
+        ~ofModule=ModuleName.TestData.make("ModuleName"),
       ),
       false,
       (),

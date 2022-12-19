@@ -4,9 +4,9 @@ module Lint = {
   test("lint complains on prohibited modules opened using bsc-flags", t => {
     t->Assert.deepEqual(
       BsConfig.TestData.make(~bscFlags=["-open Belt"])->BsConfig.lint(
-        ~prohibitedModuleNames=[ModuleName.unsafeFromString("Belt")],
+        ~prohibitedModuleNames=[ModuleName.TestData.make("Belt")],
       ),
-      Error(#HAS_OPENED_PROHIBITED_MODULE(ModuleName.unsafeFromString("Belt"))),
+      Error(#HAS_OPENED_PROHIBITED_MODULE(ModuleName.TestData.make("Belt"))),
       (),
     )
   })
@@ -16,7 +16,7 @@ module Lint = {
     t => {
       t->Assert.deepEqual(
         BsConfig.TestData.make(~bscFlags=["-open Belt"])->BsConfig.lint(
-          ~prohibitedModuleNames=[ModuleName.unsafeFromString("Js")],
+          ~prohibitedModuleNames=[ModuleName.TestData.make("Js")],
         ),
         Ok(),
         (),

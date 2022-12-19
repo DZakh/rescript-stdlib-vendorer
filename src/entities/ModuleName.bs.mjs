@@ -8,6 +8,13 @@ var defaultProhibitedModuleNames = [
   "ReScriptJs"
 ];
 
+function fromBscFlag(bscFlag) {
+  if (bscFlag.includes("-open")) {
+    return bscFlag.replace("-open", "").trim().split(".")[0];
+  }
+  
+}
+
 function fromPath(path) {
   var pathWithoutResExtension = path.replace(/\.resi?$/, "");
   if (path.length === pathWithoutResExtension.length) {
@@ -21,12 +28,22 @@ function isSubmodule(moduleName, ofModule) {
   return moduleName.startsWith("" + ofModule + "_");
 }
 
+function make(moduleName) {
+  return moduleName;
+}
+
+var TestData = {
+  make: make
+};
+
 var defaultStdlibModuleName = "Stdlib";
 
 export {
   defaultStdlibModuleName ,
   defaultProhibitedModuleNames ,
+  fromBscFlag ,
   fromPath ,
   isSubmodule ,
+  TestData ,
 }
 /* No side effect */

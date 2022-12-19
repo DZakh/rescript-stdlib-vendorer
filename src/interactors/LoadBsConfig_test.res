@@ -30,7 +30,9 @@ test("Throws when bsconfig.json is missing", t => {
       loadBsConfig(.)
     },
     ~expectations={
-      code: "ENOENT"->Obj.magic,
+      message: `ENOENT: no such file or directory, open '${NodeJs.Path.resolve([
+          "fixtures/LoadBsConfig/withoutBsconfig/bsconfig.json",
+        ])}'`,
     },
     (),
   )

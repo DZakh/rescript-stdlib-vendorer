@@ -3,6 +3,14 @@ include Opaque.String
 let defaultStdlibModuleName = "Stdlib"
 let defaultProhibitedModuleNames = ["Belt", "Js", "ReScriptJs"]
 
+let fromBscFlag = bscFlag => {
+  switch bscFlag->String.includes("-open") {
+  | true =>
+    bscFlag->String.replace("-open", "")->String.trim->String.split(".")->Array.unsafe_get(0)->Some
+  | false => None
+  }
+}
+
 let fromPath = path => {
   let pathWithoutResExtension = path->String.replaceByRe(%re("/\.resi?$/"), "")
   if path->String.length === pathWithoutResExtension->String.length {
@@ -21,4 +29,8 @@ let fromPath = path => {
 
 let isSubmodule = (moduleName, ~ofModule) => {
   moduleName->String.startsWith(`${ofModule}_`)
+}
+
+module TestData = {
+  let make = moduleName => moduleName
 }
