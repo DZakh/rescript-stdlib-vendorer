@@ -17,6 +17,8 @@ var Re;
 
 var Int;
 
+var Dict;
+
 export {
   $$Array ,
   Result ,
@@ -26,5 +28,6 @@ export {
   Json ,
   Re ,
   Int ,
+  Dict ,
 }
 /* No side effect */

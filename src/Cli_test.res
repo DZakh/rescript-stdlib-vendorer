@@ -4,7 +4,12 @@ open Execa
 let cliPath = NodeJs.Path.resolve(["cli.mjs"])
 
 asyncTest("Shows help when command is not specified", async t => {
-  let {stdout} = await execa("node", [cliPath])
+  let {stdout} = await execa(
+    "node",
+    [cliPath],
+    ~options={env: Dict.fromArray([("NO_COLOR", "")])},
+    (),
+  )
 
   t->Assert.deepEqual(
     stdout,
