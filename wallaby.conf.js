@@ -8,13 +8,17 @@ export default () => ({
   files: [
     "src/**/*.bs.mjs",
     { pattern: "fixtures/**", instrument: false },
+    { pattern: "stdlib/**", instrument: false },
   ].concat(
     tests.map((testPattern) => ({
       pattern: testPattern,
       ignore: true,
     }))
   ),
-  tests,
+  tests: tests.concat(
+    // https://github.com/wallabyjs/public/issues/662
+    "!src/Cli_test.bs.mjs"
+  ),
   env: {
     type: "node",
     params: {
