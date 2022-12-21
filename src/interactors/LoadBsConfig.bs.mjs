@@ -2,12 +2,13 @@
 
 import * as Fs from "fs";
 import * as Path from "path";
+import * as Config from "../entities/Config.bs.mjs";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
 
-function make(projectPath) {
-  return function () {
-    return Stdlib_Result.mapError(BsConfig.fromJsonString(Fs.readFileSync(Path.resolve(projectPath, "bsconfig.json"), {
+function make(param) {
+  return function (config) {
+    return Stdlib_Result.mapError(BsConfig.fromJsonString(Fs.readFileSync(Path.resolve(Config.getProjectPath(config), "bsconfig.json"), {
                           encoding: "utf8"
                         }).toString()), (function (error) {
                   return /* ParsingFailure */{

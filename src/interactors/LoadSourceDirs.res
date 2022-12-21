@@ -1,9 +1,9 @@
-let make = (~projectPath) => {
-  (. ()) => {
+let make = () => {
+  (. ~config) => {
     try {
       open NodeJs
       Fs.readFileSyncWith(
-        Path.resolve([projectPath, "lib/bs/.sourcedirs.json"]),
+        Path.resolve([config->Config.getProjectPath, "lib/bs/.sourcedirs.json"]),
         Fs.readFileOptions(~encoding="utf8", ()),
       )
       ->Buffer.toString

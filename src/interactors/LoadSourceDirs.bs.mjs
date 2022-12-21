@@ -2,16 +2,17 @@
 
 import * as Fs from "fs";
 import * as Path from "path";
+import * as Config from "../entities/Config.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
 
-function make(projectPath) {
-  return function () {
+function make(param) {
+  return function (config) {
     var tmp;
     try {
       tmp = {
         TAG: /* Ok */0,
-        _0: Fs.readFileSync(Path.resolve(projectPath, "lib/bs/.sourcedirs.json"), {
+        _0: Fs.readFileSync(Path.resolve(Config.getProjectPath(config), "lib/bs/.sourcedirs.json"), {
                 encoding: "utf8"
               }).toString()
       };

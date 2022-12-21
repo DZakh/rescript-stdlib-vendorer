@@ -33,7 +33,7 @@
     "build": "npm run res:build && npm run bundle",
     "bundle": "microbundle --entry cli.mjs --output dist --format modern --target node",
     "coverage": "c8 --reporter=lcov npm test",
-    "lint": "npm run lint:rescript-format && npm run lint:stdlib",
+    "lint": "npm run lint:rescript-format",
     "lint:rescript-format": "rescript format -check",
     "lint:stdlib": "node cli.mjs lint",
     "res:build": "rescript build -with-deps",

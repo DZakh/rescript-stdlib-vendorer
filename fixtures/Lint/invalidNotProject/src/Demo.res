@@ -1,0 +1,1 @@
+Stdlib.log("Hello, World!")

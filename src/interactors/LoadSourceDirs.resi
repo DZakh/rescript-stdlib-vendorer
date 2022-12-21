@@ -1,1 +1,1 @@
-let make: (~projectPath: string) => Port.LoadSourceDirs.t
+let make: unit => Port.LoadSourceDirs.t

@@ -2,6 +2,7 @@
 
 import * as Fs from "fs";
 import * as Path from "path";
+import * as Config from "../entities/Config.bs.mjs";
 import * as ResFile from "../entities/ResFile.bs.mjs";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as ModuleName from "../entities/ModuleName.bs.mjs";
@@ -9,9 +10,9 @@ import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as LintContext from "../entities/LintContext.bs.mjs";
 import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
 
-function make(projectPath, loadBsConfig, loadSourceDirs) {
-  return function () {
-    return Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.mapError(loadBsConfig(), (function (loadBsConfigError) {
+function make(loadBsConfig, loadSourceDirs) {
+  return function (config) {
+    return Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.mapError(loadBsConfig(config), (function (loadBsConfigError) {
                               return {
                                       TAG: /* BsConfigParseFailure */0,
                                       _0: loadBsConfigError._0
@@ -24,7 +25,7 @@ function make(projectPath, loadBsConfig, loadSourceDirs) {
                                               };
                                       }));
                         })), (function (param) {
-                      return Stdlib_Result.mapError(loadSourceDirs(), (function (loadSourceDirsError) {
+                      return Stdlib_Result.mapError(loadSourceDirs(config), (function (loadSourceDirsError) {
                                     if (loadSourceDirsError) {
                                       return {
                                               TAG: /* SourceDirsParseFailure */1,
@@ -36,7 +37,7 @@ function make(projectPath, loadBsConfig, loadSourceDirs) {
                                   }));
                     })), (function (sourceDirs) {
                   var resFiles = SourceDirs.getProjectDirs(sourceDirs).flatMap(function (sourceDir) {
-                        var fullDirPath = Path.resolve(projectPath, sourceDir);
+                        var fullDirPath = Path.resolve(Config.getProjectPath(config), sourceDir);
                         return Fs.readdirSync(fullDirPath).filter(ResFile.checkIsResFile).map(function (dirItem) {
                                     var resFilePath = "" + fullDirPath + "/" + dirItem + "";
                                     return ResFile.make(Fs.readFileSync(resFilePath, {

@@ -1,1 +1,1 @@
-let make: (~projectPath: string) => Port.LoadBsConfig.t
+let make: unit => Port.LoadBsConfig.t

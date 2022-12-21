@@ -8,7 +8,7 @@ type error =
   | CommandNotFound
   | IllegalOption({optionName: string})
 
-type command = Help | Lint | LintHelp
+type command = Help | Lint(Config.t) | LintHelp
 
 let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
   (. ()) => {
@@ -31,7 +31,14 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
           })->S.Object.strict,
           S.object(o => {
             o->S.discriminant("_", S.tuple1(. S.literal(String("lint"))))
-            Lint
+            Lint(
+              Config.make(
+                ~projectPath=o->S.field(
+                  "project-path",
+                  S.option(S.string())->S.defaulted(NodeJs.Process.process->NodeJs.Process.cwd),
+                ),
+              ),
+            )
           })->S.Object.strict,
         ]),
       )
@@ -66,7 +73,7 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
         switch command {
         | Help => runHelpCommand(.)
         | LintHelp => runHelpLintCommand(.)
-        | Lint => runLintCommand(.)
+        | Lint(config) => runLintCommand(. ~config)
         }
       })
 

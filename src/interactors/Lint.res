@@ -1,12 +1,8 @@
-let make = (
-  ~projectPath,
-  ~loadBsConfig: Port.LoadBsConfig.t,
-  ~loadSourceDirs: Port.LoadSourceDirs.t,
-) =>
-  (. ()) => {
+let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSourceDirs.t) =>
+  (. ~config) => {
     let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
 
-    loadBsConfig(.)
+    loadBsConfig(. ~config)
     ->Result.mapError((. loadBsConfigError) => {
       switch loadBsConfigError {
       | ParsingFailure(reason) => Port.Lint.BsConfigParseFailure(reason)
@@ -24,7 +20,7 @@ let make = (
     })
     // FIXME: There should be unit instead of underscore. Report to the compiler repo
     ->Result.flatMap((. _) => {
-      loadSourceDirs(.)->Result.mapError((. loadSourceDirsError) =>
+      loadSourceDirs(. ~config)->Result.mapError((. loadSourceDirsError) =>
         switch loadSourceDirsError {
         | ParsingFailure(reason) => Port.Lint.SourceDirsParseFailure(reason)
         | RescriptCompilerArtifactsNotFound => Port.Lint.RescriptCompilerArtifactsNotFound
@@ -37,7 +33,7 @@ let make = (
         ->SourceDirs.getProjectDirs
         ->Array.flatMap(sourceDir => {
           open NodeJs
-          let fullDirPath = Path.resolve([projectPath, sourceDir])
+          let fullDirPath = Path.resolve([config->Config.getProjectPath, sourceDir])
           Fs.readdirSync(fullDirPath)
           ->Array.filter(ResFile.checkIsResFile(~dirItem=_))
           ->Array.map(
