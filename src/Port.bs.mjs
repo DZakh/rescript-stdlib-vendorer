@@ -15,6 +15,8 @@ var LoadSourceDirs = {};
 
 var RunCli = {};
 
+var ExitConsoleWithError = {};
+
 export {
   Lint ,
   RunLintCommand ,
@@ -23,5 +25,6 @@ export {
   LoadBsConfig ,
   LoadSourceDirs ,
   RunCli ,
+  ExitConsoleWithError ,
 }
 /* No side effect */

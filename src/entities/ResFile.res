@@ -45,37 +45,42 @@ let lint = {
                 ~kind=ProhibitedModuleOpen({line: idx + 1, prohibitedModuleName}),
               ),
             )
-          }
-          let includeRe = Re.fromString(
-            `^ *include ${prohibitedModuleName->ModuleName.toString}($|\\.)`,
-          )
-          if includeRe->Re.test_(line) {
-            lintContext->LintContext.addIssue(
-              LintIssue.make(
-                ~path=resFile.path,
-                ~kind=ProhibitedModuleInclude({line: idx + 1, prohibitedModuleName}),
-              ),
+          } else {
+            let includeRe = Re.fromString(
+              `^ *include ${prohibitedModuleName->ModuleName.toString}($|\\.)`,
             )
-          }
-          let assignRe = Re.fromString(
-            `module.+= ${prohibitedModuleName->ModuleName.toString}($|\\.)`,
-          )
-          if assignRe->Re.test_(line) {
-            lintContext->LintContext.addIssue(
-              LintIssue.make(
-                ~path=resFile.path,
-                ~kind=ProhibitedModuleAssign({line: idx + 1, prohibitedModuleName}),
-              ),
-            )
-          }
-          let usageRe = Re.fromString(`(\\W|^)${prohibitedModuleName->ModuleName.toString}\\.`)
-          if usageRe->Re.test_(line) {
-            lintContext->LintContext.addIssue(
-              LintIssue.make(
-                ~path=resFile.path,
-                ~kind=ProhibitedModuleUsage({line: idx + 1, prohibitedModuleName}),
-              ),
-            )
+            if includeRe->Re.test_(line) {
+              lintContext->LintContext.addIssue(
+                LintIssue.make(
+                  ~path=resFile.path,
+                  ~kind=ProhibitedModuleInclude({line: idx + 1, prohibitedModuleName}),
+                ),
+              )
+            } else {
+              let assignRe = Re.fromString(
+                `^ *module.+= ${prohibitedModuleName->ModuleName.toString}($|\\.)`,
+              )
+              if assignRe->Re.test_(line) {
+                lintContext->LintContext.addIssue(
+                  LintIssue.make(
+                    ~path=resFile.path,
+                    ~kind=ProhibitedModuleAssign({line: idx + 1, prohibitedModuleName}),
+                  ),
+                )
+              } else {
+                let usageRe = Re.fromString(
+                  `(\\W|^)${prohibitedModuleName->ModuleName.toString}\\.`,
+                )
+                if usageRe->Re.test_(line) {
+                  lintContext->LintContext.addIssue(
+                    LintIssue.make(
+                      ~path=resFile.path,
+                      ~kind=ProhibitedModuleUsage({line: idx + 1, prohibitedModuleName}),
+                    ),
+                  )
+                }
+              }
+            }
           }
         })
       })

@@ -33,3 +33,7 @@ module LoadSourceDirs = {
 module RunCli = {
   type t = (. unit) => unit
 }
+
+module ExitConsoleWithError = {
+  type t = (. ~message: string) => unit
+}

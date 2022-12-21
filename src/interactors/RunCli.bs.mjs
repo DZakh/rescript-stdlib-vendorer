@@ -9,7 +9,7 @@ import * as Stdlib_Option from "stdlib/src/Stdlib_Option.bs.mjs";
 import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
 import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
-function make(runLintCommand, runHelpCommand, runHelpLintCommand) {
+function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWithError) {
   return function () {
     var commandArguments = Process.argv.slice(2);
     var result = Stdlib_Result.map(Stdlib_Result.mapError(S$ReScriptStruct.parseWith(Minimist(commandArguments), S$ReScriptStruct.union([
@@ -88,11 +88,10 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand) {
     }
     var error = result._0;
     if (error) {
-      console.log("Illegal option:", error.optionName);
+      return exitConsoleWithError("Illegal option: " + error.optionName + "");
     } else {
-      console.log("Command not found:", commandArguments.join(" "));
+      return exitConsoleWithError("Command not found: " + commandArguments.join(" ") + "");
     }
-    Process.exit(1);
   };
 }
 

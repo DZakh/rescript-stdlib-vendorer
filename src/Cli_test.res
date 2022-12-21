@@ -69,8 +69,8 @@ asyncTest("Succseefully lints invalid project", async t => {
       t->Assert.deepEqual(
         stdout,
         [
-          `${projectPath}/fixtures/Cli/invalid/src/Demo.res:1 `,
-          ` Found "Js" module usage. `,
+          `${projectPath}/fixtures/Cli/invalid/src/Demo.res:1`,
+          `Found "Js" module usage.`,
           "",
           `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,
         ]->Array.joinWith("\n"),

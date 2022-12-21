@@ -1,5 +1,4 @@
 module Process = NodeJs.Process
-module Console = NodeJs.Console
 
 @module("minimist")
 external parseCommandArguments: (array<string>, unit) => unknown = "default"
@@ -10,7 +9,7 @@ type error =
 
 type command = Help | Lint(Config.t) | LintHelp
 
-let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
+let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleWithError) => {
   (. ()) => {
     let commandArguments = Process.process->Process.argv->Array.sliceFrom(2)
     let result =
@@ -82,14 +81,12 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand) => {
     | Error(error) =>
       switch error {
       | CommandNotFound =>
-        Console.console->Console.logMany([
-          "Command not found:",
-          commandArguments->Array.joinWith(" "),
-        ])
+        exitConsoleWithError(.
+          ~message=`Command not found: ${commandArguments->Array.joinWith(" ")}`,
+        )
       | IllegalOption({optionName}) =>
-        Console.console->Console.logMany(["Illegal option:", optionName])
+        exitConsoleWithError(. ~message=`Illegal option: ${optionName}`)
       }
-      Process.process->Process.exitWithCode(1)
     }
   }
 }
