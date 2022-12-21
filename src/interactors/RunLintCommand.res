@@ -2,8 +2,8 @@ module Console = NodeJs.Console
 module Process = NodeJs.Process
 
 let make = (~lint: Port.Lint.t) =>
-  (. ()) => {
-    switch lint(.) {
+  (. ~config) => {
+    switch lint(. ~config) {
     | Ok() => ()
     | Error(error) => {
         switch error {

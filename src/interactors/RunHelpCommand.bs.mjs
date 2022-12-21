@@ -5,12 +5,12 @@ import * as Colorette from "colorette";
 function make(param) {
   return function () {
     console.log([
+            "Usage: cli [command] [options]",
             "",
-            "Available commands are:",
-            "",
-            "* " + Colorette.bold("help") + " - Display this message",
-            "* " + Colorette.bold("help <command>") + " - Show more information about a command",
-            "* " + Colorette.bold("lint") + " - Lint rescript standard libriries usage",
+            "Commands:",
+            "  " + Colorette.bold("help") + " - Display this message",
+            "  " + Colorette.bold("help <command>") + " - Show more information about a command",
+            "  " + Colorette.bold("lint") + " - Lint that you use your vendored ReScript standard library over Js, Belt, etc",
             "",
             "You can find more information about the reasoning behind the tool in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-vendorer") + "",
             ""

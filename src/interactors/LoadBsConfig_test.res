@@ -1,33 +1,41 @@
 open Ava
 
 test("Loads bs config without bscFlags", t => {
-  let loadBsConfig = LoadBsConfig.make(~projectPath="fixtures/LoadBsConfig/withoutBscFlags")
+  let loadBsConfig = LoadBsConfig.make()
 
-  t->Assert.deepEqual(loadBsConfig(.), Ok(BsConfig.TestData.make(~bscFlags=[])), ())
+  t->Assert.deepEqual(
+    loadBsConfig(. ~config=Config.make(~projectPath="fixtures/LoadBsConfig/withoutBscFlags")),
+    Ok(BsConfig.TestData.make(~bscFlags=[])),
+    (),
+  )
 })
 
 test("Loads bs config with bscFlags", t => {
-  let loadBsConfig = LoadBsConfig.make(~projectPath="fixtures/LoadBsConfig/withBscFlags")
+  let loadBsConfig = LoadBsConfig.make()
 
-  t->Assert.deepEqual(loadBsConfig(.), Ok(BsConfig.TestData.make(~bscFlags=["-open Belt"])), ())
+  t->Assert.deepEqual(
+    loadBsConfig(. ~config=Config.make(~projectPath="fixtures/LoadBsConfig/withBscFlags")),
+    Ok(BsConfig.TestData.make(~bscFlags=["-open Belt"])),
+    (),
+  )
 })
 
 test("Returns error when bsconfig is invalid", t => {
-  let loadBsConfig = LoadBsConfig.make(~projectPath="fixtures/LoadBsConfig/withInvalidBsconfig")
+  let loadBsConfig = LoadBsConfig.make()
 
   t->Assert.deepEqual(
-    loadBsConfig(.),
+    loadBsConfig(. ~config=Config.make(~projectPath="fixtures/LoadBsConfig/withInvalidBsconfig")),
     Error(ParsingFailure("Failed parsing at [bsc-flags]. Reason: Expected Array, received String")),
     (),
   )
 })
 
 test("Throws when bsconfig.json is missing", t => {
-  let loadBsConfig = LoadBsConfig.make(~projectPath="fixtures/LoadBsConfig/withoutBsconfig")
+  let loadBsConfig = LoadBsConfig.make()
 
   t->Assert.throws(
     () => {
-      loadBsConfig(.)
+      loadBsConfig(. ~config=Config.make(~projectPath="fixtures/LoadBsConfig/withoutBsconfig"))
     },
     ~expectations={
       message: `ENOENT: no such file or directory, open '${NodeJs.Path.resolve([

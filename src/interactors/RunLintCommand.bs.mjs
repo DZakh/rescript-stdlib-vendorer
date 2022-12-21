@@ -5,8 +5,8 @@ import * as LintIssue from "../entities/LintIssue.bs.mjs";
 import * as Colorette from "colorette";
 
 function make(lint) {
-  return function () {
-    var error = lint();
+  return function (config) {
+    var error = lint(config);
     if (error.TAG === /* Ok */0) {
       return ;
     }

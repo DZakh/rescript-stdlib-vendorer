@@ -1,9 +1,9 @@
-let make = (~projectPath) => {
-  (. ()) => {
+let make = () => {
+  (. ~config) => {
     {
       open NodeJs
       Fs.readFileSyncWith(
-        Path.resolve([projectPath, "bsconfig.json"]),
+        Path.resolve([config->Config.getProjectPath, "bsconfig.json"]),
         Fs.readFileOptions(~encoding="utf8", ()),
       )->Buffer.toString
     }

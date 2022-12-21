@@ -1,29 +1,57 @@
 open Ava
 open Execa
 
-let cliPath = NodeJs.Path.resolve(["cli.mjs"])
-
-asyncTest("Shows help when command is not specified", async t => {
-  let {stdout} = await execa(
+let execCli = (~arguments) => {
+  execa(
     "node",
-    [cliPath],
+    [NodeJs.Path.resolve(["cli.mjs"])]->Array.concat(arguments),
     ~options={env: Dict.fromArray([("NO_COLOR", "")])},
     (),
   )
+}
 
-  t->Assert.deepEqual(
-    stdout,
-    [
-      "",
-      "Available commands are:",
-      "",
-      "* help - Display this message",
-      "* help <command> - Show more information about a command",
-      "* lint - Lint rescript standard libriries usage",
-      "",
-      "You can find more information about the reasoning behind the tool in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer",
-      "",
-    ]->Array.joinWith("\n"),
-    (),
-  )
+asyncTest("Shows help when command is not specified", async t => {
+  let {stdout} = await execCli(~arguments=[])
+
+  t->Assert.snapshot(stdout, ())
+})
+
+asyncTest("Shows help when help command provided", async t => {
+  let {stdout} = await execCli(~arguments=["help"])
+
+  t->Assert.snapshot(stdout, ())
+})
+
+asyncTest("Shows help lint", async t => {
+  let {stdout} = await execCli(~arguments=["help", "lint"])
+
+  t->Assert.snapshot(stdout, ())
+})
+
+asyncTest("Succseefully lints the project", async t => {
+  let {stdout} = await execCli(~arguments=["lint"])
+
+  t->Assert.deepEqual(stdout, "", ())
+})
+
+asyncTest("Succseefully lints invalid project", async t => {
+  try {
+    let _ = await execCli(~arguments=["lint", "--project-path=fixtures/Cli/invalid"])
+  } catch {
+  | Exn.Error(error) => {
+      let {stdout} = error->Obj.magic
+      let projectPath = NodeJs.Path.resolve([""])
+
+      t->Assert.deepEqual(
+        stdout,
+        [
+          `${projectPath}/fixtures/Cli/invalid/src/Demo.res:1 `,
+          ` Found "Js" module usage. `,
+          "",
+          `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,
+        ]->Array.joinWith("\n"),
+        (),
+      )
+    }
+  }
 })

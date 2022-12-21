@@ -5,11 +5,11 @@ module Lint = {
     | BsConfigHasOpenedProhibitedModule(ModuleName.t)
     | LintFailedWithIssues(array<LintIssue.t>)
     | RescriptCompilerArtifactsNotFound
-  type t = (. unit) => result<unit, error>
+  type t = (. ~config: Config.t) => result<unit, error>
 }
 
 module RunLintCommand = {
-  type t = (. unit) => unit
+  type t = (. ~config: Config.t) => unit
 }
 
 module RunHelpLintCommand = {
@@ -22,12 +22,12 @@ module RunHelpCommand = {
 
 module LoadBsConfig = {
   type error = ParsingFailure(string)
-  type t = (. unit) => result<BsConfig.t, error>
+  type t = (. ~config: Config.t) => result<BsConfig.t, error>
 }
 
 module LoadSourceDirs = {
   type error = RescriptCompilerArtifactsNotFound | ParsingFailure(string)
-  type t = (. unit) => result<SourceDirs.t, error>
+  type t = (. ~config: Config.t) => result<SourceDirs.t, error>
 }
 
 module RunCli = {
