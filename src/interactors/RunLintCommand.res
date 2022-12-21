@@ -1,40 +1,38 @@
-module Console = NodeJs.Console
-module Process = NodeJs.Process
-
-let make = (~lint: Port.Lint.t) =>
+let make = (~lint: Port.Lint.t, ~exitConsoleWithError: Port.ExitConsoleWithError.t) =>
   (. ~config) => {
     switch lint(. ~config) {
     | Ok() => ()
-    | Error(error) => {
-        switch error {
-        | BsConfigParseFailure(reason) =>
-          Console.console->Console.logMany([`Failed to parse "bsconfig.json":`, reason])
-        | RescriptCompilerArtifactsNotFound =>
-          Console.console->Console.log(`Couldn't find rescript compiler artifacts in the "./lib/bs/" directory. Try to run compiler before the lint script.`)
-        | SourceDirsParseFailure(reason) =>
-          Console.console->Console.logMany([
-            `Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error:`,
-            reason,
-          ])
-        | BsConfigHasOpenedProhibitedModule(moduleName) =>
-          Console.console->Console.log(
-            `Lint failed: Found globally opened module ${moduleName->ModuleName.toString}`,
-          )
-        | LintFailedWithIssues(lintIssues) => {
-            lintIssues->Array.forEach(lintIssue => {
-              Console.console->Console.logMany([
+    | Error(error) =>
+      switch error {
+      | BsConfigParseFailure(reason) =>
+        exitConsoleWithError(. ~message=`Failed to parse "bsconfig.json": ${reason}`)
+      | RescriptCompilerArtifactsNotFound =>
+        exitConsoleWithError(.
+          ~message=`Couldn't find rescript compiler artifacts in the "./lib/bs/" directory. Try to run compiler before the lint script.`,
+        )
+      | SourceDirsParseFailure(reason) =>
+        exitConsoleWithError(.
+          ~message=`Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error: ${reason}`,
+        )
+      | BsConfigHasOpenedProhibitedModule(moduleName) =>
+        exitConsoleWithError(.
+          ~message=`Lint failed: Found globally opened module ${moduleName->ModuleName.toString}`,
+        )
+      | LintFailedWithIssues(lintIssues) => {
+          let message =
+            lintIssues
+            ->Array.map(lintIssue => {
+              [
                 lintIssue->LintIssue.getLink->Colorette.underline,
-                "\n",
                 lintIssue->LintIssue.getMessage,
-                "\n",
-              ])
+              ]->Array.joinWith("\n")
             })
-            Console.console->Console.log(
+            ->Array.concat([
               `Use custom standard library. Read more in the documentation: ${"https://github.com/DZakh/rescript-stdlib-vendorer"->Colorette.underline}`->Colorette.bold,
-            )
-          }
+            ])
+            ->Array.joinWith("\n\n")
+          exitConsoleWithError(. ~message)
         }
-        Process.process->Process.exitWithCode(1)
       }
     }
   }

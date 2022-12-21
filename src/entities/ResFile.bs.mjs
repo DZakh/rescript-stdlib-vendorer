@@ -33,27 +33,27 @@ function lint(resFile, lintContext, prohibitedModuleNames, stdlibModuleName) {
         prohibitedModuleNames.forEach(function (prohibitedModuleName) {
               var openRe = new RegExp("^ *open " + prohibitedModuleName + "($|\\.)");
               if (openRe.test(line)) {
-                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
-                          TAG: /* ProhibitedModuleOpen */0,
-                          line: idx + 1 | 0,
-                          prohibitedModuleName: prohibitedModuleName
-                        }));
+                return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
+                                TAG: /* ProhibitedModuleOpen */0,
+                                line: idx + 1 | 0,
+                                prohibitedModuleName: prohibitedModuleName
+                              }));
               }
               var includeRe = new RegExp("^ *include " + prohibitedModuleName + "($|\\.)");
               if (includeRe.test(line)) {
-                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
-                          TAG: /* ProhibitedModuleInclude */1,
-                          line: idx + 1 | 0,
-                          prohibitedModuleName: prohibitedModuleName
-                        }));
+                return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
+                                TAG: /* ProhibitedModuleInclude */1,
+                                line: idx + 1 | 0,
+                                prohibitedModuleName: prohibitedModuleName
+                              }));
               }
-              var assignRe = new RegExp("module.+= " + prohibitedModuleName + "($|\\.)");
+              var assignRe = new RegExp("^ *module.+= " + prohibitedModuleName + "($|\\.)");
               if (assignRe.test(line)) {
-                LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
-                          TAG: /* ProhibitedModuleAssign */2,
-                          line: idx + 1 | 0,
-                          prohibitedModuleName: prohibitedModuleName
-                        }));
+                return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
+                                TAG: /* ProhibitedModuleAssign */2,
+                                line: idx + 1 | 0,
+                                prohibitedModuleName: prohibitedModuleName
+                              }));
               }
               var usageRe = new RegExp("(\\W|^)" + prohibitedModuleName + "\\.");
               if (usageRe.test(line)) {

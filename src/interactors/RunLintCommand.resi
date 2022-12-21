@@ -1,1 +1,4 @@
-let make: (~lint: Port.Lint.t) => Port.RunLintCommand.t
+let make: (
+  ~lint: Port.Lint.t,
+  ~exitConsoleWithError: Port.ExitConsoleWithError.t,
+) => Port.RunLintCommand.t
