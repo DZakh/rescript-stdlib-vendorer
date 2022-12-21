@@ -1,3 +1,7 @@
+[![CI](https://github.com/DZakh/rescript-stdlib-vendorer/actions/workflows/ci.yml/badge.svg)](https://github.com/DZakh/rescript-stdlib-vendorer/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/DZakh/rescript-stdlib-vendorer/branch/main/graph/badge.svg?token=40G6YKKD6J)](https://codecov.io/gh/DZakh/rescript-stdlib-vendorer)
+[![npm](https://img.shields.io/npm/dm/rescript-stdlib-vendorer)](https://www.npmjs.com/package/rescript-stdlib-vendorer)
+
 # The ultimate answer to Belt vs Js in ReScript
 
 Probably every developer that comes to [ReScript](https://rescript-lang.org/) stumbles upon a dilemma about which module from the standard library they should use to work with JavaScript API.
