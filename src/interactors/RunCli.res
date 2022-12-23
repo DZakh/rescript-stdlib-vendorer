@@ -11,7 +11,7 @@ type command = Help | Lint(Config.t) | LintHelp
 
 let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleWithError) => {
   (. ()) => {
-    let commandArguments = Process.process->Process.argv->Array.sliceFrom(2)
+    let commandArguments = Process.process->Process.argv->Array.sliceToEnd(~from=2)
     let result =
       commandArguments
       ->parseCommandArguments()
@@ -41,7 +41,7 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
           })->S.Object.strict,
         ]),
       )
-      ->Result.mapError((. error) => {
+      ->Result.mapError(error => {
         switch error.code {
         | InvalidUnion(unionErrors) => {
             let maybeIllegalOptionName =
@@ -68,7 +68,7 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
         | _ => Exn.raiseError("Parsed error always must have the InvalidUnion code")
         }
       })
-      ->Result.map((. command) => {
+      ->Result.map(command => {
         switch command {
         | Help => runHelpCommand(.)
         | LintHelp => runHelpLintCommand(.)

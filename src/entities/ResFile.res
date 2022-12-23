@@ -9,7 +9,7 @@ let make = (~content, ~path) => {
 }
 
 let lint = {
-  let normalizeName = name => name->String.replaceByRe(%re("/\W/g"), "")->String.toLowerCase
+  let normalizeName = name => name->String.replaceRegExp(%re("/\W/g"), "")->String.toLowerCase
 
   (resFile, ~lintContext, ~prohibitedModuleNames, ~stdlibModuleName) => {
     if (
@@ -35,10 +35,10 @@ let lint = {
     } else {
       resFile.content
       ->String.split("\n")
-      ->Array.forEachi((line, idx) => {
+      ->Array.forEachWithIndex((line, idx) => {
         prohibitedModuleNames->Array.forEach(prohibitedModuleName => {
           let openRe = Re.fromString(`^ *open ${prohibitedModuleName->ModuleName.toString}($|\\.)`)
-          if openRe->Re.test_(line) {
+          if openRe->Re.test(line) {
             lintContext->LintContext.addIssue(
               LintIssue.make(
                 ~path=resFile.path,
@@ -49,7 +49,7 @@ let lint = {
             let includeRe = Re.fromString(
               `^ *include ${prohibitedModuleName->ModuleName.toString}($|\\.)`,
             )
-            if includeRe->Re.test_(line) {
+            if includeRe->Re.test(line) {
               lintContext->LintContext.addIssue(
                 LintIssue.make(
                   ~path=resFile.path,
@@ -60,7 +60,7 @@ let lint = {
               let assignRe = Re.fromString(
                 `^ *module.+= ${prohibitedModuleName->ModuleName.toString}($|\\.)`,
               )
-              if assignRe->Re.test_(line) {
+              if assignRe->Re.test(line) {
                 lintContext->LintContext.addIssue(
                   LintIssue.make(
                     ~path=resFile.path,
@@ -71,7 +71,7 @@ let lint = {
                 let usageRe = Re.fromString(
                   `(\\W|^)${prohibitedModuleName->ModuleName.toString}\\.`,
                 )
-                if usageRe->Re.test_(line) {
+                if usageRe->Re.test(line) {
                   lintContext->LintContext.addIssue(
                     LintIssue.make(
                       ~path=resFile.path,

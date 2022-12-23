@@ -14,7 +14,7 @@
   "bs-dependencies": [
     "rescript-nodejs",
     "rescript-struct",
-    "stdlib",
+    "@dzakh/rescript-stdlib",
     "@dzakh/rescript-ava"
   ],
   "suffix": ".bs.mjs"

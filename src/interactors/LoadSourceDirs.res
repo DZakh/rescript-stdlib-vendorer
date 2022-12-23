@@ -11,10 +11,10 @@ let make = () => {
     } catch {
     // TODO: Try to build rescript ourselves
     | _ => Error(Port.LoadSourceDirs.RescriptCompilerArtifactsNotFound)
-    }->Result.flatMap((. file) =>
+    }->Result.flatMap(file =>
       file
       ->SourceDirs.fromJsonString
-      ->Result.mapError((. error): Port.LoadSourceDirs.error => {
+      ->Result.mapError((error): Port.LoadSourceDirs.error => {
         ParsingFailure(error)
       })
     )
