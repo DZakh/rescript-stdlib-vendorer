@@ -3,7 +3,7 @@
 import * as LintIssue from "./LintIssue.bs.mjs";
 import * as ModuleName from "./ModuleName.bs.mjs";
 import * as LintContext from "./LintContext.bs.mjs";
-import * as Stdlib_Option from "stdlib/src/Stdlib_Option.bs.mjs";
+import * as Stdlib_Option from "@dzakh/rescript-stdlib/src/Stdlib_Option.bs.mjs";
 
 function make(content, path) {
   return {

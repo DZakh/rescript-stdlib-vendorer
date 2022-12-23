@@ -8,7 +8,7 @@ let make = () => {
       )->Buffer.toString
     }
     ->BsConfig.fromJsonString
-    ->Result.mapError((. error) => {
+    ->Result.mapError(error => {
       Port.LoadBsConfig.ParsingFailure(error)
     })
   }

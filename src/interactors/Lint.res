@@ -3,31 +3,30 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
     let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
 
     loadBsConfig(. ~config)
-    ->Result.mapError((. loadBsConfigError) => {
+    ->Result.mapError(loadBsConfigError => {
       switch loadBsConfigError {
       | ParsingFailure(reason) => Port.Lint.BsConfigParseFailure(reason)
       }
     })
-    ->Result.flatMap((. bsConfig) => {
+    ->Result.flatMap(bsConfig => {
       bsConfig
       ->BsConfig.lint(~prohibitedModuleNames)
-      ->Result.mapError((. error) => {
+      ->Result.mapError(error => {
         switch error {
         | #HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule) =>
           Port.Lint.BsConfigHasOpenedProhibitedModule(openedProhibitedModule)
         }
       })
     })
-    // FIXME: There should be unit instead of underscore. Report to the compiler repo
-    ->Result.flatMap((. _) => {
-      loadSourceDirs(. ~config)->Result.mapError((. loadSourceDirsError) =>
+    ->Result.flatMap(_ => {
+      loadSourceDirs(. ~config)->Result.mapError(loadSourceDirsError =>
         switch loadSourceDirsError {
         | ParsingFailure(reason) => Port.Lint.SourceDirsParseFailure(reason)
         | RescriptCompilerArtifactsNotFound => Port.Lint.RescriptCompilerArtifactsNotFound
         }
       )
     })
-    ->Result.flatMap((. sourceDirs) => {
+    ->Result.flatMap(sourceDirs => {
       let resFiles =
         sourceDirs
         ->SourceDirs.getProjectDirs

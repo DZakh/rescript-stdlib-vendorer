@@ -6,13 +6,18 @@ let defaultProhibitedModuleNames = ["Belt", "Js", "ReScriptJs"]
 let fromBscFlag = bscFlag => {
   switch bscFlag->String.includes("-open") {
   | true =>
-    bscFlag->String.replace("-open", "")->String.trim->String.split(".")->Array.unsafe_get(0)->Some
+    bscFlag
+    ->String.replaceString("-open", "")
+    ->String.trim
+    ->String.split(".")
+    ->Array.getUnsafe(0)
+    ->Some
   | false => None
   }
 }
 
 let fromPath = path => {
-  let pathWithoutResExtension = path->String.replaceByRe(%re("/\.resi?$/"), "")
+  let pathWithoutResExtension = path->String.replaceRegExp(%re("/\.resi?$/"), "")
   if path->String.length === pathWithoutResExtension->String.length {
     None
   } else {

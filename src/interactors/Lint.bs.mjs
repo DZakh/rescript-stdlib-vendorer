@@ -8,7 +8,7 @@ import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as ModuleName from "../entities/ModuleName.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as LintContext from "../entities/LintContext.bs.mjs";
-import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
+import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
   return function (config) {

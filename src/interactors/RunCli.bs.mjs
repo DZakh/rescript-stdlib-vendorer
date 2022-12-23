@@ -4,9 +4,8 @@ import * as Config from "../entities/Config.bs.mjs";
 import * as Js_exn from "rescript/lib/es6/js_exn.js";
 import * as Process from "process";
 import Minimist from "minimist";
-import * as Caml_option from "rescript/lib/es6/caml_option.js";
-import * as Stdlib_Option from "stdlib/src/Stdlib_Option.bs.mjs";
-import * as Stdlib_Result from "stdlib/src/Stdlib_Result.bs.mjs";
+import * as Stdlib_Option from "@dzakh/rescript-stdlib/src/Stdlib_Option.bs.mjs";
+import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
 import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWithError) {
@@ -50,14 +49,14 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWit
                 if (unionErrors.TAG !== /* InvalidUnion */5) {
                   return Js_exn.raiseError("Parsed error always must have the InvalidUnion code");
                 }
-                var maybeIllegalOptionName = Stdlib_Option.map(Caml_option.undefined_to_opt(unionErrors._0.find(function (error) {
-                              var match = error.code;
-                              if (typeof match === "number" || match.TAG !== /* ExcessField */4) {
-                                return false;
-                              } else {
-                                return true;
-                              }
-                            })), (function (excessFieldError) {
+                var maybeIllegalOptionName = Stdlib_Option.map(unionErrors._0.find(function (error) {
+                          var match = error.code;
+                          if (typeof match === "number" || match.TAG !== /* ExcessField */4) {
+                            return false;
+                          } else {
+                            return true;
+                          }
+                        }), (function (excessFieldError) {
                         var illegalOptionName = excessFieldError.code;
                         if (typeof illegalOptionName === "number" || illegalOptionName.TAG !== /* ExcessField */4) {
                           return Js_exn.raiseError("The excessFieldError always must have the ExcessField code");
