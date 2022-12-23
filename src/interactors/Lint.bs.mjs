@@ -8,7 +8,6 @@ import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as ModuleName from "../entities/ModuleName.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as LintContext from "../entities/LintContext.bs.mjs";
-import * as Stdlib_Array from "@dzakh/rescript-stdlib/src/Stdlib_Array.bs.mjs";
 import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
@@ -37,15 +36,15 @@ function make(loadBsConfig, loadSourceDirs) {
                                     }
                                   }));
                     })), (function (sourceDirs) {
-                  var resFiles = Stdlib_Array.flatMap(SourceDirs.getProjectDirs(sourceDirs), (function (sourceDir) {
-                          var fullDirPath = Path.resolve(Config.getProjectPath(config), sourceDir);
-                          return Fs.readdirSync(fullDirPath).filter(ResFile.checkIsResFile).map(function (dirItem) {
-                                      var resFilePath = "" + fullDirPath + "/" + dirItem + "";
-                                      return ResFile.make(Fs.readFileSync(resFilePath, {
-                                                        encoding: "utf8"
-                                                      }).toString(), resFilePath);
-                                    });
-                        }));
+                  var resFiles = SourceDirs.getProjectDirs(sourceDirs).flatMap(function (sourceDir) {
+                        var fullDirPath = Path.resolve(Config.getProjectPath(config), sourceDir);
+                        return Fs.readdirSync(fullDirPath).filter(ResFile.checkIsResFile).map(function (dirItem) {
+                                    var resFilePath = "" + fullDirPath + "/" + dirItem + "";
+                                    return ResFile.make(Fs.readFileSync(resFilePath, {
+                                                      encoding: "utf8"
+                                                    }).toString(), resFilePath);
+                                  });
+                      });
                   var lintContext = LintContext.make(undefined);
                   resFiles.forEach(function (resFile) {
                         ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, ModuleName.defaultStdlibModuleName);

@@ -3,7 +3,6 @@
 import * as LintIssue from "./LintIssue.bs.mjs";
 import * as ModuleName from "./ModuleName.bs.mjs";
 import * as LintContext from "./LintContext.bs.mjs";
-import * as Stdlib_Array from "@dzakh/rescript-stdlib/src/Stdlib_Array.bs.mjs";
 import * as Stdlib_Option from "@dzakh/rescript-stdlib/src/Stdlib_Option.bs.mjs";
 
 function make(content, path) {
@@ -20,7 +19,7 @@ function normalizeName(name) {
 
 function lint(resFile, lintContext, prohibitedModuleNames, stdlibModuleName) {
   if (resFile.moduleName === stdlibModuleName || ModuleName.isSubmodule(resFile.moduleName, stdlibModuleName)) {
-    var stdlibParentDirName = Stdlib_Option.getExnWithMessage(Stdlib_Array.at(resFile.path.split("/"), -2), "A ResFile should always have a directory name");
+    var stdlibParentDirName = Stdlib_Option.getExnWithMessage(resFile.path.split("/").at(-2), "A ResFile should always have a directory name");
     if (normalizeName(stdlibModuleName) !== normalizeName(stdlibParentDirName)) {
       return LintContext.addIssue(lintContext, LintIssue.make(resFile.path, {
                       TAG: /* InvalidStdlibParentDirName */4,
