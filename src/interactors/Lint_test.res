@@ -6,7 +6,7 @@ test("Fails when can't parse bsconfig", t => {
   let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
-    lint(. ~config=Config.make(~projectPath="")),
+    lint(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false)),
     Error(BsConfigParseFailure("Some reason")),
     (),
   )
@@ -18,7 +18,7 @@ test("Fails with globally opened prohibited module", t => {
   let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
-    lint(. ~config=Config.make(~projectPath="")),
+    lint(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false)),
     Error(BsConfigHasOpenedProhibitedModule(ModuleName.TestData.make("Belt"))),
     (),
   )
@@ -30,7 +30,7 @@ test("Fails when can't parse sourcedirs.json", t => {
   let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
-    lint(. ~config=Config.make(~projectPath="")),
+    lint(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false)),
     Error(SourceDirsParseFailure("Some reason")),
     (),
   )
@@ -44,7 +44,7 @@ test("Fails when can't find rescript artifacts", t => {
   let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
-    lint(. ~config=Config.make(~projectPath="")),
+    lint(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false)),
     Error(RescriptCompilerArtifactsNotFound),
     (),
   )
@@ -55,7 +55,11 @@ test("Doesn't complain with valid project", t => {
   let loadSourceDirs = (. ~config as _) => Ok(SourceDirs.TestData.make(~projectDirs=["src"]))
   let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
 
-  t->Assert.deepEqual(lint(. ~config=Config.make(~projectPath="fixtures/Lint/valid")), Ok(), ())
+  t->Assert.deepEqual(
+    lint(. ~config=Config.make(~projectPath="fixtures/Lint/valid", ~ignoreWithoutStdlibOpen=false)),
+    Ok(),
+    (),
+  )
 })
 
 test("Doesn't complain with invalid ReScript files not specified in projectDirs", t => {
@@ -64,7 +68,12 @@ test("Doesn't complain with invalid ReScript files not specified in projectDirs"
   let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
-    lint(. ~config=Config.make(~projectPath="fixtures/Lint/invalidNotProject")),
+    lint(.
+      ~config=Config.make(
+        ~projectPath="fixtures/Lint/invalidNotProject",
+        ~ignoreWithoutStdlibOpen=false,
+      ),
+    ),
     Ok(),
     (),
   )
@@ -76,7 +85,9 @@ test("Complains with invalid project", t => {
   let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
-    lint(. ~config=Config.make(~projectPath="fixtures/Lint/invalid")),
+    lint(.
+      ~config=Config.make(~projectPath="fixtures/Lint/invalid", ~ignoreWithoutStdlibOpen=false),
+    ),
     Error(
       LintFailedWithIssues([
         LintIssue.make(

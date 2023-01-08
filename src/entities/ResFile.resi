@@ -7,6 +7,7 @@ let lint: (
   ~lintContext: LintContext.t,
   ~prohibitedModuleNames: array<ModuleName.t>,
   ~stdlibModuleName: ModuleName.t,
+  ~ignoreIssuesBeforeStdlibOpen: bool,
 ) => unit
 
 let checkIsResFile: (~dirItem: string) => bool

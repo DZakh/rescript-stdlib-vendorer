@@ -22,6 +22,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -35,6 +36,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -63,6 +65,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -88,6 +91,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -113,6 +117,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad"), ModuleName.TestData.make("Belt")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -145,6 +150,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -173,6 +179,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -198,6 +205,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -223,6 +231,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -251,6 +260,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -276,6 +286,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -301,6 +312,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -338,6 +350,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -351,6 +364,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -364,6 +378,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 
@@ -377,6 +392,7 @@ module Lint = {
       ~lintContext,
       ~prohibitedModuleNames=[ModuleName.TestData.make("Bad")],
       ~stdlibModuleName=ModuleName.TestData.make("Stdlib"),
+      ~ignoreIssuesBeforeStdlibOpen=false,
     )
     let issues = lintContext->LintContext.getIssues
 

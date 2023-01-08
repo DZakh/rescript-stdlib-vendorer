@@ -9,24 +9,25 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
       }
     })
     ->Result.flatMap(bsConfig => {
-      bsConfig
-      ->BsConfig.lint(~prohibitedModuleNames)
-      ->Result.mapError(error => {
-        switch error {
-        | #HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule) =>
-          Port.Lint.BsConfigHasOpenedProhibitedModule(openedProhibitedModule)
-        }
-      })
+      switch bsConfig->BsConfig.lint(~prohibitedModuleNames) {
+      | Ok() => Ok(bsConfig)
+      | Error(#HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule)) =>
+        Error(Port.Lint.BsConfigHasOpenedProhibitedModule(openedProhibitedModule))
+      }
     })
-    ->Result.flatMap(_ => {
-      loadSourceDirs(. ~config)->Result.mapError(loadSourceDirsError =>
-        switch loadSourceDirsError {
-        | ParsingFailure(reason) => Port.Lint.SourceDirsParseFailure(reason)
-        | RescriptCompilerArtifactsNotFound => Port.Lint.RescriptCompilerArtifactsNotFound
-        }
-      )
+    ->Result.flatMap(bsConfig => {
+      switch loadSourceDirs(. ~config) {
+      | Ok(sourceDirs) => Ok(bsConfig, sourceDirs)
+      | Error(loadSourceDirsError) =>
+        Error(
+          switch loadSourceDirsError {
+          | ParsingFailure(reason) => Port.Lint.SourceDirsParseFailure(reason)
+          | RescriptCompilerArtifactsNotFound => Port.Lint.RescriptCompilerArtifactsNotFound
+          },
+        )
+      }
     })
-    ->Result.flatMap(sourceDirs => {
+    ->Result.flatMap(((bsConfig, sourceDirs)) => {
       let resFiles =
         sourceDirs
         ->SourceDirs.getProjectDirs
@@ -54,7 +55,10 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
         resFile->ResFile.lint(
           ~lintContext,
           ~prohibitedModuleNames,
-          ~stdlibModuleName=ModuleName.defaultStdlibModuleName,
+          ~ignoreIssuesBeforeStdlibOpen=config->Config.checkShouldIngoreResFileIssuesBeforeStdlibOpen(
+            ~bsConfig,
+          ),
+          ~stdlibModuleName=config->Config.getStdlibModuleName,
         )
       })
       switch lintContext->LintContext.getIssues {

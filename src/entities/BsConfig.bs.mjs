@@ -5,22 +5,25 @@ import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import * as Stdlib_Option from "@dzakh/rescript-stdlib/src/Stdlib_Option.bs.mjs";
 import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
 
-function getGlobalyOpenedModules(bsConfig) {
-  var globalyOpenedModules = [];
+function getGlobalyOpenedModulesSet(bsConfig) {
+  var set = new Set();
   bsConfig.bscFlags.forEach(function (bscFlag) {
         Stdlib_Option.forEach(ModuleName.fromBscFlag(bscFlag), (function (moduleName) {
-                globalyOpenedModules.push(moduleName);
+                set.add(moduleName);
               }));
       });
-  return globalyOpenedModules;
+  return set;
+}
+
+function hasGloballyOpenedModule(bsConfig, moduleName) {
+  var globalyOpenedModulesSet = getGlobalyOpenedModulesSet(bsConfig);
+  return globalyOpenedModulesSet.has(moduleName);
 }
 
 function lint(bsConfig, prohibitedModuleNames) {
-  var globalyOpenedModules = getGlobalyOpenedModules(bsConfig);
+  var globalyOpenedModulesSet = getGlobalyOpenedModulesSet(bsConfig);
   var maybeOpenedProhibitedModule = prohibitedModuleNames.find(function (prohibitedModule) {
-        return globalyOpenedModules.some(function (globalyOpenedModule) {
-                    return globalyOpenedModule === prohibitedModule;
-                  });
+        return globalyOpenedModulesSet.has(prohibitedModule);
       });
   if (maybeOpenedProhibitedModule !== undefined) {
     return {
@@ -60,6 +63,7 @@ var TestData = {
 
 export {
   lint ,
+  hasGloballyOpenedModule ,
   fromJsonString ,
   TestData ,
 }
