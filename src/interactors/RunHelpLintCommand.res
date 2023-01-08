@@ -9,6 +9,7 @@ let make = () => {
         "",
         "Options:",
         ` ${"--project-path"->Colorette.bold} - Path to the project directory. It should point to where bsconfig.json is located (defaults to the current directory).`,
+        ` ${"--ignore-without-stdlib-open"->Colorette.bold} - Whether linter should ignore files that don't have globally opened vendored stdlib. Convenient for gradual adoption.`,
         "",
       ]->Array.joinWith("\n"),
     )

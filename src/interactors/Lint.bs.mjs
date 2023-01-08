@@ -18,25 +18,43 @@ function make(loadBsConfig, loadSourceDirs) {
                                       _0: loadBsConfigError._0
                                     };
                             })), (function (bsConfig) {
-                          return Stdlib_Result.mapError(BsConfig.lint(bsConfig, ModuleName.defaultProhibitedModuleNames), (function (error) {
-                                        return {
-                                                TAG: /* BsConfigHasOpenedProhibitedModule */2,
-                                                _0: error.VAL
-                                              };
-                                      }));
-                        })), (function (param) {
-                      return Stdlib_Result.mapError(loadSourceDirs(config), (function (loadSourceDirsError) {
-                                    if (loadSourceDirsError) {
-                                      return {
-                                              TAG: /* SourceDirsParseFailure */1,
-                                              _0: loadSourceDirsError._0
-                                            };
-                                    } else {
-                                      return /* RescriptCompilerArtifactsNotFound */0;
+                          var match = BsConfig.lint(bsConfig, ModuleName.defaultProhibitedModuleNames);
+                          if (match.TAG === /* Ok */0) {
+                            return {
+                                    TAG: /* Ok */0,
+                                    _0: bsConfig
+                                  };
+                          } else {
+                            return {
+                                    TAG: /* Error */1,
+                                    _0: {
+                                      TAG: /* BsConfigHasOpenedProhibitedModule */2,
+                                      _0: match._0.VAL
                                     }
-                                  }));
-                    })), (function (sourceDirs) {
-                  var resFiles = SourceDirs.getProjectDirs(sourceDirs).flatMap(function (sourceDir) {
+                                  };
+                          }
+                        })), (function (bsConfig) {
+                      var sourceDirs = loadSourceDirs(config);
+                      if (sourceDirs.TAG === /* Ok */0) {
+                        return {
+                                TAG: /* Ok */0,
+                                _0: [
+                                  bsConfig,
+                                  sourceDirs._0
+                                ]
+                              };
+                      }
+                      var loadSourceDirsError = sourceDirs._0;
+                      return {
+                              TAG: /* Error */1,
+                              _0: loadSourceDirsError ? ({
+                                    TAG: /* SourceDirsParseFailure */1,
+                                    _0: loadSourceDirsError._0
+                                  }) : /* RescriptCompilerArtifactsNotFound */0
+                            };
+                    })), (function (param) {
+                  var bsConfig = param[0];
+                  var resFiles = SourceDirs.getProjectDirs(param[1]).flatMap(function (sourceDir) {
                         var fullDirPath = Path.resolve(Config.getProjectPath(config), sourceDir);
                         return Fs.readdirSync(fullDirPath).filter(ResFile.checkIsResFile).map(function (dirItem) {
                                     var resFilePath = "" + fullDirPath + "/" + dirItem + "";
@@ -47,7 +65,7 @@ function make(loadBsConfig, loadSourceDirs) {
                       });
                   var lintContext = LintContext.make(undefined);
                   resFiles.forEach(function (resFile) {
-                        ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, ModuleName.defaultStdlibModuleName);
+                        ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, Config.getStdlibModuleName(config), Config.checkShouldIngoreResFileIssuesBeforeStdlibOpen(config, bsConfig));
                       });
                   var lintIssues = LintContext.getIssues(lintContext);
                   if (lintIssues.length !== 0) {

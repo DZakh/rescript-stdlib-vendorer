@@ -60,7 +60,9 @@ asyncTest("Succseefully lints the project", async t => {
 
 asyncTest("Succseefully lints invalid project", async t => {
   try {
-    let _ = await execCli(~arguments=["lint", "--project-path=fixtures/Cli/invalid"])
+    let _ = await execCli(
+      ~arguments=["lint", "--project-path=fixtures/Cli/invalid", "--ignore-without-stdlib-open"],
+    )
   } catch {
   | Exn.Error(error) => {
       let {stdout} = error->Obj.magic
@@ -69,7 +71,7 @@ asyncTest("Succseefully lints invalid project", async t => {
       t->Assert.deepEqual(
         stdout,
         [
-          `${projectPath}/fixtures/Cli/invalid/src/Demo.res:1`,
+          `${projectPath}/fixtures/Cli/invalid/src/Demo1.res:2`,
           `Found "Js" module usage.`,
           "",
           `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,

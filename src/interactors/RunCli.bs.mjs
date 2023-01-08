@@ -38,7 +38,7 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWit
                                               _0: "lint"
                                             })));
                                 return /* Lint */{
-                                        _0: Config.make(S$ReScriptStruct.field(o, "project-path", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.string(undefined)), Process.cwd())))
+                                        _0: Config.make(S$ReScriptStruct.field(o, "project-path", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.string(undefined)), Process.cwd())), S$ReScriptStruct.field(o, "ignore-without-stdlib-open", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.bool(undefined)), false)))
                                       };
                               }))
                     ])), (function (error) {
@@ -97,4 +97,4 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWit
 export {
   make ,
 }
-/* process Not a pure module */
+/* Config Not a pure module */

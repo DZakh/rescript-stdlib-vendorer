@@ -36,6 +36,10 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
                   "project-path",
                   S.option(S.string())->S.defaulted(NodeJs.Process.process->NodeJs.Process.cwd),
                 ),
+                ~ignoreWithoutStdlibOpen=o->S.field(
+                  "ignore-without-stdlib-open",
+                  S.option(S.bool())->S.defaulted(false),
+                ),
               ),
             )
           })->S.Object.strict,
