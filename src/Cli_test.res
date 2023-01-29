@@ -75,7 +75,7 @@ asyncTest("Lints invalid project", async t => {
           `${projectPath}/fixtures/Cli/invalid/src/Demo2.res:1`,
           `Found "Js" module usage.`,
           "",
-          `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,
+          `Use the vendored standard library instead. Read more at: https://github.com/DZakh/rescript-stdlib-vendorer`,
         ]->Array.joinWith("\n"),
         (),
       )
@@ -99,7 +99,7 @@ asyncTest("Lints invalid project with --ignore-without-stdlib-open flag", async 
           `${projectPath}/fixtures/Cli/invalid/src/Demo1.res:2`,
           `Found "Js" module usage.`,
           "",
-          `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,
+          `Use the vendored standard library instead. Read more at: https://github.com/DZakh/rescript-stdlib-vendorer`,
         ]->Array.joinWith("\n"),
         (),
       )
@@ -123,7 +123,7 @@ asyncTest("Lints invalid project with ignored single file", async t => {
           `${projectPath}/fixtures/Cli/invalid/src/Demo1.res:2`,
           `Found "Js" module usage.`,
           "",
-          `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,
+          `Use the vendored standard library instead. Read more at: https://github.com/DZakh/rescript-stdlib-vendorer`,
         ]->Array.joinWith("\n"),
         (),
       )
