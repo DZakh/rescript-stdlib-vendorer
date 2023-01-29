@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-vendorer",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "Tool to support usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
@@ -49,16 +49,16 @@
   "dependencies": {
     "colorette": "^2.0.19",
     "minimist": "^1.2.7",
-    "rescript": "^10.1.0"
+    "rescript": "^10.1.1"
   },
   "devDependencies": {
     "@dzakh/rescript-stdlib": "1.1.0",
     "@dzakh/rescript-ava": "2.1.0",
-    "ava": "5.1.0",
+    "ava": "5.1.1",
     "c8": "7.12.0",
     "execa": "6.1.0",
     "microbundle": "0.15.1",
     "rescript-nodejs": "14.3.1",
-    "rescript-struct": "3.0.0"
+    "rescript-struct": "3.0.1"
   }
 }

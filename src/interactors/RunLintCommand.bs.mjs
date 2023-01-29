@@ -26,7 +26,7 @@ function make(lint, exitConsoleWithError) {
                               Colorette.underline(LintIssue.getLink(lintIssue)),
                               LintIssue.getMessage(lintIssue)
                             ].join("\n");
-                  }).concat([Colorette.bold("Use custom standard library. Read more in the documentation: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-vendorer") + "")]).join("\n\n");
+                  }).concat([Colorette.bold("Use the vendored standard library instead. Read more at: " + Colorette.underline("https://github.com/DZakh/rescript-stdlib-vendorer") + "")]).join("\n\n");
           return exitConsoleWithError(message);
       
     }

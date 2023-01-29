@@ -28,7 +28,7 @@ let make = (~lint: Port.Lint.t, ~exitConsoleWithError: Port.ExitConsoleWithError
               ]->Array.joinWith("\n")
             })
             ->Array.concat([
-              `Use custom standard library. Read more in the documentation: ${"https://github.com/DZakh/rescript-stdlib-vendorer"->Colorette.underline}`->Colorette.bold,
+              `Use the vendored standard library instead. Read more at: ${"https://github.com/DZakh/rescript-stdlib-vendorer"->Colorette.underline}`->Colorette.bold,
             ])
             ->Array.joinWith("\n\n")
           exitConsoleWithError(. ~message)
