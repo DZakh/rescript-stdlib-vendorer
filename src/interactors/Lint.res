@@ -28,27 +28,31 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
       }
     })
     ->Result.flatMap(((bsConfig, sourceDirs)) => {
-      let resFiles =
-        sourceDirs
-        ->SourceDirs.getProjectDirs
-        ->Array.flatMap(sourceDir => {
-          open NodeJs
-          let fullDirPath = Path.resolve([config->Config.getProjectPath, sourceDir])
-          Fs.readdirSync(fullDirPath)
-          ->Array.filter(ResFile.checkIsResFile(~dirItem=_))
-          ->Array.map(
-            dirItem => {
+      let resFiles = []
+      sourceDirs
+      ->SourceDirs.getProjectDirs
+      ->Array.forEach(sourceDir => {
+        open NodeJs
+        let fullDirPath = Path.resolve([config->Config.getProjectPath, sourceDir])
+        Fs.readdirSync(fullDirPath)->Array.forEach(
+          dirItem => {
+            if (
+              ResFile.checkIsResFile(~dirItem) &&
+              config->Config.checkIsIgnoredPath(~relativePath=`${sourceDir}/${dirItem}`)->not
+            ) {
               let resFilePath = `${fullDirPath}/${dirItem}`
-              ResFile.make(
+              let resFile = ResFile.make(
                 ~content=Fs.readFileSyncWith(
                   resFilePath,
                   Fs.readFileOptions(~encoding="utf8", ()),
                 )->Buffer.toString,
                 ~path=resFilePath,
               )
-            },
-          )
-        })
+              resFiles->Array.push(resFile)->ignore
+            }
+          },
+        )
+      })
 
       let lintContext = LintContext.make()
       resFiles->Array.forEach(resFile => {

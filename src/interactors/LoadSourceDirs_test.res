@@ -8,6 +8,7 @@ test("Loads sourceDirs with project directories", t => {
       ~config=Config.make(
         ~projectPath="fixtures/LoadSourceDirs/withProjectDirs",
         ~ignoreWithoutStdlibOpen=false,
+        ~ignorePaths=[],
       ),
     ),
     Ok(
@@ -27,6 +28,7 @@ test("Returns error when sourcedirs.json is invalid", t => {
       ~config=Config.make(
         ~projectPath="fixtures/LoadSourceDirs/withInvalidSourcedirs",
         ~ignoreWithoutStdlibOpen=false,
+        ~ignorePaths=[],
       ),
     ),
     Error(ParsingFailure("Failed parsing at [dirs]. Reason: Expected Array, received Option")),
@@ -42,6 +44,7 @@ test("Returns error sourcedirs.json is missing", t => {
       ~config=Config.make(
         ~projectPath="fixtures/LoadSourceDirs/withoutBsconfig",
         ~ignoreWithoutStdlibOpen=false,
+        ~ignorePaths=[],
       ),
     ),
     Error(RescriptCompilerArtifactsNotFound),

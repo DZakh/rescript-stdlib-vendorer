@@ -17,7 +17,9 @@ test("Doesn't log anything on success", t => {
   let lint = (. ~config as _) => Ok()
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false))
+  runLintCommand(.
+    ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
+  )
 
   t->Assert.deepEqual(exitConsoleWithErrorCalls, [], ())
 })
@@ -27,7 +29,9 @@ test("Handles BsConfigParseFailure error", t => {
   let lint = (. ~config as _) => Error(Port.Lint.BsConfigParseFailure("Something went wrong"))
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false))
+  runLintCommand(.
+    ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
+  )
 
   t->Assert.snapshot(exitConsoleWithErrorCalls, ())
 })
@@ -37,7 +41,9 @@ test("Handles RescriptCompilerArtifactsNotFound error", t => {
   let lint = (. ~config as _) => Error(Port.Lint.RescriptCompilerArtifactsNotFound)
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false))
+  runLintCommand(.
+    ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
+  )
 
   t->Assert.snapshot(exitConsoleWithErrorCalls, ())
 })
@@ -47,7 +53,9 @@ test("Handles SourceDirsParseFailure error", t => {
   let lint = (. ~config as _) => Error(Port.Lint.SourceDirsParseFailure("Something went wrong"))
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false))
+  runLintCommand(.
+    ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
+  )
 
   t->Assert.snapshot(exitConsoleWithErrorCalls, ())
 })
@@ -59,7 +67,9 @@ test("Handles BsConfigHasOpenedProhibitedModule error", t => {
   )
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false))
+  runLintCommand(.
+    ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
+  )
 
   t->Assert.snapshot(exitConsoleWithErrorCalls, ())
 })
@@ -85,7 +95,9 @@ test("Handles LintFailedWithIssues error", t => {
   )
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(. ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false))
+  runLintCommand(.
+    ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
+  )
 
   t->Assert.snapshot(exitConsoleWithErrorCalls, ())
 })

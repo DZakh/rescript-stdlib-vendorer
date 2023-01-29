@@ -54,14 +54,19 @@ function make(loadBsConfig, loadSourceDirs) {
                             };
                     })), (function (param) {
                   var bsConfig = param[0];
-                  var resFiles = SourceDirs.getProjectDirs(param[1]).flatMap(function (sourceDir) {
+                  var resFiles = [];
+                  SourceDirs.getProjectDirs(param[1]).forEach(function (sourceDir) {
                         var fullDirPath = Path.resolve(Config.getProjectPath(config), sourceDir);
-                        return Fs.readdirSync(fullDirPath).filter(ResFile.checkIsResFile).map(function (dirItem) {
-                                    var resFilePath = "" + fullDirPath + "/" + dirItem + "";
-                                    return ResFile.make(Fs.readFileSync(resFilePath, {
-                                                      encoding: "utf8"
-                                                    }).toString(), resFilePath);
-                                  });
+                        Fs.readdirSync(fullDirPath).forEach(function (dirItem) {
+                              if (!(ResFile.checkIsResFile(dirItem) && !Config.checkIsIgnoredPath(config, "" + sourceDir + "/" + dirItem + ""))) {
+                                return ;
+                              }
+                              var resFilePath = "" + fullDirPath + "/" + dirItem + "";
+                              var resFile = ResFile.make(Fs.readFileSync(resFilePath, {
+                                          encoding: "utf8"
+                                        }).toString(), resFilePath);
+                              resFiles.push(resFile);
+                            });
                       });
                   var lintContext = LintContext.make(undefined);
                   resFiles.forEach(function (resFile) {

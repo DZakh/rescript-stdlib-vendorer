@@ -40,6 +40,12 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
                   "ignore-without-stdlib-open",
                   S.option(S.bool())->S.defaulted(false),
                 ),
+                ~ignorePaths=o->S.field(
+                  "ignore-path",
+                  S.option(
+                    S.union([S.string()->S.transform(~parser=s => [s], ()), S.array(S.string())]),
+                  )->S.defaulted([]),
+                ),
               ),
             )
           })->S.Object.strict,

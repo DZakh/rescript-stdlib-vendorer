@@ -3,11 +3,12 @@
 import * as BsConfig from "./BsConfig.bs.mjs";
 import * as ModuleName from "./ModuleName.bs.mjs";
 
-function make(projectPath, ignoreWithoutStdlibOpen) {
+function make(projectPath, ignoreWithoutStdlibOpen, ignorePaths) {
   return {
           projectPath: projectPath,
           ignoreWithoutStdlibOpen: ignoreWithoutStdlibOpen,
-          stdlibModuleName: ModuleName.defaultStdlibModuleName
+          stdlibModuleName: ModuleName.defaultStdlibModuleName,
+          ignorePaths: ignorePaths
         };
 }
 
@@ -27,10 +28,17 @@ function checkShouldIngoreResFileIssuesBeforeStdlibOpen(config, bsConfig) {
   }
 }
 
+function checkIsIgnoredPath(config, relativePath) {
+  return config.ignorePaths.some(function (ignorePath) {
+              return relativePath.startsWith(ignorePath);
+            });
+}
+
 export {
   make ,
   getProjectPath ,
   getStdlibModuleName ,
   checkShouldIngoreResFileIssuesBeforeStdlibOpen ,
+  checkIsIgnoredPath ,
 }
 /* BsConfig Not a pure module */
