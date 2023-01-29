@@ -58,7 +58,32 @@ asyncTest("Succseefully lints the project", async t => {
   t->Assert.deepEqual(stdout, "", ())
 })
 
-asyncTest("Succseefully lints invalid project", async t => {
+asyncTest("Lints invalid project", async t => {
+  try {
+    let _ = await execCli(~arguments=["lint", "--project-path=fixtures/Cli/invalid"])
+  } catch {
+  | Exn.Error(error) => {
+      let {stdout} = error->Obj.magic
+      let projectPath = NodeJs.Path.resolve([""])
+
+      t->Assert.deepEqual(
+        stdout,
+        [
+          `${projectPath}/fixtures/Cli/invalid/src/Demo1.res:2`,
+          `Found "Js" module usage.`,
+          "",
+          `${projectPath}/fixtures/Cli/invalid/src/Demo2.res:1`,
+          `Found "Js" module usage.`,
+          "",
+          `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,
+        ]->Array.joinWith("\n"),
+        (),
+      )
+    }
+  }
+})
+
+asyncTest("Lints invalid project with --ignore-without-stdlib-open flag", async t => {
   try {
     let _ = await execCli(
       ~arguments=["lint", "--project-path=fixtures/Cli/invalid", "--ignore-without-stdlib-open"],
@@ -80,4 +105,47 @@ asyncTest("Succseefully lints invalid project", async t => {
       )
     }
   }
+})
+
+asyncTest("Lints invalid project with ignored single file", async t => {
+  try {
+    let _ = await execCli(
+      ~arguments=["lint", "--project-path=fixtures/Cli/invalid", "--ignore-path=src/Demo2.res"],
+    )
+  } catch {
+  | Exn.Error(error) => {
+      let {stdout} = error->Obj.magic
+      let projectPath = NodeJs.Path.resolve([""])
+
+      t->Assert.deepEqual(
+        stdout,
+        [
+          `${projectPath}/fixtures/Cli/invalid/src/Demo1.res:2`,
+          `Found "Js" module usage.`,
+          "",
+          `Use custom standard library. Read more in the documentation: https://github.com/DZakh/rescript-stdlib-vendorer`,
+        ]->Array.joinWith("\n"),
+        (),
+      )
+    }
+  }
+})
+
+asyncTest("Lints invalid project with ignored multiple files", async t => {
+  let {stdout} = await execCli(
+    ~arguments=[
+      "lint",
+      "--project-path=fixtures/Cli/invalid",
+      "--ignore-path=src/Demo1.res",
+      "--ignore-path=src/Demo2.res",
+    ],
+  )
+  t->Assert.deepEqual(stdout, "", ())
+})
+
+asyncTest("Lints invalid project with ignored directory", async t => {
+  let {stdout} = await execCli(
+    ~arguments=["lint", "--project-path=fixtures/Cli/invalid", "--ignore-path=src"],
+  )
+  t->Assert.deepEqual(stdout, "", ())
 })
