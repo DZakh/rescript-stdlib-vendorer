@@ -43,7 +43,9 @@ test("Returns error when bsconfig is invalid", t => {
         ~ignorePaths=[],
       ),
     ),
-    Error(ParsingFailure("Failed parsing at [bsc-flags]. Reason: Expected Array, received String")),
+    Error(
+      ParsingFailure(`Failed parsing at ["bsc-flags"]. Reason: Expected Array, received String`),
+    ),
     (),
   )
 })

@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-vendorer",
-  "bsc-flags": ["-open Stdlib", "-open ReScriptStruct"],
+  "bsc-flags": ["-open Stdlib", "-open RescriptStruct"],
   "sources": [
     {
       "dir": "src",

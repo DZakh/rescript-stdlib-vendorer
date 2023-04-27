@@ -47,9 +47,9 @@
     ]
   },
   "dependencies": {
-    "colorette": "^2.0.19",
-    "minimist": "^1.2.7",
-    "rescript": "^10.1.1"
+    "colorette": "^2.0.20",
+    "minimist": "^1.2.8",
+    "rescript": "^10.1.4"
   },
   "devDependencies": {
     "@dzakh/rescript-stdlib": "1.1.0",
@@ -59,6 +59,6 @@
     "execa": "6.1.0",
     "microbundle": "0.15.1",
     "rescript-nodejs": "14.3.1",
-    "rescript-struct": "3.0.1"
+    "rescript-struct": "4.0.0"
   }
 }

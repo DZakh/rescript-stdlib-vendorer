@@ -3,7 +3,7 @@
 import * as ModuleName from "./ModuleName.bs.mjs";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import * as Stdlib_Option from "@dzakh/rescript-stdlib/src/Stdlib_Option.bs.mjs";
-import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
+import * as S$RescriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function getGlobalyOpenedModulesSet(bsConfig) {
   var set = new Set();
@@ -41,14 +41,16 @@ function lint(bsConfig, prohibitedModuleNames) {
   }
 }
 
-var struct = S$ReScriptStruct.json(S$ReScriptStruct.object(function (o) {
-          return {
-                  bscFlags: S$ReScriptStruct.field(o, "bsc-flags", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.array(S$ReScriptStruct.string(undefined))), []))
-                };
-        }));
+var struct = S$RescriptStruct.object(function (o) {
+      return {
+              bscFlags: S$RescriptStruct.field(o, "bsc-flags", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.array(S$RescriptStruct.string(undefined))), (function (param) {
+                          return [];
+                        })))
+            };
+    });
 
 function fromJsonString(jsonString) {
-  return S$ReScriptStruct.Result.mapErrorToString(S$ReScriptStruct.parseWith(jsonString, struct));
+  return S$RescriptStruct.Result.mapErrorToString(S$RescriptStruct.parseJsonWith(jsonString, struct));
 }
 
 function make(bscFlags) {

@@ -31,7 +31,7 @@ test("Returns error when sourcedirs.json is invalid", t => {
         ~ignorePaths=[],
       ),
     ),
-    Error(ParsingFailure("Failed parsing at [dirs]. Reason: Expected Array, received Option")),
+    Error(ParsingFailure(`Failed parsing at ["dirs"]. Reason: Expected Array, received Option`)),
     (),
   )
 })

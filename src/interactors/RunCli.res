@@ -1,7 +1,7 @@
 module Process = NodeJs.Process
 
 @module("minimist")
-external parseCommandArguments: (array<string>, unit) => unknown = "default"
+external parseCommandArguments: (array<string>, unit) => Js.Json.t = "default"
 
 type error =
   | CommandNotFound
@@ -18,33 +18,37 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
       ->S.parseWith(
         S.union([
           S.object(o => {
-            o->S.discriminant(
-              "_",
-              S.union([S.tuple0(.), S.tuple1(. S.literalVariant(String("help"), ()))]),
+            ignore(
+              o->S.field(
+                "_",
+                S.union([S.tuple0(.), S.tuple1(. S.literalVariant(String("help"), ()))]),
+              ),
             )
             Help
           })->S.Object.strict,
           S.object(o => {
-            o->S.discriminant("_", S.tuple2(. S.literal(String("help")), S.literal(String("lint"))))
+            ignore(
+              o->S.field("_", S.tuple2(. S.literal(String("help")), S.literal(String("lint")))),
+            )
             LintHelp
           })->S.Object.strict,
           S.object(o => {
-            o->S.discriminant("_", S.tuple1(. S.literal(String("lint"))))
+            ignore(o->S.field("_", S.tuple1(. S.literal(String("lint")))))
             Lint(
               Config.make(
                 ~projectPath=o->S.field(
                   "project-path",
-                  S.option(S.string())->S.defaulted(NodeJs.Process.process->NodeJs.Process.cwd),
+                  S.option(S.string())->S.default(() => NodeJs.Process.process->NodeJs.Process.cwd),
                 ),
                 ~ignoreWithoutStdlibOpen=o->S.field(
                   "ignore-without-stdlib-open",
-                  S.option(S.bool())->S.defaulted(false),
+                  S.option(S.bool())->S.default(() => false),
                 ),
                 ~ignorePaths=o->S.field(
                   "ignore-path",
                   S.option(
                     S.union([S.string()->S.transform(~parser=s => [s], ()), S.array(S.string())]),
-                  )->S.defaulted([]),
+                  )->S.default(() => []),
                 ),
               ),
             )

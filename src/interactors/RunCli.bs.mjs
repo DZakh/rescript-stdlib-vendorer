@@ -6,44 +6,50 @@ import * as Process from "process";
 import Minimist from "minimist";
 import * as Stdlib_Option from "@dzakh/rescript-stdlib/src/Stdlib_Option.bs.mjs";
 import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
-import * as S$ReScriptStruct from "rescript-struct/src/S.bs.mjs";
+import * as S$RescriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWithError) {
   return function () {
     var commandArguments = Process.argv.slice(2);
-    var result = Stdlib_Result.map(Stdlib_Result.mapError(S$ReScriptStruct.parseWith(Minimist(commandArguments), S$ReScriptStruct.union([
-                      S$ReScriptStruct.$$Object.strict(S$ReScriptStruct.object(function (o) {
-                                S$ReScriptStruct.discriminant(o, "_", S$ReScriptStruct.union([
-                                          S$ReScriptStruct.tuple0(),
-                                          S$ReScriptStruct.tuple1(S$ReScriptStruct.literalVariant({
+    var result = Stdlib_Result.map(Stdlib_Result.mapError(S$RescriptStruct.parseWith(Minimist(commandArguments), S$RescriptStruct.union([
+                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
+                                S$RescriptStruct.field(o, "_", S$RescriptStruct.union([
+                                          S$RescriptStruct.tuple0(),
+                                          S$RescriptStruct.tuple1(S$RescriptStruct.literalVariant({
                                                     TAG: /* String */0,
                                                     _0: "help"
                                                   }, undefined))
                                         ]));
                                 return /* Help */0;
                               })),
-                      S$ReScriptStruct.$$Object.strict(S$ReScriptStruct.object(function (o) {
-                                S$ReScriptStruct.discriminant(o, "_", S$ReScriptStruct.tuple2(S$ReScriptStruct.literal({
+                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
+                                S$RescriptStruct.field(o, "_", S$RescriptStruct.tuple2(S$RescriptStruct.literal({
                                               TAG: /* String */0,
                                               _0: "help"
-                                            }), S$ReScriptStruct.literal({
+                                            }), S$RescriptStruct.literal({
                                               TAG: /* String */0,
                                               _0: "lint"
                                             })));
                                 return /* LintHelp */1;
                               })),
-                      S$ReScriptStruct.$$Object.strict(S$ReScriptStruct.object(function (o) {
-                                S$ReScriptStruct.discriminant(o, "_", S$ReScriptStruct.tuple1(S$ReScriptStruct.literal({
+                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
+                                S$RescriptStruct.field(o, "_", S$RescriptStruct.tuple1(S$RescriptStruct.literal({
                                               TAG: /* String */0,
                                               _0: "lint"
                                             })));
                                 return /* Lint */{
-                                        _0: Config.make(S$ReScriptStruct.field(o, "project-path", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.string(undefined)), Process.cwd())), S$ReScriptStruct.field(o, "ignore-without-stdlib-open", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.bool(undefined)), false)), S$ReScriptStruct.field(o, "ignore-path", S$ReScriptStruct.defaulted(S$ReScriptStruct.option(S$ReScriptStruct.union([
-                                                              S$ReScriptStruct.transform(S$ReScriptStruct.string(undefined), (function (s) {
+                                        _0: Config.make(S$RescriptStruct.field(o, "project-path", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.string(undefined)), (function (param) {
+                                                        return Process.cwd();
+                                                      }))), S$RescriptStruct.field(o, "ignore-without-stdlib-open", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.bool(undefined)), (function (param) {
+                                                        return false;
+                                                      }))), S$RescriptStruct.field(o, "ignore-path", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.union([
+                                                              S$RescriptStruct.transform(S$RescriptStruct.string(undefined), (function (s) {
                                                                       return [s];
-                                                                    }), undefined, undefined),
-                                                              S$ReScriptStruct.array(S$ReScriptStruct.string(undefined))
-                                                            ])), [])))
+                                                                    }), undefined, undefined, undefined),
+                                                              S$RescriptStruct.array(S$RescriptStruct.string(undefined))
+                                                            ])), (function (param) {
+                                                        return [];
+                                                      }))))
                                       };
                               }))
                     ])), (function (error) {
