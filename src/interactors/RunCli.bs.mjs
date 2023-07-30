@@ -2,15 +2,16 @@
 
 import * as Config from "../entities/Config.bs.mjs";
 import * as Js_exn from "rescript/lib/es6/js_exn.js";
-import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as Process from "process";
 import Minimist from "minimist";
+import * as Core__Option from "@dzakh/rescript-core/src/Core__Option.bs.mjs";
+import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
 import * as S$RescriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWithError) {
   return function () {
     var commandArguments = Process.argv.slice(2);
-    var result = Stdlib.Result.map(Stdlib.Result.mapError(S$RescriptStruct.parseWith(Minimist(commandArguments), S$RescriptStruct.union([
+    var result = Core__Result.map(Core__Result.mapError(S$RescriptStruct.parseWith(Minimist(commandArguments), S$RescriptStruct.union([
                       S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
                                 S$RescriptStruct.field(o, "_", S$RescriptStruct.union([
                                           S$RescriptStruct.tuple0(undefined),
@@ -60,7 +61,7 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWit
                 if (unionErrors.TAG !== "InvalidUnion") {
                   return Js_exn.raiseError("Parsed error always must have the InvalidUnion code");
                 }
-                var maybeIllegalOptionName = Stdlib.$$Option.map(unionErrors._0.find(function (error) {
+                var maybeIllegalOptionName = Core__Option.map(unionErrors._0.find(function (error) {
                           var match = error.code;
                           if (typeof match !== "object" || match.TAG !== "ExcessField") {
                             return false;

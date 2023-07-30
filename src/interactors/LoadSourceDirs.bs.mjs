@@ -3,8 +3,8 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Config from "../entities/Config.bs.mjs";
-import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
+import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
 
 function make() {
   return function (config) {
@@ -23,8 +23,8 @@ function make() {
         _0: "RescriptCompilerArtifactsNotFound"
       };
     }
-    return Stdlib.Result.flatMap(tmp, (function (file) {
-                  return Stdlib.Result.mapError(SourceDirs.fromJsonString(file), (function (error) {
+    return Core__Result.flatMap(tmp, (function (file) {
+                  return Core__Result.mapError(SourceDirs.fromJsonString(file), (function (error) {
                                 return {
                                         TAG: "ParsingFailure",
                                         _0: error

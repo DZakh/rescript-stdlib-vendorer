@@ -3,16 +3,16 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Config from "../entities/Config.bs.mjs";
-import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as ResFile from "../entities/ResFile.bs.mjs";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as ModuleName from "../entities/ModuleName.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as LintContext from "../entities/LintContext.bs.mjs";
+import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
   return function (config) {
-    return Stdlib.Result.flatMap(Stdlib.Result.flatMap(Stdlib.Result.flatMap(Stdlib.Result.mapError(loadBsConfig(config), (function (loadBsConfigError) {
+    return Core__Result.flatMap(Core__Result.flatMap(Core__Result.flatMap(Core__Result.mapError(loadBsConfig(config), (function (loadBsConfigError) {
                               return {
                                       TAG: "BsConfigParseFailure",
                                       _0: loadBsConfigError._0

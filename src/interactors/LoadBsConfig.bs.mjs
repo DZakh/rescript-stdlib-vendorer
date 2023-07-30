@@ -3,12 +3,12 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Config from "../entities/Config.bs.mjs";
-import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
+import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
 
 function make() {
   return function (config) {
-    return Stdlib.Result.mapError(BsConfig.fromJsonString(Fs.readFileSync(Path.resolve(Config.getProjectPath(config), "bsconfig.json"), {
+    return Core__Result.mapError(BsConfig.fromJsonString(Fs.readFileSync(Path.resolve(Config.getProjectPath(config), "bsconfig.json"), {
                           encoding: "utf8"
                         }).toString()), (function (error) {
                   return {
