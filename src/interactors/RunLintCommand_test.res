@@ -5,7 +5,7 @@ module ExitConsoleWithError = {
     let calls = []
     (
       calls,
-      (. ~message) => {
+      (~message) => {
         calls->Array.push(message)->ignore
       },
     )
@@ -14,10 +14,10 @@ module ExitConsoleWithError = {
 
 test("Doesn't log anything on success", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
-  let lint = (. ~config as _) => Ok()
+  let lint = (~config as _) => Ok()
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(.
+  runLintCommand(
     ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
   )
 
@@ -26,10 +26,10 @@ test("Doesn't log anything on success", t => {
 
 test("Handles BsConfigParseFailure error", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
-  let lint = (. ~config as _) => Error(Port.Lint.BsConfigParseFailure("Something went wrong"))
+  let lint = (~config as _) => Error(Port.Lint.BsConfigParseFailure("Something went wrong"))
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(.
+  runLintCommand(
     ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
   )
 
@@ -38,10 +38,10 @@ test("Handles BsConfigParseFailure error", t => {
 
 test("Handles RescriptCompilerArtifactsNotFound error", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
-  let lint = (. ~config as _) => Error(Port.Lint.RescriptCompilerArtifactsNotFound)
+  let lint = (~config as _) => Error(Port.Lint.RescriptCompilerArtifactsNotFound)
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(.
+  runLintCommand(
     ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
   )
 
@@ -50,10 +50,10 @@ test("Handles RescriptCompilerArtifactsNotFound error", t => {
 
 test("Handles SourceDirsParseFailure error", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
-  let lint = (. ~config as _) => Error(Port.Lint.SourceDirsParseFailure("Something went wrong"))
+  let lint = (~config as _) => Error(Port.Lint.SourceDirsParseFailure("Something went wrong"))
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(.
+  runLintCommand(
     ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
   )
 
@@ -62,12 +62,12 @@ test("Handles SourceDirsParseFailure error", t => {
 
 test("Handles BsConfigHasOpenedProhibitedModule error", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
-  let lint = (. ~config as _) => Error(
+  let lint = (~config as _) => Error(
     Port.Lint.BsConfigHasOpenedProhibitedModule(ModuleName.TestData.make("Js")),
   )
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(.
+  runLintCommand(
     ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
   )
 
@@ -76,7 +76,7 @@ test("Handles BsConfigHasOpenedProhibitedModule error", t => {
 
 test("Handles LintFailedWithIssues error", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
-  let lint = (. ~config as _) => Error(
+  let lint = (~config as _) => Error(
     Port.Lint.LintFailedWithIssues([
       LintIssue.make(
         ~kind=ProhibitedModuleInclude({
@@ -95,7 +95,7 @@ test("Handles LintFailedWithIssues error", t => {
   )
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
-  runLintCommand(.
+  runLintCommand(
     ~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[]),
   )
 

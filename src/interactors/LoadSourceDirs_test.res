@@ -4,7 +4,7 @@ test("Loads sourceDirs with project directories", t => {
   let loadSourceDirs = LoadSourceDirs.make()
 
   t->Assert.deepEqual(
-    loadSourceDirs(.
+    loadSourceDirs(
       ~config=Config.make(
         ~projectPath="fixtures/LoadSourceDirs/withProjectDirs",
         ~ignoreWithoutStdlibOpen=false,
@@ -24,7 +24,7 @@ test("Returns error when sourcedirs.json is invalid", t => {
   let loadSourceDirs = LoadSourceDirs.make()
 
   t->Assert.deepEqual(
-    loadSourceDirs(.
+    loadSourceDirs(
       ~config=Config.make(
         ~projectPath="fixtures/LoadSourceDirs/withInvalidSourcedirs",
         ~ignoreWithoutStdlibOpen=false,
@@ -40,7 +40,7 @@ test("Returns error sourcedirs.json is missing", t => {
   let loadSourceDirs = LoadSourceDirs.make()
 
   t->Assert.deepEqual(
-    loadSourceDirs(.
+    loadSourceDirs(
       ~config=Config.make(
         ~projectPath="fixtures/LoadSourceDirs/withoutBsconfig",
         ~ignoreWithoutStdlibOpen=false,

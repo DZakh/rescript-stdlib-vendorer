@@ -1,5 +1,5 @@
 let make = () => {
-  (. ~config) => {
+  (~config) => {
     {
       open NodeJs
       Fs.readFileSyncWith(

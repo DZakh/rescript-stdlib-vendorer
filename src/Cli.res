@@ -1,4 +1,4 @@
-let exitConsoleWithError = (. ~message) => {
+let exitConsoleWithError = (~message) => {
   NodeJs.Console.console->NodeJs.Console.log(message)
   NodeJs.Process.process->NodeJs.Process.exitWithCode(1)
 }
@@ -13,4 +13,4 @@ let runCli = RunCli.make(
   ~exitConsoleWithError,
 )
 
-runCli(.)
+runCli()

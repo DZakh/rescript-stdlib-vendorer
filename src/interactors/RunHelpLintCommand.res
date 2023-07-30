@@ -1,7 +1,7 @@
 module Console = NodeJs.Console
 
 let make = () => {
-  (. ()) => {
+  () => {
     Console.console->Console.log(
       [
         "",

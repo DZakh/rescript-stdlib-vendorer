@@ -4,7 +4,7 @@ test("Loads bs config without bscFlags", t => {
   let loadBsConfig = LoadBsConfig.make()
 
   t->Assert.deepEqual(
-    loadBsConfig(.
+    loadBsConfig(
       ~config=Config.make(
         ~projectPath="fixtures/LoadBsConfig/withoutBscFlags",
         ~ignoreWithoutStdlibOpen=false,
@@ -20,7 +20,7 @@ test("Loads bs config with bscFlags", t => {
   let loadBsConfig = LoadBsConfig.make()
 
   t->Assert.deepEqual(
-    loadBsConfig(.
+    loadBsConfig(
       ~config=Config.make(
         ~projectPath="fixtures/LoadBsConfig/withBscFlags",
         ~ignoreWithoutStdlibOpen=false,
@@ -36,7 +36,7 @@ test("Returns error when bsconfig is invalid", t => {
   let loadBsConfig = LoadBsConfig.make()
 
   t->Assert.deepEqual(
-    loadBsConfig(.
+    loadBsConfig(
       ~config=Config.make(
         ~projectPath="fixtures/LoadBsConfig/withInvalidBsconfig",
         ~ignoreWithoutStdlibOpen=false,
@@ -55,7 +55,7 @@ test("Throws when bsconfig.json is missing", t => {
 
   t->Assert.throws(
     () => {
-      loadBsConfig(.
+      loadBsConfig(
         ~config=Config.make(
           ~projectPath="fixtures/LoadBsConfig/withoutBsconfig",
           ~ignoreWithoutStdlibOpen=false,
