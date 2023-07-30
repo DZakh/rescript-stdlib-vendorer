@@ -3,15 +3,16 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Config from "../entities/Config.bs.mjs";
+import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
-import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
 
-function make(param) {
+function make() {
   return function (config) {
-    return Stdlib_Result.mapError(BsConfig.fromJsonString(Fs.readFileSync(Path.resolve(Config.getProjectPath(config), "bsconfig.json"), {
+    return Stdlib.Result.mapError(BsConfig.fromJsonString(Fs.readFileSync(Path.resolve(Config.getProjectPath(config), "bsconfig.json"), {
                           encoding: "utf8"
                         }).toString()), (function (error) {
-                  return /* ParsingFailure */{
+                  return {
+                          TAG: "ParsingFailure",
                           _0: error
                         };
                 }));

@@ -10,24 +10,24 @@ function make(path, kind) {
 
 function getLink(lintIssue) {
   var match = lintIssue.kind;
-  if (match.TAG === /* InvalidStdlibParentDirName */4) {
+  if (match.TAG === "InvalidStdlibParentDirName") {
     return lintIssue.path;
   } else {
-    return "" + lintIssue.path + ":" + match.line.toString() + "";
+    return lintIssue.path + ":" + match.line.toString();
   }
 }
 
 function getMessage(lintIssue) {
   var match = lintIssue.kind;
-  switch (match.TAG | 0) {
-    case /* ProhibitedModuleOpen */0 :
+  switch (match.TAG) {
+    case "ProhibitedModuleOpen" :
         return "Found \"" + match.prohibitedModuleName + "\" module open.";
-    case /* ProhibitedModuleInclude */1 :
+    case "ProhibitedModuleInclude" :
         return "Found \"" + match.prohibitedModuleName + "\" module include.";
-    case /* ProhibitedModuleAssign */2 :
-    case /* ProhibitedModuleUsage */3 :
+    case "ProhibitedModuleAssign" :
+    case "ProhibitedModuleUsage" :
         return "Found \"" + match.prohibitedModuleName + "\" module usage.";
-    case /* InvalidStdlibParentDirName */4 :
+    case "InvalidStdlibParentDirName" :
         return "The \"" + match.stdlibParentDirName + "\" is an invalid directory name for custom standary library related files. Put the files to the directory with the name \"stdlib\" to make it easier to find them.";
     
   }

@@ -3,15 +3,15 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Config from "../entities/Config.bs.mjs";
+import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
-import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
 
-function make(param) {
+function make() {
   return function (config) {
     var tmp;
     try {
       tmp = {
-        TAG: /* Ok */0,
+        TAG: "Ok",
         _0: Fs.readFileSync(Path.resolve(Config.getProjectPath(config), "lib/bs/.sourcedirs.json"), {
                 encoding: "utf8"
               }).toString()
@@ -19,13 +19,14 @@ function make(param) {
     }
     catch (exn){
       tmp = {
-        TAG: /* Error */1,
-        _0: /* RescriptCompilerArtifactsNotFound */0
+        TAG: "Error",
+        _0: "RescriptCompilerArtifactsNotFound"
       };
     }
-    return Stdlib_Result.flatMap(tmp, (function (file) {
-                  return Stdlib_Result.mapError(SourceDirs.fromJsonString(file), (function (error) {
-                                return /* ParsingFailure */{
+    return Stdlib.Result.flatMap(tmp, (function (file) {
+                  return Stdlib.Result.mapError(SourceDirs.fromJsonString(file), (function (error) {
+                                return {
+                                        TAG: "ParsingFailure",
                                         _0: error
                                       };
                               }));

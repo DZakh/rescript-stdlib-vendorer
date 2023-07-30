@@ -10,8 +10,8 @@ type error =
 type command = Help | Lint(Config.t) | LintHelp
 
 let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleWithError) => {
-  (. ()) => {
-    let commandArguments = Process.process->Process.argv->Array.sliceToEnd(~from=2)
+  () => {
+    let commandArguments = Process.process->Process.argv->Array.sliceToEnd(~start=2)
     let result =
       commandArguments
       ->parseCommandArguments()
@@ -21,19 +21,17 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
             ignore(
               o->S.field(
                 "_",
-                S.union([S.tuple0(.), S.tuple1(. S.literalVariant(String("help"), ()))]),
+                S.union([S.tuple0(), S.tuple1(S.literalVariant(String("help"), ()))]),
               ),
             )
             Help
           })->S.Object.strict,
           S.object(o => {
-            ignore(
-              o->S.field("_", S.tuple2(. S.literal(String("help")), S.literal(String("lint")))),
-            )
+            ignore(o->S.field("_", S.tuple2(S.literal(String("help")), S.literal(String("lint")))))
             LintHelp
           })->S.Object.strict,
           S.object(o => {
-            ignore(o->S.field("_", S.tuple1(. S.literal(String("lint")))))
+            ignore(o->S.field("_", S.tuple1(S.literal(String("lint")))))
             Lint(
               Config.make(
                 ~projectPath=o->S.field(
@@ -84,9 +82,9 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
       })
       ->Result.map(command => {
         switch command {
-        | Help => runHelpCommand(.)
-        | LintHelp => runHelpLintCommand(.)
-        | Lint(config) => runLintCommand(. ~config)
+        | Help => runHelpCommand()
+        | LintHelp => runHelpLintCommand()
+        | Lint(config) => runLintCommand(~config)
         }
       })
 
@@ -95,11 +93,9 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
     | Error(error) =>
       switch error {
       | CommandNotFound =>
-        exitConsoleWithError(.
-          ~message=`Command not found: ${commandArguments->Array.joinWith(" ")}`,
-        )
+        exitConsoleWithError(~message=`Command not found: ${commandArguments->Array.joinWith(" ")}`)
       | IllegalOption({optionName}) =>
-        exitConsoleWithError(. ~message=`Illegal option: ${optionName}`)
+        exitConsoleWithError(~message=`Illegal option: ${optionName}`)
       }
     }
   }

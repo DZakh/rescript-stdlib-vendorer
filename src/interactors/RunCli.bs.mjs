@@ -2,105 +2,106 @@
 
 import * as Config from "../entities/Config.bs.mjs";
 import * as Js_exn from "rescript/lib/es6/js_exn.js";
+import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as Process from "process";
 import Minimist from "minimist";
-import * as Stdlib_Option from "@dzakh/rescript-stdlib/src/Stdlib_Option.bs.mjs";
-import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
 import * as S$RescriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWithError) {
   return function () {
     var commandArguments = Process.argv.slice(2);
-    var result = Stdlib_Result.map(Stdlib_Result.mapError(S$RescriptStruct.parseWith(Minimist(commandArguments), S$RescriptStruct.union([
+    var result = Stdlib.Result.map(Stdlib.Result.mapError(S$RescriptStruct.parseWith(Minimist(commandArguments), S$RescriptStruct.union([
                       S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
                                 S$RescriptStruct.field(o, "_", S$RescriptStruct.union([
-                                          S$RescriptStruct.tuple0(),
+                                          S$RescriptStruct.tuple0(undefined),
                                           S$RescriptStruct.tuple1(S$RescriptStruct.literalVariant({
-                                                    TAG: /* String */0,
+                                                    TAG: "String",
                                                     _0: "help"
                                                   }, undefined))
                                         ]));
-                                return /* Help */0;
+                                return "Help";
                               })),
                       S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
                                 S$RescriptStruct.field(o, "_", S$RescriptStruct.tuple2(S$RescriptStruct.literal({
-                                              TAG: /* String */0,
+                                              TAG: "String",
                                               _0: "help"
                                             }), S$RescriptStruct.literal({
-                                              TAG: /* String */0,
+                                              TAG: "String",
                                               _0: "lint"
                                             })));
-                                return /* LintHelp */1;
+                                return "LintHelp";
                               })),
                       S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
                                 S$RescriptStruct.field(o, "_", S$RescriptStruct.tuple1(S$RescriptStruct.literal({
-                                              TAG: /* String */0,
+                                              TAG: "String",
                                               _0: "lint"
                                             })));
-                                return /* Lint */{
-                                        _0: Config.make(S$RescriptStruct.field(o, "project-path", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.string(undefined)), (function (param) {
+                                return {
+                                        TAG: "Lint",
+                                        _0: Config.make(S$RescriptStruct.field(o, "project-path", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.string(undefined)), (function () {
                                                         return Process.cwd();
-                                                      }))), S$RescriptStruct.field(o, "ignore-without-stdlib-open", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.bool(undefined)), (function (param) {
+                                                      }))), S$RescriptStruct.field(o, "ignore-without-stdlib-open", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.bool(undefined)), (function () {
                                                         return false;
                                                       }))), S$RescriptStruct.field(o, "ignore-path", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.union([
                                                               S$RescriptStruct.transform(S$RescriptStruct.string(undefined), (function (s) {
                                                                       return [s];
                                                                     }), undefined, undefined, undefined),
                                                               S$RescriptStruct.array(S$RescriptStruct.string(undefined))
-                                                            ])), (function (param) {
+                                                            ])), (function () {
                                                         return [];
                                                       }))))
                                       };
                               }))
                     ])), (function (error) {
                 var unionErrors = error.code;
-                if (typeof unionErrors === "number") {
+                if (typeof unionErrors !== "object") {
                   return Js_exn.raiseError("Parsed error always must have the InvalidUnion code");
                 }
-                if (unionErrors.TAG !== /* InvalidUnion */5) {
+                if (unionErrors.TAG !== "InvalidUnion") {
                   return Js_exn.raiseError("Parsed error always must have the InvalidUnion code");
                 }
-                var maybeIllegalOptionName = Stdlib_Option.map(unionErrors._0.find(function (error) {
+                var maybeIllegalOptionName = Stdlib.$$Option.map(unionErrors._0.find(function (error) {
                           var match = error.code;
-                          if (typeof match === "number" || match.TAG !== /* ExcessField */4) {
+                          if (typeof match !== "object" || match.TAG !== "ExcessField") {
                             return false;
                           } else {
                             return true;
                           }
                         }), (function (excessFieldError) {
                         var illegalOptionName = excessFieldError.code;
-                        if (typeof illegalOptionName === "number" || illegalOptionName.TAG !== /* ExcessField */4) {
+                        if (typeof illegalOptionName !== "object" || illegalOptionName.TAG !== "ExcessField") {
                           return Js_exn.raiseError("The excessFieldError always must have the ExcessField code");
                         } else {
                           return illegalOptionName._0;
                         }
                       }));
                 if (maybeIllegalOptionName !== undefined) {
-                  return /* IllegalOption */{
+                  return {
+                          TAG: "IllegalOption",
                           optionName: maybeIllegalOptionName
                         };
                 } else {
-                  return /* CommandNotFound */0;
+                  return "CommandNotFound";
                 }
               })), (function (command) {
-            if (typeof command === "number") {
-              if (command !== 0) {
-                return runHelpLintCommand();
+            if (typeof command !== "object") {
+              if (command === "Help") {
+                return runHelpCommand(undefined);
               } else {
-                return runHelpCommand();
+                return runHelpLintCommand(undefined);
               }
             } else {
               return runLintCommand(command._0);
             }
           }));
-    if (result.TAG === /* Ok */0) {
+    if (result.TAG === "Ok") {
       return ;
     }
     var error = result._0;
-    if (error) {
-      return exitConsoleWithError("Illegal option: " + error.optionName + "");
+    if (typeof error !== "object") {
+      return exitConsoleWithError("Command not found: " + commandArguments.join(" "));
     } else {
-      return exitConsoleWithError("Command not found: " + commandArguments.join(" ") + "");
+      return exitConsoleWithError("Illegal option: " + error.optionName);
     }
   };
 }

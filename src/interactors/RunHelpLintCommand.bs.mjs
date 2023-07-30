@@ -2,7 +2,7 @@
 
 import * as Colorette from "colorette";
 
-function make(param) {
+function make() {
   return function () {
     console.log([
             "",

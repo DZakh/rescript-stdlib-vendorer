@@ -6,12 +6,7 @@ let defaultProhibitedModuleNames = ["Belt", "Js", "ReScriptJs"]
 let fromBscFlag = bscFlag => {
   switch bscFlag->String.includes("-open") {
   | true =>
-    bscFlag
-    ->String.replaceString("-open", "")
-    ->String.trim
-    ->String.split(".")
-    ->Array.getUnsafe(0)
-    ->Some
+    bscFlag->String.replace("-open", "")->String.trim->String.split(".")->Array.getUnsafe(0)->Some
   | false => None
   }
 }

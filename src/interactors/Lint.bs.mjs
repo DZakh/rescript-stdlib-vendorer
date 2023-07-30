@@ -3,41 +3,41 @@
 import * as Fs from "fs";
 import * as Path from "path";
 import * as Config from "../entities/Config.bs.mjs";
+import * as Stdlib from "@dzakh/rescript-stdlib/src/Stdlib.bs.mjs";
 import * as ResFile from "../entities/ResFile.bs.mjs";
 import * as BsConfig from "../entities/BsConfig.bs.mjs";
 import * as ModuleName from "../entities/ModuleName.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as LintContext from "../entities/LintContext.bs.mjs";
-import * as Stdlib_Result from "@dzakh/rescript-stdlib/src/Stdlib_Result.bs.mjs";
 
 function make(loadBsConfig, loadSourceDirs) {
   return function (config) {
-    return Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.flatMap(Stdlib_Result.mapError(loadBsConfig(config), (function (loadBsConfigError) {
+    return Stdlib.Result.flatMap(Stdlib.Result.flatMap(Stdlib.Result.flatMap(Stdlib.Result.mapError(loadBsConfig(config), (function (loadBsConfigError) {
                               return {
-                                      TAG: /* BsConfigParseFailure */0,
+                                      TAG: "BsConfigParseFailure",
                                       _0: loadBsConfigError._0
                                     };
                             })), (function (bsConfig) {
                           var match = BsConfig.lint(bsConfig, ModuleName.defaultProhibitedModuleNames);
-                          if (match.TAG === /* Ok */0) {
+                          if (match.TAG === "Ok") {
                             return {
-                                    TAG: /* Ok */0,
+                                    TAG: "Ok",
                                     _0: bsConfig
                                   };
                           } else {
                             return {
-                                    TAG: /* Error */1,
+                                    TAG: "Error",
                                     _0: {
-                                      TAG: /* BsConfigHasOpenedProhibitedModule */2,
+                                      TAG: "BsConfigHasOpenedProhibitedModule",
                                       _0: match._0.VAL
                                     }
                                   };
                           }
                         })), (function (bsConfig) {
                       var sourceDirs = loadSourceDirs(config);
-                      if (sourceDirs.TAG === /* Ok */0) {
+                      if (sourceDirs.TAG === "Ok") {
                         return {
-                                TAG: /* Ok */0,
+                                TAG: "Ok",
                                 _0: [
                                   bsConfig,
                                   sourceDirs._0
@@ -45,12 +45,14 @@ function make(loadBsConfig, loadSourceDirs) {
                               };
                       }
                       var loadSourceDirsError = sourceDirs._0;
+                      var tmp;
+                      tmp = typeof loadSourceDirsError !== "object" ? "RescriptCompilerArtifactsNotFound" : ({
+                            TAG: "SourceDirsParseFailure",
+                            _0: loadSourceDirsError._0
+                          });
                       return {
-                              TAG: /* Error */1,
-                              _0: loadSourceDirsError ? ({
-                                    TAG: /* SourceDirsParseFailure */1,
-                                    _0: loadSourceDirsError._0
-                                  }) : /* RescriptCompilerArtifactsNotFound */0
+                              TAG: "Error",
+                              _0: tmp
                             };
                     })), (function (param) {
                   var bsConfig = param[0];
@@ -58,10 +60,10 @@ function make(loadBsConfig, loadSourceDirs) {
                   SourceDirs.getProjectDirs(param[1]).forEach(function (sourceDir) {
                         var fullDirPath = Path.resolve(Config.getProjectPath(config), sourceDir);
                         Fs.readdirSync(fullDirPath).forEach(function (dirItem) {
-                              if (!(ResFile.checkIsResFile(dirItem) && !Config.checkIsIgnoredPath(config, "" + sourceDir + "/" + dirItem + ""))) {
+                              if (!(ResFile.checkIsResFile(dirItem) && !Config.checkIsIgnoredPath(config, sourceDir + "/" + dirItem))) {
                                 return ;
                               }
-                              var resFilePath = "" + fullDirPath + "/" + dirItem + "";
+                              var resFilePath = fullDirPath + "/" + dirItem;
                               var resFile = ResFile.make(Fs.readFileSync(resFilePath, {
                                           encoding: "utf8"
                                         }).toString(), resFilePath);
@@ -75,15 +77,15 @@ function make(loadBsConfig, loadSourceDirs) {
                   var lintIssues = LintContext.getIssues(lintContext);
                   if (lintIssues.length !== 0) {
                     return {
-                            TAG: /* Error */1,
+                            TAG: "Error",
                             _0: {
-                              TAG: /* LintFailedWithIssues */3,
+                              TAG: "LintFailedWithIssues",
                               _0: lintIssues
                             }
                           };
                   } else {
                     return {
-                            TAG: /* Ok */0,
+                            TAG: "Ok",
                             _0: undefined
                           };
                   }
