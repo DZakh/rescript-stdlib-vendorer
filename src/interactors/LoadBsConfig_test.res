@@ -44,7 +44,7 @@ test("Returns error when bsconfig is invalid", t => {
       ),
     ),
     Error(
-      ParsingFailure(`Failed parsing at ["bsc-flags"]. Reason: Expected Array, received String`),
+      ParsingFailure(`Failed parsing at ["bsc-flags"]. Reason: Expected Option(Array(String)), received "-open Belt"`),
     ),
     (),
   )

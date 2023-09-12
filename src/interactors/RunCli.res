@@ -1,7 +1,7 @@
 module Process = NodeJs.Process
 
 @module("minimist")
-external parseCommandArguments: (array<string>, unit) => Js.Json.t = "default"
+external parseCommandArguments: (array<string>, unit) => JSON.t = "default"
 
 type error =
   | CommandNotFound
@@ -17,36 +17,33 @@ let make = (~runLintCommand, ~runHelpCommand, ~runHelpLintCommand, ~exitConsoleW
       ->parseCommandArguments()
       ->S.parseWith(
         S.union([
-          S.object(o => {
-            ignore(
-              o->S.field(
-                "_",
-                S.union([S.tuple0(), S.tuple1(S.literalVariant(String("help"), ()))]),
-              ),
-            )
+          S.object(s => {
+            s.tag("_", [])
             Help
           })->S.Object.strict,
-          S.object(o => {
-            ignore(o->S.field("_", S.tuple2(S.literal(String("help")), S.literal(String("lint")))))
+          S.object(s => {
+            s.tag("_", ["help"])
+            Help
+          })->S.Object.strict,
+          S.object(s => {
+            s.tag("_", ["help", "lint"])
             LintHelp
           })->S.Object.strict,
-          S.object(o => {
-            ignore(o->S.field("_", S.tuple1(S.literal(String("lint")))))
+          S.object(s => {
+            s.tag("_", ["lint"])
             Lint(
               Config.make(
-                ~projectPath=o->S.field(
+                ~projectPath=s.field(
                   "project-path",
-                  S.option(S.string())->S.default(() => NodeJs.Process.process->NodeJs.Process.cwd),
+                  S.option(S.string)->S.Option.getOrWith(() =>
+                    NodeJs.Process.process->NodeJs.Process.cwd
+                  ),
                 ),
-                ~ignoreWithoutStdlibOpen=o->S.field(
-                  "ignore-without-stdlib-open",
-                  S.option(S.bool())->S.default(() => false),
-                ),
-                ~ignorePaths=o->S.field(
+                ~ignoreWithoutStdlibOpen=s.fieldOr("ignore-without-stdlib-open", S.bool, false),
+                ~ignorePaths=s.fieldOr(
                   "ignore-path",
-                  S.option(
-                    S.union([S.string()->S.transform(~parser=s => [s], ()), S.array(S.string())]),
-                  )->S.default(() => []),
+                  S.union([S.string->S.variant(s => [s]), S.array(S.string)]),
+                  [],
                 ),
               ),
             )

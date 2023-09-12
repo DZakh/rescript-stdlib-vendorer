@@ -12,45 +12,33 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWit
   return function () {
     var commandArguments = Process.argv.slice(2);
     var result = Core__Result.map(Core__Result.mapError(S$RescriptStruct.parseWith(Minimist(commandArguments), S$RescriptStruct.union([
-                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
-                                S$RescriptStruct.field(o, "_", S$RescriptStruct.union([
-                                          S$RescriptStruct.tuple0(undefined),
-                                          S$RescriptStruct.tuple1(S$RescriptStruct.literalVariant({
-                                                    TAG: "String",
-                                                    _0: "help"
-                                                  }, undefined))
-                                        ]));
+                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+                                s.t("_", []);
                                 return "Help";
                               })),
-                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
-                                S$RescriptStruct.field(o, "_", S$RescriptStruct.tuple2(S$RescriptStruct.literal({
-                                              TAG: "String",
-                                              _0: "help"
-                                            }), S$RescriptStruct.literal({
-                                              TAG: "String",
-                                              _0: "lint"
-                                            })));
+                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+                                s.t("_", ["help"]);
+                                return "Help";
+                              })),
+                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+                                s.t("_", [
+                                      "help",
+                                      "lint"
+                                    ]);
                                 return "LintHelp";
                               })),
-                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (o) {
-                                S$RescriptStruct.field(o, "_", S$RescriptStruct.tuple1(S$RescriptStruct.literal({
-                                              TAG: "String",
-                                              _0: "lint"
-                                            })));
+                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+                                s.t("_", ["lint"]);
                                 return {
                                         TAG: "Lint",
-                                        _0: Config.make(S$RescriptStruct.field(o, "project-path", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.string(undefined)), (function () {
+                                        _0: Config.make(s.f("project-path", S$RescriptStruct.$$Option.getOrWith(S$RescriptStruct.option(S$RescriptStruct.string), (function () {
                                                         return Process.cwd();
-                                                      }))), S$RescriptStruct.field(o, "ignore-without-stdlib-open", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.bool(undefined)), (function () {
-                                                        return false;
-                                                      }))), S$RescriptStruct.field(o, "ignore-path", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.union([
-                                                              S$RescriptStruct.transform(S$RescriptStruct.string(undefined), (function (s) {
-                                                                      return [s];
-                                                                    }), undefined, undefined, undefined),
-                                                              S$RescriptStruct.array(S$RescriptStruct.string(undefined))
-                                                            ])), (function () {
-                                                        return [];
-                                                      }))))
+                                                      }))), s.o("ignore-without-stdlib-open", S$RescriptStruct.bool, false), s.o("ignore-path", S$RescriptStruct.union([
+                                                      S$RescriptStruct.variant(S$RescriptStruct.string, (function (s) {
+                                                              return [s];
+                                                            })),
+                                                      S$RescriptStruct.array(S$RescriptStruct.string)
+                                                    ]), []))
                                       };
                               }))
                     ])), (function (error) {

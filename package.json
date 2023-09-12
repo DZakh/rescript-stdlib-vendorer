@@ -36,8 +36,8 @@
     "lint": "npm run lint:rescript-format",
     "lint:rescript-format": "rescript format -check -all",
     "lint:stdlib": "node cli.mjs lint",
-    "res:build": "rescript build -with-deps",
-    "res:dev": "rescript build -with-deps -w",
+    "res:build": "rescript build",
+    "res": "rescript build -w",
     "test": "ava",
     "test:watch": "ava --watch"
   },
@@ -49,8 +49,8 @@
   "dependencies": {
     "colorette": "~2.0.20",
     "minimist": "~1.2.8",
-    "rescript": "~11.0.0-beta.4",
-    "rescript-struct": "~4.1.1"
+    "rescript": "~11.0.0-rc.3",
+    "rescript-struct": "~5.0.1"
   },
   "devDependencies": {
     "@dzakh/rescript-ava": "2.3.0",

@@ -3,6 +3,7 @@
 import * as ModuleName from "./ModuleName.bs.mjs";
 import * as Caml_option from "rescript/lib/es6/caml_option.js";
 import * as Core__Option from "@dzakh/rescript-core/src/Core__Option.bs.mjs";
+import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
 import * as S$RescriptStruct from "rescript-struct/src/S.bs.mjs";
 
 function getGlobalyOpenedModulesSet(bsConfig) {
@@ -41,16 +42,14 @@ function lint(bsConfig, prohibitedModuleNames) {
   }
 }
 
-var struct = S$RescriptStruct.object(function (o) {
+var struct = S$RescriptStruct.object(function (s) {
       return {
-              bscFlags: S$RescriptStruct.field(o, "bsc-flags", S$RescriptStruct.$$default(S$RescriptStruct.option(S$RescriptStruct.array(S$RescriptStruct.string(undefined))), (function () {
-                          return [];
-                        })))
+              bscFlags: s.o("bsc-flags", S$RescriptStruct.array(S$RescriptStruct.string), [])
             };
     });
 
 function fromJsonString(jsonString) {
-  return S$RescriptStruct.Result.mapErrorToString(S$RescriptStruct.parseJsonWith(jsonString, struct));
+  return Core__Result.mapError(S$RescriptStruct.parseJsonStringWith(jsonString, struct), S$RescriptStruct.$$Error.message);
 }
 
 function make(bscFlags) {
