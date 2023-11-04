@@ -1,8 +1,8 @@
 type t = {bscFlags: array<string>}
 
-let getGlobalyOpenedModulesSet = bsConfig => {
+let getGlobalyOpenedModulesSet = resConfig => {
   let set = Set.make()
-  bsConfig.bscFlags->Array.forEach(bscFlag => {
+  resConfig.bscFlags->Array.forEach(bscFlag => {
     bscFlag
     ->ModuleName.fromBscFlag
     ->Option.forEach(moduleName => {
@@ -12,13 +12,13 @@ let getGlobalyOpenedModulesSet = bsConfig => {
   set
 }
 
-let hasGloballyOpenedModule = (bsConfig, ~moduleName) => {
-  let globalyOpenedModulesSet = bsConfig->getGlobalyOpenedModulesSet
+let hasGloballyOpenedModule = (resConfig, ~moduleName) => {
+  let globalyOpenedModulesSet = resConfig->getGlobalyOpenedModulesSet
   globalyOpenedModulesSet->Set.has(moduleName)
 }
 
-let lint = (bsConfig, ~prohibitedModuleNames) => {
-  let globalyOpenedModulesSet = bsConfig->getGlobalyOpenedModulesSet
+let lint = (resConfig, ~prohibitedModuleNames) => {
+  let globalyOpenedModulesSet = resConfig->getGlobalyOpenedModulesSet
   let maybeOpenedProhibitedModule = prohibitedModuleNames->Array.find(prohibitedModule => {
     globalyOpenedModulesSet->Set.has(prohibitedModule)
   })

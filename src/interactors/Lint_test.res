@@ -1,33 +1,33 @@
 open Ava
 
 test("Fails when can't parse bsconfig", t => {
-  let loadBsConfig = (~config as _) => Error(Port.LoadBsConfig.ParsingFailure("Some reason"))
+  let loadResConfig = (~config as _) => Error(Port.LoadResConfig.ParsingFailure("Some reason"))
   let loadSourceDirs = (~config as _) => t->Assert.fail("Shouldn't call loadSourceDirs")
-  let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
+  let lint = Lint.make(~loadResConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
     lint(~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[])),
-    Error(BsConfigParseFailure("Some reason")),
+    Error(ResConfigParseFailure("Some reason")),
     (),
   )
 })
 
 test("Fails with globally opened prohibited module", t => {
-  let loadBsConfig = (~config as _) => Ok(BsConfig.TestData.make(~bscFlags=["-open Belt"]))
+  let loadResConfig = (~config as _) => Ok(ResConfig.TestData.make(~bscFlags=["-open Belt"]))
   let loadSourceDirs = (~config as _) => t->Assert.fail("Shouldn't call loadSourceDirs")
-  let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
+  let lint = Lint.make(~loadResConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
     lint(~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[])),
-    Error(BsConfigHasOpenedProhibitedModule(ModuleName.TestData.make("Belt"))),
+    Error(ResConfigHasOpenedProhibitedModule(ModuleName.TestData.make("Belt"))),
     (),
   )
 })
 
 test("Fails when can't parse sourcedirs.json", t => {
-  let loadBsConfig = (~config as _) => Ok(BsConfig.TestData.make(~bscFlags=[]))
+  let loadResConfig = (~config as _) => Ok(ResConfig.TestData.make(~bscFlags=[]))
   let loadSourceDirs = (~config as _) => Error(Port.LoadSourceDirs.ParsingFailure("Some reason"))
-  let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
+  let lint = Lint.make(~loadResConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
     lint(~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[])),
@@ -37,11 +37,11 @@ test("Fails when can't parse sourcedirs.json", t => {
 })
 
 test("Fails when can't find rescript artifacts", t => {
-  let loadBsConfig = (~config as _) => Ok(BsConfig.TestData.make(~bscFlags=[]))
+  let loadResConfig = (~config as _) => Ok(ResConfig.TestData.make(~bscFlags=[]))
   let loadSourceDirs = (~config as _) => Error(
     Port.LoadSourceDirs.RescriptCompilerArtifactsNotFound,
   )
-  let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
+  let lint = Lint.make(~loadResConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
     lint(~config=Config.make(~projectPath="", ~ignoreWithoutStdlibOpen=false, ~ignorePaths=[])),
@@ -51,9 +51,9 @@ test("Fails when can't find rescript artifacts", t => {
 })
 
 test("Doesn't complain with valid project", t => {
-  let loadBsConfig = (~config as _) => Ok(BsConfig.TestData.make(~bscFlags=[]))
+  let loadResConfig = (~config as _) => Ok(ResConfig.TestData.make(~bscFlags=[]))
   let loadSourceDirs = (~config as _) => Ok(SourceDirs.TestData.make(~projectDirs=["src"]))
-  let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
+  let lint = Lint.make(~loadResConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
     lint(
@@ -69,9 +69,9 @@ test("Doesn't complain with valid project", t => {
 })
 
 test("Doesn't complain with invalid ReScript files not specified in projectDirs", t => {
-  let loadBsConfig = (~config as _) => Ok(BsConfig.TestData.make(~bscFlags=[]))
+  let loadResConfig = (~config as _) => Ok(ResConfig.TestData.make(~bscFlags=[]))
   let loadSourceDirs = (~config as _) => Ok(SourceDirs.TestData.make(~projectDirs=["src"]))
-  let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
+  let lint = Lint.make(~loadResConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
     lint(
@@ -87,9 +87,9 @@ test("Doesn't complain with invalid ReScript files not specified in projectDirs"
 })
 
 test("Complains with invalid project", t => {
-  let loadBsConfig = (~config as _) => Ok(BsConfig.TestData.make(~bscFlags=[]))
+  let loadResConfig = (~config as _) => Ok(ResConfig.TestData.make(~bscFlags=[]))
   let loadSourceDirs = (~config as _) => Ok(SourceDirs.TestData.make(~projectDirs=["src"]))
-  let lint = Lint.make(~loadBsConfig, ~loadSourceDirs)
+  let lint = Lint.make(~loadResConfig, ~loadSourceDirs)
 
   t->Assert.deepEqual(
     lint(

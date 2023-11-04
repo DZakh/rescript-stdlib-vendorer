@@ -3,7 +3,7 @@
 import * as Lint from "./interactors/Lint.bs.mjs";
 import * as RunCli from "./interactors/RunCli.bs.mjs";
 import * as Process from "process";
-import * as LoadBsConfig from "./interactors/LoadBsConfig.bs.mjs";
+import * as LoadResConfig from "./interactors/LoadResConfig.bs.mjs";
 import * as LoadSourceDirs from "./interactors/LoadSourceDirs.bs.mjs";
 import * as RunHelpCommand from "./interactors/RunHelpCommand.bs.mjs";
 import * as RunLintCommand from "./interactors/RunLintCommand.bs.mjs";
@@ -14,7 +14,7 @@ function exitConsoleWithError(message) {
   Process.exit(1);
 }
 
-var runCli = RunCli.make(RunLintCommand.make(Lint.make(LoadBsConfig.make(), LoadSourceDirs.make()), exitConsoleWithError), RunHelpCommand.make(), RunHelpLintCommand.make(), exitConsoleWithError);
+var runCli = RunCli.make(RunLintCommand.make(Lint.make(LoadResConfig.make(), LoadSourceDirs.make()), exitConsoleWithError), RunHelpCommand.make(), RunHelpLintCommand.make(), exitConsoleWithError);
 
 runCli();
 

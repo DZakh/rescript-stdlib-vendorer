@@ -4,5 +4,5 @@ let make: (~projectPath: string, ~ignoreWithoutStdlibOpen: bool, ~ignorePaths: a
 
 let getProjectPath: t => string
 let getStdlibModuleName: t => ModuleName.t
-let checkShouldIngoreResFileIssuesBeforeStdlibOpen: (t, ~bsConfig: BsConfig.t) => bool
+let checkShouldIngoreResFileIssuesBeforeStdlibOpen: (t, ~resConfig: ResConfig.t) => bool
 let checkIsIgnoredPath: (t, ~relativePath: string) => bool

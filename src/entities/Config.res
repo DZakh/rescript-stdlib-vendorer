@@ -16,9 +16,9 @@ let getProjectPath = config => config.projectPath
 
 let getStdlibModuleName = config => config.stdlibModuleName
 
-let checkShouldIngoreResFileIssuesBeforeStdlibOpen = (config, ~bsConfig) => {
+let checkShouldIngoreResFileIssuesBeforeStdlibOpen = (config, ~resConfig) => {
   config.ignoreWithoutStdlibOpen &&
-  bsConfig->BsConfig.hasGloballyOpenedModule(~moduleName=config.stdlibModuleName)->not
+  resConfig->ResConfig.hasGloballyOpenedModule(~moduleName=config.stdlibModuleName)->not
 }
 
 let checkIsIgnoredPath = (config, ~relativePath) => {

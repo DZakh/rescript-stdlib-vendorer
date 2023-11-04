@@ -4,42 +4,42 @@ import * as Fs from "fs";
 import * as Path from "path";
 import * as Config from "../entities/Config.bs.mjs";
 import * as ResFile from "../entities/ResFile.bs.mjs";
-import * as BsConfig from "../entities/BsConfig.bs.mjs";
+import * as ResConfig from "../entities/ResConfig.bs.mjs";
 import * as ModuleName from "../entities/ModuleName.bs.mjs";
 import * as SourceDirs from "../entities/SourceDirs.bs.mjs";
 import * as LintContext from "../entities/LintContext.bs.mjs";
 import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
 
-function make(loadBsConfig, loadSourceDirs) {
+function make(loadResConfig, loadSourceDirs) {
   return function (config) {
-    return Core__Result.flatMap(Core__Result.flatMap(Core__Result.flatMap(Core__Result.mapError(loadBsConfig(config), (function (loadBsConfigError) {
+    return Core__Result.flatMap(Core__Result.flatMap(Core__Result.flatMap(Core__Result.mapError(loadResConfig(config), (function (loadResConfigError) {
                               return {
-                                      TAG: "BsConfigParseFailure",
-                                      _0: loadBsConfigError._0
+                                      TAG: "ResConfigParseFailure",
+                                      _0: loadResConfigError._0
                                     };
-                            })), (function (bsConfig) {
-                          var match = BsConfig.lint(bsConfig, ModuleName.defaultProhibitedModuleNames);
+                            })), (function (resConfig) {
+                          var match = ResConfig.lint(resConfig, ModuleName.defaultProhibitedModuleNames);
                           if (match.TAG === "Ok") {
                             return {
                                     TAG: "Ok",
-                                    _0: bsConfig
+                                    _0: resConfig
                                   };
                           } else {
                             return {
                                     TAG: "Error",
                                     _0: {
-                                      TAG: "BsConfigHasOpenedProhibitedModule",
+                                      TAG: "ResConfigHasOpenedProhibitedModule",
                                       _0: match._0.VAL
                                     }
                                   };
                           }
-                        })), (function (bsConfig) {
+                        })), (function (resConfig) {
                       var sourceDirs = loadSourceDirs(config);
                       if (sourceDirs.TAG === "Ok") {
                         return {
                                 TAG: "Ok",
                                 _0: [
-                                  bsConfig,
+                                  resConfig,
                                   sourceDirs._0
                                 ]
                               };
@@ -55,7 +55,7 @@ function make(loadBsConfig, loadSourceDirs) {
                               _0: tmp
                             };
                     })), (function (param) {
-                  var bsConfig = param[0];
+                  var resConfig = param[0];
                   var resFiles = [];
                   SourceDirs.getProjectDirs(param[1]).forEach(function (sourceDir) {
                         var fullDirPath = Path.resolve(Config.getProjectPath(config), sourceDir);
@@ -72,7 +72,7 @@ function make(loadBsConfig, loadSourceDirs) {
                       });
                   var lintContext = LintContext.make();
                   resFiles.forEach(function (resFile) {
-                        ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, Config.getStdlibModuleName(config), Config.checkShouldIngoreResFileIssuesBeforeStdlibOpen(config, bsConfig));
+                        ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, Config.getStdlibModuleName(config), Config.checkShouldIngoreResFileIssuesBeforeStdlibOpen(config, resConfig));
                       });
                   var lintIssues = LintContext.getIssues(lintContext);
                   if (lintIssues.length !== 0) {

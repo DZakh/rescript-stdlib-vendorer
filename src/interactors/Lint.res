@@ -1,24 +1,24 @@
-let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSourceDirs.t) => (
+let make = (~loadResConfig: Port.LoadResConfig.t, ~loadSourceDirs: Port.LoadSourceDirs.t) => (
   ~config,
 ) => {
   let prohibitedModuleNames = ModuleName.defaultProhibitedModuleNames
 
-  loadBsConfig(~config)
-  ->Result.mapError(loadBsConfigError => {
-    switch loadBsConfigError {
-    | ParsingFailure(reason) => Port.Lint.BsConfigParseFailure(reason)
+  loadResConfig(~config)
+  ->Result.mapError(loadResConfigError => {
+    switch loadResConfigError {
+    | ParsingFailure(reason) => Port.Lint.ResConfigParseFailure(reason)
     }
   })
-  ->Result.flatMap(bsConfig => {
-    switch bsConfig->BsConfig.lint(~prohibitedModuleNames) {
-    | Ok() => Ok(bsConfig)
+  ->Result.flatMap(resConfig => {
+    switch resConfig->ResConfig.lint(~prohibitedModuleNames) {
+    | Ok() => Ok(resConfig)
     | Error(#HAS_OPENED_PROHIBITED_MODULE(openedProhibitedModule)) =>
-      Error(Port.Lint.BsConfigHasOpenedProhibitedModule(openedProhibitedModule))
+      Error(Port.Lint.ResConfigHasOpenedProhibitedModule(openedProhibitedModule))
     }
   })
-  ->Result.flatMap(bsConfig => {
+  ->Result.flatMap(resConfig => {
     switch loadSourceDirs(~config) {
-    | Ok(sourceDirs) => Ok(bsConfig, sourceDirs)
+    | Ok(sourceDirs) => Ok(resConfig, sourceDirs)
     | Error(loadSourceDirsError) =>
       Error(
         switch loadSourceDirsError {
@@ -28,7 +28,7 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
       )
     }
   })
-  ->Result.flatMap(((bsConfig, sourceDirs)) => {
+  ->Result.flatMap(((resConfig, sourceDirs)) => {
     let resFiles = []
     sourceDirs
     ->SourceDirs.getProjectDirs
@@ -61,7 +61,7 @@ let make = (~loadBsConfig: Port.LoadBsConfig.t, ~loadSourceDirs: Port.LoadSource
         ~lintContext,
         ~prohibitedModuleNames,
         ~ignoreIssuesBeforeStdlibOpen=config->Config.checkShouldIngoreResFileIssuesBeforeStdlibOpen(
-          ~bsConfig,
+          ~resConfig,
         ),
         ~stdlibModuleName=config->Config.getStdlibModuleName,
       )

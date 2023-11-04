@@ -5,7 +5,7 @@ let make = (~lint: Port.Lint.t, ~exitConsoleWithError: Port.ExitConsoleWithError
   | Ok() => ()
   | Error(error) =>
     switch error {
-    | BsConfigParseFailure(reason) =>
+    | ResConfigParseFailure(reason) =>
       exitConsoleWithError(~message=`Failed to parse "bsconfig.json": ${reason}`)
     | RescriptCompilerArtifactsNotFound =>
       exitConsoleWithError(
@@ -15,7 +15,7 @@ let make = (~lint: Port.Lint.t, ~exitConsoleWithError: Port.ExitConsoleWithError
       exitConsoleWithError(
         ~message=`Failed to parse ".sourcedirs.json". Check that you use compatible ReScript version. Parsing error: ${reason}`,
       )
-    | BsConfigHasOpenedProhibitedModule(moduleName) =>
+    | ResConfigHasOpenedProhibitedModule(moduleName) =>
       exitConsoleWithError(
         ~message=`Lint failed: Found globally opened module ${moduleName->ModuleName.toString}`,
       )

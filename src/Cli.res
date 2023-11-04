@@ -6,7 +6,7 @@ let exitConsoleWithError = (~message) => {
 let runCli = RunCli.make(
   ~runLintCommand=RunLintCommand.make(
     ~exitConsoleWithError,
-    ~lint=Lint.make(~loadBsConfig=LoadBsConfig.make(), ~loadSourceDirs=LoadSourceDirs.make()),
+    ~lint=Lint.make(~loadResConfig=LoadResConfig.make(), ~loadSourceDirs=LoadSourceDirs.make()),
   ),
   ~runHelpCommand=RunHelpCommand.make(),
   ~runHelpLintCommand=RunHelpLintCommand.make(),

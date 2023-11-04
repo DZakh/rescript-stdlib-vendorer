@@ -1,8 +1,8 @@
 module Lint = {
   type error =
-    | BsConfigParseFailure(string)
+    | ResConfigParseFailure(string)
     | SourceDirsParseFailure(string)
-    | BsConfigHasOpenedProhibitedModule(ModuleName.t)
+    | ResConfigHasOpenedProhibitedModule(ModuleName.t)
     | LintFailedWithIssues(array<LintIssue.t>)
     | RescriptCompilerArtifactsNotFound
   type t = (~config: Config.t) => result<unit, error>
@@ -20,9 +20,9 @@ module RunHelpCommand = {
   type t = unit => unit
 }
 
-module LoadBsConfig = {
+module LoadResConfig = {
   type error = ParsingFailure(string)
-  type t = (~config: Config.t) => result<BsConfig.t, error>
+  type t = (~config: Config.t) => result<ResConfig.t, error>
 }
 
 module LoadSourceDirs = {

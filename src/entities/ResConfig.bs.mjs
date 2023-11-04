@@ -6,9 +6,9 @@ import * as Core__Option from "@dzakh/rescript-core/src/Core__Option.bs.mjs";
 import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
 import * as S$RescriptStruct from "rescript-struct/src/S.bs.mjs";
 
-function getGlobalyOpenedModulesSet(bsConfig) {
+function getGlobalyOpenedModulesSet(resConfig) {
   var set = new Set();
-  bsConfig.bscFlags.forEach(function (bscFlag) {
+  resConfig.bscFlags.forEach(function (bscFlag) {
         Core__Option.forEach(ModuleName.fromBscFlag(bscFlag), (function (moduleName) {
                 set.add(moduleName);
               }));
@@ -16,13 +16,13 @@ function getGlobalyOpenedModulesSet(bsConfig) {
   return set;
 }
 
-function hasGloballyOpenedModule(bsConfig, moduleName) {
-  var globalyOpenedModulesSet = getGlobalyOpenedModulesSet(bsConfig);
+function hasGloballyOpenedModule(resConfig, moduleName) {
+  var globalyOpenedModulesSet = getGlobalyOpenedModulesSet(resConfig);
   return globalyOpenedModulesSet.has(moduleName);
 }
 
-function lint(bsConfig, prohibitedModuleNames) {
-  var globalyOpenedModulesSet = getGlobalyOpenedModulesSet(bsConfig);
+function lint(resConfig, prohibitedModuleNames) {
+  var globalyOpenedModulesSet = getGlobalyOpenedModulesSet(resConfig);
   var maybeOpenedProhibitedModule = prohibitedModuleNames.find(function (prohibitedModule) {
         return globalyOpenedModulesSet.has(prohibitedModule);
       });

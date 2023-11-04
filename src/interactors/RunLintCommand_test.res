@@ -24,9 +24,9 @@ test("Doesn't log anything on success", t => {
   t->Assert.deepEqual(exitConsoleWithErrorCalls, [], ())
 })
 
-test("Handles BsConfigParseFailure error", t => {
+test("Handles ResConfigParseFailure error", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
-  let lint = (~config as _) => Error(Port.Lint.BsConfigParseFailure("Something went wrong"))
+  let lint = (~config as _) => Error(Port.Lint.ResConfigParseFailure("Something went wrong"))
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 
   runLintCommand(
@@ -60,10 +60,10 @@ test("Handles SourceDirsParseFailure error", t => {
   t->Assert.snapshot(exitConsoleWithErrorCalls, ())
 })
 
-test("Handles BsConfigHasOpenedProhibitedModule error", t => {
+test("Handles ResConfigHasOpenedProhibitedModule error", t => {
   let (exitConsoleWithErrorCalls, exitConsoleWithError) = ExitConsoleWithError.make()
   let lint = (~config as _) => Error(
-    Port.Lint.BsConfigHasOpenedProhibitedModule(ModuleName.TestData.make("Js")),
+    Port.Lint.ResConfigHasOpenedProhibitedModule(ModuleName.TestData.make("Js")),
   )
   let runLintCommand = RunLintCommand.make(~exitConsoleWithError, ~lint)
 

@@ -9,7 +9,7 @@ var RunHelpLintCommand = {};
 
 var RunHelpCommand = {};
 
-var LoadBsConfig = {};
+var LoadResConfig = {};
 
 var LoadSourceDirs = {};
 
@@ -22,7 +22,7 @@ export {
   RunLintCommand ,
   RunHelpLintCommand ,
   RunHelpCommand ,
-  LoadBsConfig ,
+  LoadResConfig ,
   LoadSourceDirs ,
   RunCli ,
   ExitConsoleWithError ,

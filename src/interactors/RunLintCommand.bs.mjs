@@ -14,11 +14,11 @@ function make(lint, exitConsoleWithError) {
       return exitConsoleWithError("Couldn't find rescript compiler artifacts in the \"./lib/bs/\" directory. Try to run compiler before the lint script.");
     }
     switch (error$1.TAG) {
-      case "BsConfigParseFailure" :
+      case "ResConfigParseFailure" :
           return exitConsoleWithError("Failed to parse \"bsconfig.json\": " + error$1._0);
       case "SourceDirsParseFailure" :
           return exitConsoleWithError("Failed to parse \".sourcedirs.json\". Check that you use compatible ReScript version. Parsing error: " + error$1._0);
-      case "BsConfigHasOpenedProhibitedModule" :
+      case "ResConfigHasOpenedProhibitedModule" :
           return exitConsoleWithError("Lint failed: Found globally opened module " + error$1._0);
       case "LintFailedWithIssues" :
           var message = error$1._0.map(function (lintIssue) {
