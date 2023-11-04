@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-vendorer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Tool to support usage of a vendored standard library in ReScript",
   "keywords": [
     "ReScript",
@@ -8,7 +8,7 @@
     "Vendored",
     "Belt",
     "Js",
-    "ReScriptJs",
+    "Core",
     "Lint",
     "Eslint"
   ],
