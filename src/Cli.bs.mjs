@@ -14,9 +14,9 @@ function exitConsoleWithError(message) {
   Process.exit(1);
 }
 
-var runCli = RunCli.make(RunLintCommand.make(Lint.make(LoadBsConfig.make(undefined), LoadSourceDirs.make(undefined)), exitConsoleWithError), RunHelpCommand.make(undefined), RunHelpLintCommand.make(undefined), exitConsoleWithError);
+var runCli = RunCli.make(RunLintCommand.make(Lint.make(LoadBsConfig.make(), LoadSourceDirs.make()), exitConsoleWithError), RunHelpCommand.make(), RunHelpLintCommand.make(), exitConsoleWithError);
 
-runCli(undefined);
+runCli();
 
 export {
   

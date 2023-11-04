@@ -70,7 +70,7 @@ function make(loadBsConfig, loadSourceDirs) {
                               resFiles.push(resFile);
                             });
                       });
-                  var lintContext = LintContext.make(undefined);
+                  var lintContext = LintContext.make();
                   resFiles.forEach(function (resFile) {
                         ResFile.lint(resFile, lintContext, ModuleName.defaultProhibitedModuleNames, Config.getStdlibModuleName(config), Config.checkShouldIngoreResFileIssuesBeforeStdlibOpen(config, bsConfig));
                       });

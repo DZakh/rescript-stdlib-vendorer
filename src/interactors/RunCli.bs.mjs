@@ -75,9 +75,9 @@ function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWit
               })), (function (command) {
             if (typeof command !== "object") {
               if (command === "Help") {
-                return runHelpCommand(undefined);
+                return runHelpCommand();
               } else {
-                return runHelpLintCommand(undefined);
+                return runHelpLintCommand();
               }
             } else {
               return runLintCommand(command._0);
