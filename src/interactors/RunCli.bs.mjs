@@ -6,38 +6,38 @@ import * as Process from "process";
 import Minimist from "minimist";
 import * as Core__Option from "@dzakh/rescript-core/src/Core__Option.bs.mjs";
 import * as Core__Result from "@dzakh/rescript-core/src/Core__Result.bs.mjs";
-import * as S$RescriptStruct from "rescript-struct/src/S.bs.mjs";
+import * as S$RescriptSchema from "rescript-schema/src/S.bs.mjs";
 
 function make(runLintCommand, runHelpCommand, runHelpLintCommand, exitConsoleWithError) {
   return function () {
     var commandArguments = Process.argv.slice(2);
-    var result = Core__Result.map(Core__Result.mapError(S$RescriptStruct.parseWith(Minimist(commandArguments), S$RescriptStruct.union([
-                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+    var result = Core__Result.map(Core__Result.mapError(S$RescriptSchema.parseWith(Minimist(commandArguments), S$RescriptSchema.union([
+                      S$RescriptSchema.$$Object.strict(S$RescriptSchema.object(function (s) {
                                 s.t("_", []);
                                 return "Help";
                               })),
-                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+                      S$RescriptSchema.$$Object.strict(S$RescriptSchema.object(function (s) {
                                 s.t("_", ["help"]);
                                 return "Help";
                               })),
-                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+                      S$RescriptSchema.$$Object.strict(S$RescriptSchema.object(function (s) {
                                 s.t("_", [
                                       "help",
                                       "lint"
                                     ]);
                                 return "LintHelp";
                               })),
-                      S$RescriptStruct.$$Object.strict(S$RescriptStruct.object(function (s) {
+                      S$RescriptSchema.$$Object.strict(S$RescriptSchema.object(function (s) {
                                 s.t("_", ["lint"]);
                                 return {
                                         TAG: "Lint",
-                                        _0: Config.make(s.f("project-path", S$RescriptStruct.$$Option.getOrWith(S$RescriptStruct.option(S$RescriptStruct.string), (function () {
+                                        _0: Config.make(s.f("project-path", S$RescriptSchema.$$Option.getOrWith(S$RescriptSchema.option(S$RescriptSchema.string), (function () {
                                                         return Process.cwd();
-                                                      }))), s.o("ignore-without-stdlib-open", S$RescriptStruct.bool, false), s.o("ignore-path", S$RescriptStruct.union([
-                                                      S$RescriptStruct.variant(S$RescriptStruct.string, (function (s) {
+                                                      }))), s.o("ignore-without-stdlib-open", S$RescriptSchema.bool, false), s.o("ignore-path", S$RescriptSchema.union([
+                                                      S$RescriptSchema.variant(S$RescriptSchema.string, (function (s) {
                                                               return [s];
                                                             })),
-                                                      S$RescriptStruct.array(S$RescriptStruct.string)
+                                                      S$RescriptSchema.array(S$RescriptSchema.string)
                                                     ]), []))
                                       };
                               }))

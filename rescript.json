@@ -1,6 +1,6 @@
 {
   "name": "rescript-stdlib-vendorer",
-  "bsc-flags": ["-open RescriptCore", "-open RescriptStruct"],
+  "bsc-flags": ["-open RescriptCore", "-open RescriptSchema"],
   "sources": [
     {
       "dir": "src",
@@ -13,7 +13,7 @@
   },
   "bs-dependencies": [
     "rescript-nodejs",
-    "rescript-struct",
+    "rescript-schema",
     "@dzakh/rescript-core",
     "@dzakh/rescript-ava"
   ],

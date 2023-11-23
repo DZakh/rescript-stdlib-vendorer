@@ -50,7 +50,7 @@
     "colorette": "~2.0.20",
     "minimist": "~1.2.8",
     "rescript": "~11.0.0-rc.5",
-    "rescript-struct": "~5.1.0"
+    "rescript-schema": "~6.0.0"
   },
   "devDependencies": {
     "@dzakh/rescript-ava": "2.3.0",
